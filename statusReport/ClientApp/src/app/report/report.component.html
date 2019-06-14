@@ -1,0 +1,8 @@
+<p>
+  report works!
+</p>
+
+<h4> {{user | json}}</h4>
+<button name="Profile" (click)="profileClicked()">Get My Profile</button>
+
+<h4 *ngIf="profile"> {{user | json}}</h4>

@@ -1,0 +1,19 @@
+<p>
+  project works!
+</p>
+<table class='table table-striped' *ngIf="projects">
+  <thead>
+    <tr>
+      <th>ProjectName</th>
+      <th>CustomerName</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let project of projects">
+      <td>{{ project.projectname }}</td>
+      <td>{{ project.customername }}</td>
+     
+    </tr>
+  </tbody>
+</table>
