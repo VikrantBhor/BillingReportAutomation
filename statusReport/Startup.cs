@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using statusReport.Models;
 using System;
 
 namespace statusReport
@@ -63,6 +64,7 @@ namespace statusReport
             //}));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.Add(new ServiceDescriptor(typeof(actitimeContext), new actitimeContext(Configuration.GetConnectionString("DefaultConnection"))));
 
 
             // In production, the Angular files will be served from this directory
@@ -70,6 +72,7 @@ namespace statusReport
             //{
             //    configuration.RootPath = "ClientApp/dist";
             //});
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
