@@ -15,6 +15,7 @@ import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 
 import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
+import { ReportSummeryComponent } from './report-summery/report-summery.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ReportComponent } from './report/report.component';
     FetchDataComponent,
     ProjectComponent,
     LoginComponent,
-    ReportComponent
+    ReportComponent,
+    ReportSummeryComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +38,7 @@ import { ReportComponent } from './report/report.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
+      { path: 'reportSummery', component: ReportSummeryComponent, canActivate: [AdalGuard] },
       
     ])
   ],
