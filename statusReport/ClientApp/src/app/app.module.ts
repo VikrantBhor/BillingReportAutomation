@@ -12,10 +12,12 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProjectComponent } from './project/project.component';
 
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
 import { ReportSummeryComponent } from './report-summery/report-summery.component';
+import { ReportCRComponent } from './report-cr/report-cr.component';
 
 @NgModule({
   declarations: [
@@ -27,18 +29,21 @@ import { ReportSummeryComponent } from './report-summery/report-summery.componen
     ProjectComponent,
     LoginComponent,
     ReportComponent,
-    ReportSummeryComponent
+    ReportSummeryComponent,
+    ReportCRComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: ReportComponent, canActivate: [AdalGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
       { path: 'reportSummery', component: ReportSummeryComponent, canActivate: [AdalGuard] },
+      { path: 'reportCr', component: ReportCRComponent },
       
     ])
   ],

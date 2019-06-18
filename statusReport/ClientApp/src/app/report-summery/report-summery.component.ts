@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+
 
 @Component({
   selector: 'app-report-summery',
@@ -8,10 +11,18 @@ import { Component, OnInit } from '@angular/core';
 export class ReportSummeryComponent implements OnInit {
 
   reportType: string = 'Monthly';
+  ReportSummery: FormGroup;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+
+    this.ReportSummery = this.fb.group({
+
+
+    })
+
+
   }
 
 }
