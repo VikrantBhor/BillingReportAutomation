@@ -1,0 +1,56 @@
+<p>
+  report-cr works!
+</p>
+
+
+
+
+
+
+
+   <table>
+     <thead>
+       <tr>
+         <th>CR Name</th>
+         <th>Estimate Hrs</th>
+         <th>Actual Hrs</th>
+         <th>CR Status</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr *ngFor="let cr of reportCR; let i=index">
+         <td>
+           <input [(ngModel)]="cr.crName" class="form-control" type="text" name="{{cr.crName}}" />
+         </td>
+         <td>
+           <input [(ngModel)]="cr.estimateHrs" class="form-control" type="text" name="{{cr.estimateHrs}}" />
+         </td>
+         <td>
+           <input [(ngModel)]="cr.actualHrs" class="form-control" type="text" name="{{cr.actualHrs}}" />
+         </td>
+         <td>
+           <input [(ngModel)]="cr.status" class="form-control" type="text" name="{{cr.status}}" />
+         </td>
+         <td>
+           <button class="btn btn-default" type="button" (click)="deleteFieldValue(i)">Delete</button>
+         </td>
+       </tr>
+       <tr>
+           <td>
+             <input class="form-control" type="text" id="newAttributeCode" [(ngModel)]="newAttribute.crName" name="newAttributeCRName" />
+           </td>
+           <td>
+             <input class="form-control" type="text" id="newAttributeName" [(ngModel)]="newAttribute.estimateHrs" name="newAttributeCREstimateHrs" />
+           </td>
+           <td>
+             <input class="form-control" type="text" id="newAttributePrice" [(ngModel)]="newAttribute.actualHrs" name="newAttributeCRActualHrs" />
+           </td>
+           <td>
+             <input class="form-control" type="text" id="newAttributePrice" [(ngModel)]="newAttribute.status" name="newAttributeCRStatus" />
+           </td>
+           <td>
+             <button class="btn btn-default" type="button" (click)="addFieldValue()">Add</button>
+           </td>
+        </tr>
+     </tbody>
+   </table>
