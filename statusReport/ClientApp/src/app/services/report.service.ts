@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { reportCR } from '../DTO/ReportCR';
 import { Observable } from 'rxjs';
 import { Response } from '@angular/http';
+import { reportList } from '../DTO/ReportList';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { reportActivity } from '../DTO/ReportActivity';
 
@@ -48,7 +49,9 @@ export class ReportService {
 
   } 
 
-
+  getReports(role,reportStatus): Observable<reportList[]> {
+    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
+  }
 
 
 }

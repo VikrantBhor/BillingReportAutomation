@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AdalService } from 'adal-angular4';
 import { HttpClient } from '@angular/common/http';
+import { FilterPipe } from 'ngx-filter-pipe';
+import { ReportService } from '../services/report.service';
+import { reportList } from '../DTO/ReportList';
 
 @Component({
   selector: 'app-report',
@@ -8,22 +11,34 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./report.component.css']
 })
 export class ReportComponent implements OnInit {
-
   user: any;
   profile: any;
+  reports: reportList[];
+  role: string;
+  statusReport: number;
+  p: number = 1;
+  searchTerm: any = { clientName: '' };;
 
-  constructor(private adalService: AdalService, protected http: HttpClient) {
-
+  constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService) {
+    debugger;
   }
 
   ngOnInit() {
-
     this.user = this.adalService.userInfo;
-
+    debugger;
     this.user.token = this.user.token.substring(0, 10) + '...';
-
     console.log(this.user.token);
-  }
+    if (this.user.userName.indexOf('Rumana') == 0) { // This block is for Rumana
+      this.role = "Manager";
+      this.getSubmittedReports();
+    }
+    else {
+      this.role = "TL";
+      this.getSavedReports();
+    }
+    
+    
+}
 
   public getProfile() {
     console.log('Get Profile called');
@@ -37,6 +52,34 @@ export class ReportComponent implements OnInit {
         this.profile = result;
       }
     });
+  }
+
+  getSavedReports() {
+    this.statusReport = 0;
+    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+      debugger;
+      this.reports = res;
+      console.log(res);
+    }, error => console.log(error))
+  }
+
+  getSubmittedReports() {
+    this.statusReport = 1;
+    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+      debugger;
+      this.reports = res;
+      console.log(res);
+    }, error => console.log(error))
+  }
+
+  getPendingReports() {
+    //this.role = "TL";
+    this.statusReport = 3;
+    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+      debugger;
+      this.reports = res;
+      console.log(res);
+    }, error => console.log(error))
   }
 
 }

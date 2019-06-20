@@ -32,6 +32,9 @@ namespace statusReport.Controllers.Home
 
         }
 
+
+
+
         //public IEnumerable<Project> GetProjects()
         //{
         //    List<Project> projects = new List<Project>();

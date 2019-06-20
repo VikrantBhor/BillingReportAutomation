@@ -1,19 +1,52 @@
-<p>
-  Report  works!
-</p>
-
 <div class="row">
   <div class="col-sm-12">
-    <button class=" btn btn-info">Saved Reports</button>&nbsp;&nbsp;
-    <button class=" btn btn-info">Pending Reports</button>
-   
-      <button class=" btn btn-primary" style="float:right">Create Report</button>
-   
+    <button *ngIf="this.role=='TL'" class=" btn btn-info" (click)="getSavedReports()">Saved Reports</button>&nbsp;&nbsp;
+    <button *ngIf="this.role=='TL'" class=" btn btn-info" (click)="getPendingReports()">Pending Reports</button>
+    <button *ngIf="this.role=='TL'" class=" btn btn-primary" style="float:right">Create Report</button>
   </div>
 </div>
- <br/>
-<h4> Display the saved report and pending report list here..... </h4>
-  
+<br />
+<div class="row">
+  <div class="col-sm-12">
+    <div class="container container-border " style="background-color: white !important">
+      <div class="panel panel-primary" style="margin-bottom: 0px;">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-sm-6"><h2>Report List</h2></div>
+            <div class="col-sm-6"><input class="col-sm-6" style="margin-bottom:10px;float:right;" type="text" placeholder="Search" [(ngModel)]="searchTerm.clientName" /></div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive col-xs-12" style="margin-bottom: 2%">
+            <table class="table table-bordered  table-hover" *ngIf="reports">
+              <thead>
+                <tr>
+                  <th>Sl. No.</th>
+                  <th>Name of files</th>
+                  <th>Created On</th>
+                  <th *ngIf="this.role=='Manager'">Submitted By</th>
+                  <th *ngIf="this.role=='Manager'">Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!--<tr *ngFor="let report of reports | paginate : {itemsPerPage:10,currentPage:p}">-->
+                <!--<tr *ngFor="let report of reports | filter : searchTerm; let i=index">-->
+                <tr *ngFor="let report of reports | filterBy: searchTerm |  paginate: { itemsPerPage: 10, currentPage: p }; let i=index">
+                  <td>{{i + 1}}</td>
+                  <td> <a routerLink="[/reportSummery, report.id]">{{ report.clientName }} {{ report.projectName }} {{ report.projectType }}</a></td>
+                  <td>{{ report.createdDate | date: 'mediumDate'}}</td>
+                  <td *ngIf="this.role=='Manager'">{{ report.createdBy }}</td>
+                  <td *ngIf="this.role=='Manager'">{{ report.remarks }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <pagination-controls (pageChange)="p =$event"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <br />
 <br />
 <br />
@@ -21,5 +54,4 @@
 
 <h6> {{user | json}}</h6>
 <!--<button name="Profile" (click)="profileClicked()">Get My Profile</button>-->
-
 <!--<h4 *ngIf="profile"> {{user | json}}</h4>-->
