@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "statusReport", "statusReport\statusReport.csproj", "{6B11A3E4-F8B4-4A55-8A5F-55E18137FDCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "statusReport", "statusReport\statusReport.csproj", "{6B11A3E4-F8B4-4A55-8A5F-55E18137FDCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
