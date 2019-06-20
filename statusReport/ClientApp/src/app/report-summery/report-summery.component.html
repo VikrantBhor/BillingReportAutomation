@@ -5,3 +5,304 @@
  <h3 align="center"> Report Summery </h3>
 
 <h4 align="center"> {{reportType}} Hours Summery Report </h4>
+
+<form [formGroup]="ReportSummery" (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label " for="clientName">Client Name</label>
+    <div class="col-md-4">
+      <input type="text"
+             id="clientName"
+             class="form-control"
+             placeholder="Client Name"
+             name="name"
+             formControlName="clientName">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="projectName">Project Name</label>
+    <div class="col-md-4">
+      <input type="text"
+             id="projectName"
+             class="form-control"
+             placeholder="Project Name"
+             name="name"
+             formControlName="projectName">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="projectType">Project Type</label>
+    <div class="col-md-4">
+      <input type="text"
+             id="projectType"
+             class="form-control"
+             placeholder="Project Type"
+             name="name"
+             formControlName="projectType">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="accomp">Accomplishments</label>
+    <div class="col-md-8">
+      <input type="text"
+             id="accomp"
+             class="form-control"
+             placeholder="Team Accomplishments"
+             name="name"
+             formControlName="accomp">
+    </div>
+  </div>
+
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="Cr">CR Details</label>
+    <div class="col-md-9">
+      <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewCR()" [disabled]="!addCRBtn">
+        <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
+      </button>
+
+      <table class="table table-striped" *ngIf="reportCRDetails.length !=0 ">
+        <thead>
+          <tr>
+            <th>CR Name</th>
+            <th>CR Estimate Hrs</th>
+            <th>CR Actual Hrs</th>
+            <th>CR Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let CR of reportCRDetails;let i=index">
+            <td>{{CR.crName}}</td>
+            <td>{{CR.estimateHrs}}</td>
+            <td>{{CR.actualHrs}}</td>
+            <td>{{CR.status}}</td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteCR(i)">
+                <span class="fa fa-trash" aria-hidden="true"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div formArrayName="crDetails" *ngIf="!showCRDiv">
+        <div>
+          <fieldset>
+            <div [formGroupName]="0">
+              <div class="form-inline">
+                <div class="form-group">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder="CR Name"
+                         name="type"
+                         formControlName="Name"
+                         style="margin-right:5px;">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder="CR Estimate Hrs"
+                         name="type"
+                         formControlName="estimateHrs"
+                         style="margin-right:5px;">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder="CR Actual Hrs"
+                         name="type"
+                         formControlName="actualHrs"
+                         style="margin-right:5px;">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder="CR Status"
+                         name="type"
+                         formControlName="status"
+                         style="margin-right:5px;">&nbsp;
+                  <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveCRDetails()">
+                    <span class="fa fa-check-square" aria-hidden="true"></span> save
+                  </button>
+                </div>
+              </div>    
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="Cr">Activity Details</label>
+    <div class="col-md-9">
+      <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewActivity()" [disabled]="!addActBtn">
+        <span class="fa fa-plus-square" aria-hidden="true"></span> Add New Activity
+      </button>
+
+      <table class="table table-striped" *ngIf="reportCRDetails.length !=0 ">
+        <thead>
+          <tr>
+            <th>Sr No.</th>
+            <th>Milestone</th>
+            <th>ETA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Activity of reportActivityDetails;let i=index">
+            <td>{{i+1}}</td>
+            <td>{{Activity.milestones}}</td>
+            <td>{{Activity.eta}}</td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm" (click)="deleteActivity(i)">
+                <span class="fa fa-trash" aria-hidden="true"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div formArrayName="activityDetails" *ngIf="!showActDiv">
+        <div>
+          <fieldset>
+            <div [formGroupName]="0">
+              <div class="form-inline">
+                <div class="form-group">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder=" Milestone "
+                         name="type"
+                         formControlName="milestones"
+                         style="margin-right:5px;">
+                  <input type="text"
+                         class="form-control"
+                         id="city"
+                         placeholder="Required ETA"
+                         name="type"
+                         formControlName="eta"
+                         style="margin-right:5px;">&nbsp;
+                  <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveActivityDetails()">
+                    <span class="fa fa-check-square" aria-hidden="true"></span> save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="clientAwtInfo">Client Awaiting Information</label>
+    <div class="col-md-8">
+      <input type="text"
+             id="clientAwtInfo"
+             class="form-control"
+             placeholder="Client Awaiting Information"
+             name="name"
+             formControlName="clientAwtInfo">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="onShoreTotalHrs">On-Shore Total Hrs</label>
+    <div class="col-md-2">
+      <input type="number"
+             id="onShoreTotalHrs"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="onShoreTotalHrs">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsTillLastWeek">On-Shore Hrs Till Last Week </label>
+    <div class="col-md-2">
+      <input type="number"
+             id="onShoreHrsTillLastWeek"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="onShoreHrsTillLastWeek">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">On-Shore Hrs Current Week </label>
+    <div class="col-md-2">
+      <input type="number"
+             id="onShoreHrsCurrentWeek"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="onShoreHrsCurrentWeek">
+    </div>
+  </div>
+
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="offShoreTotalHrs">Off-Shore Total Hrs</label>
+    <div class="col-md-2">
+      <input type="number"
+             id="offShoreTotalHrs"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="offShoreTotalHrs">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Off-Shore Hrs Till Last Week </label>
+    <div class="col-md-2">
+      <input type="number"
+             id="offShoreHrsTillLastWeek"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="offShoreHrsTillLastWeek">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">Off-Shore Hrs Current Week </label>
+    <div class="col-md-2">
+      <input type="number"
+             id="offShoreHrsCurrentWeek"
+             class="form-control"
+             placeholder="00.00"
+             name="name"
+             formControlName="offShoreHrsCurrentWeek">
+    </div>
+  </div>
+
+  <div class="form-group  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="notes">Notes</label>
+    <div class="col-md-8">
+      <input type="text"
+             id="notes"
+             class="form-control"
+             placeholder="Notes.."
+             name="name"
+             formControlName="notes">
+    </div>
+  </div>
+
+  <div class="Zeropadding  row mb-2">
+    <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
+    <div class="col-md-8" align="center">
+      <button type="button" class="btn btn-primary" (click)="saveForm()">Save </button>&nbsp;&nbsp;
+      <button type="submit" class="btn btn-success">Submit </button>&nbsp;&nbsp;
+      <button type="button" class="btn btn-danger" (click)="rejectForm()">Reject</button>
+    </div>
+  </div>
+
+</form>
