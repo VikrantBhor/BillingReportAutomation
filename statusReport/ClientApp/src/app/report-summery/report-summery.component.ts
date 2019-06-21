@@ -6,6 +6,7 @@ import { reportCR } from '../DTO/ReportCR';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { error } from '@angular/compiler/src/util';
 import { reportActivity } from '../DTO/ReportActivity';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -27,6 +28,9 @@ export class ReportSummeryComponent implements OnInit {
   addActBtn: boolean = true;
   showActDiv: boolean = true;
 
+  closeResult: string;
+  comment: string;
+  remark: string;
 
   newCRDetails: reportCR = {
     crName: '',
@@ -77,7 +81,7 @@ export class ReportSummeryComponent implements OnInit {
     ]
   }
 
-  constructor(private fb: FormBuilder, private reportservice: ReportService) {
+  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal) {
     this.ReportSummery = this.fb.group({
       clientName: [''],
       projectName: [''],
@@ -117,6 +121,30 @@ export class ReportSummeryComponent implements OnInit {
       console.log(res);
     }, error => console.log(error))
 
+  }
+
+  open(content) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      debugger;
+      if (result == "Save click") {
+        this.remark = this.comment;
+
+      }
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    debugger;
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   setCrDetails() {

@@ -18,6 +18,7 @@ export class ReportComponent implements OnInit {
   statusReport: number;
   p: number = 1;
   searchTerm: any = { clientName: '' };;
+  btnPendingClicked = false;
 
   constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService) {
     debugger;
@@ -56,6 +57,7 @@ export class ReportComponent implements OnInit {
 
   getSavedReports() {
     this.statusReport = 0;
+    this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
       debugger;
       this.reports = res;
@@ -65,6 +67,7 @@ export class ReportComponent implements OnInit {
 
   getSubmittedReports() {
     this.statusReport = 1;
+    this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
       debugger;
       this.reports = res;
@@ -73,7 +76,7 @@ export class ReportComponent implements OnInit {
   }
 
   getPendingReports() {
-    //this.role = "TL";
+    this.btnPendingClicked = true;
     this.statusReport = 3;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
       debugger;

@@ -13,9 +13,9 @@ import { ProjectComponent } from './project/project.component';
 
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 import { ReactiveFormsModule } from '@angular/forms';
-//import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FilterPipeModule } from 'ngx-filter-pipe'; 
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
@@ -40,9 +40,9 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    //Ng2SearchPipeModule,
     FilterPipeModule,
     NgxPaginationModule,
+    NgbModule,
     RouterModule.forRoot([
       { path: '', component: ReportComponent, canActivate: [AdalGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },

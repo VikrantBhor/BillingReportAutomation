@@ -25,7 +25,7 @@
                   <th>Name of files</th>
                   <th>Created On</th>
                   <th *ngIf="this.role=='Manager'">Submitted By</th>
-                  <th *ngIf="this.role=='Manager'">Remarks</th>
+                  <th *ngIf="this.btnPendingClicked == true ">Remarks</th>
                 </tr>
               </thead>
               <tbody>
@@ -33,10 +33,10 @@
                 <!--<tr *ngFor="let report of reports | filter : searchTerm; let i=index">-->
                 <tr *ngFor="let report of reports | filterBy: searchTerm |  paginate: { itemsPerPage: 10, currentPage: p }; let i=index">
                   <td>{{i + 1}}</td>
-                  <td> <a routerLink="[/reportSummery, report.id]">{{ report.clientName }} {{ report.projectName }} {{ report.projectType }}</a></td>
+                  <td> <a routerLink="['/reportSummery/', report.id]">{{ report.clientName }} {{ report.projectName }} {{ report.projectType }}</a></td>
                   <td>{{ report.createdDate | date: 'mediumDate'}}</td>
                   <td *ngIf="this.role=='Manager'">{{ report.createdBy }}</td>
-                  <td *ngIf="this.role=='Manager'">{{ report.remarks }}</td>
+                  <td *ngIf="this.btnPendingClicked == true ">{{ report.remarks }}</td>
                 </tr>
               </tbody>
             </table>
