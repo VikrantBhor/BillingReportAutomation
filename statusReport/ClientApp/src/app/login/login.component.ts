@@ -14,9 +14,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
+    //debugger;
     this.adalService.handleWindowCallback();
-    debugger;
+   // debugger;
     const user = this.adalService.getUser();
     console.log(this.adalService.userInfo);
   }
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.adalService.clearCache();
     console.log(this.adalService.userInfo);
-    debugger;
+    //debugger;
     const user = this.adalService.getUser();
     //const roles = user.roles; // Returns [ "User" ]
     this.adalService.login();

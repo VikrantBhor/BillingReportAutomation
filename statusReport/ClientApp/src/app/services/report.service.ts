@@ -30,13 +30,14 @@ export class ReportService {
     return this.http.get<reportActivity[]>(this.Baseurl + 'api/ReportSummery/getActivityDetails');
   }
 
-  //getReportSummeryDetails(): Observable<ReportSummery> {
-  //  return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails');
-  //}
+  getReportSummeryDetails(): Observable<ReportSummery> {
+    //debugger;
+    return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails');
+  }
 
 
   saveReportDetails(reportSummery: ReportSummery): Observable<any> {
-    debugger;
+   // debugger;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });

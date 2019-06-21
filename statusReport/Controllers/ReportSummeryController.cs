@@ -23,7 +23,7 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportCr.Where(x => x.ReportId == 1).Select(x=> new CRDetails ()
+                    return context.TblReportCr.Where(x => x.ReportId == 21).Select(x=> new CRDetails ()
                                                                             { crName = x.CrName,
                                                                               estimateHrs =(int) x.EstimateHrs,
                                                                               actualHrs = (int)x.ActualHrs,
@@ -45,7 +45,7 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportActivity.Where(x => x.ReportId == 1).Select(x=> new ActivityDetails()
+                    return context.TblReportActivity.Where(x => x.ReportId == 21).Select(x=> new ActivityDetails()
                                                                                 {
                                                                                     milestones= x.Milestones,
                                                                                     eta= Convert.ToInt32(x.Eta)
@@ -88,7 +88,6 @@ namespace statusReport.Controllers
                                       offShoreHrsCurrentWeek = (int) RSD.OnshoreCurrentWeekHrs,
                                       notes = RSD.Notes
                                   }).SingleOrDefault();
-
 
                     return reportSummery;
 

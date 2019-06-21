@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ReportService } from '../services/report.service';
 import { reportCR } from '../DTO/ReportCR';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { error } from '@angular/compiler/src/util';
 import { reportActivity } from '../DTO/ReportActivity';
+import { generate } from 'rxjs';
 
 
 @Component({
@@ -20,6 +21,8 @@ export class ReportSummeryComponent implements OnInit {
   reportCRDetails: reportCR[];
   reportActivityDetails: reportActivity[];
   reportSummery: ReportSummery;
+
+  reportId: number = 21;
 
   addCRBtn: boolean = true;
   showCRDiv: boolean = true;
@@ -41,7 +44,25 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveReportCRDetails: reportCR[] = [];
-  saveReportActivityDetails: reportActivity[] =[]
+  saveReportActivityDetails: reportActivity[] = []
+
+
+  public e: ReportSummery = {
+    clientName: '',
+    projectName: '',
+    projectType: '',
+    accomp: '',
+    crDetails: this.saveReportCRDetails,
+    activityDetails: this.saveReportActivityDetails,
+    clientAwtInfo: '',
+    onShoreTotalHrs: 0,
+    onShoreHrsTillLastWeek: 0,
+    onShoreHrsCurrentWeek: 0,
+    offShoreTotalHrs: 0,
+    offShoreHrsTillLastWeek: 0,
+    offShoreHrsCurrentWeek: 0,
+    notes: ''
+  }
 
   saveReportSummery: ReportSummery = {
     clientName: '',
@@ -101,12 +122,6 @@ export class ReportSummeryComponent implements OnInit {
 
   ngOnInit() {
 
-
-    //this.reportservice.getReportSummeryDetails().subscribe(res => {
-    //  this.reportSummery = res;
-    //  console.log(res);
-    //}, error => console.log(error))
-
     this.reportservice.getCRdetails().subscribe(res => {
       this.reportCRDetails = res;
       console.log(res);
@@ -116,6 +131,51 @@ export class ReportSummeryComponent implements OnInit {
       this.reportActivityDetails = res;
       console.log(res);
     }, error => console.log(error))
+
+
+    //debugger;
+    if (this.reportId == 21)
+    {
+
+      this.reportservice.getReportSummeryDetails().subscribe(res => {
+        this.reportSummery = res;
+        console.log(res);
+        this.e = res
+
+        //this.generateForm();
+      }, error => console.log(error))
+
+    }
+
+  }
+
+
+  generateForm() {
+    debugger;
+    console.log(this.reportSummery.clientName); 
+
+    this.ReportSummery = new FormGroup({
+      clientName: new FormControl({ value: this.reportSummery.clientName }),
+      projectName: new FormControl({ value: this.reportSummery.projectName }),
+      projectType: new FormControl({ value: this.reportSummery.projectType }),
+      accomp: new FormControl({ value: this.reportSummery.accomp }),
+      //crDetails: this.fb.array([]),
+      // crDetails: new FormArray({  values: this.reportCRDetails }),
+      //activityDetails: this.fb.array([]),
+      clientAwtInfo: new FormControl({ value: this.reportSummery.clientAwtInfo }),
+      onShoreTotalHrs: new FormControl({ value: this.reportSummery.onShoreTotalHrs }),
+      onShoreHrsTillLastWeek: new FormControl({ value: this.reportSummery.onShoreHrsTillLastWeek }),
+      onShoreHrsCurrentWeek: new FormControl({ value: this.reportSummery.onShoreHrsCurrentWeek }),
+      offShoreTotalHrs: new FormControl({ value: this.reportSummery.offShoreTotalHrs }),
+      offShoreHrsTillLastWeek: new FormControl({ value: this.reportSummery.offShoreHrsTillLastWeek }),
+      offShoreHrsCurrentWeek: new FormControl({ value: this.reportSummery.offShoreHrsCurrentWeek }),
+      notes: new FormControl({ value: this.reportSummery.notes })
+    })
+
+    //this.ReportSummery.setControl('crDetails', this.fb.array(this.reportCRDetails));
+    //this.ReportSummery.setControl('activityDetails', this.fb.array(this.reportActivityDetails));
+
+
 
   }
 
@@ -144,7 +204,7 @@ export class ReportSummeryComponent implements OnInit {
 
   onSubmit() {
     console.log(this.ReportSummery.value);
-    debugger;
+   // debugger;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
     this.saveReportSummery.projectType = this.ReportSummery.controls.projectType.value;
