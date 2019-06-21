@@ -35,6 +35,7 @@ namespace statusReport.Controllers
                     {
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved)
+                                  orderby reportSummary.CreatedDate
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,
@@ -48,6 +49,7 @@ namespace statusReport.Controllers
                     {
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected)
+                                  orderby reportSummary.LastUpdatedDate
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,
@@ -65,6 +67,7 @@ namespace statusReport.Controllers
                     {
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Submitted)
+                                  orderby reportSummary.LastUpdatedDate
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,
