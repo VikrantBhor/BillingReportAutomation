@@ -21,12 +21,12 @@ export class ReportComponent implements OnInit {
   btnPendingClicked = false;
 
   constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService) {
-    debugger;
+    //debugger;
   }
 
   ngOnInit() {
     this.user = this.adalService.userInfo;
-    debugger;
+    //debugger;
     this.user.token = this.user.token.substring(0, 10) + '...';
     console.log(this.user.token);
     if (this.user.userName.indexOf('Rumana') == 0) { // This block is for Rumana
