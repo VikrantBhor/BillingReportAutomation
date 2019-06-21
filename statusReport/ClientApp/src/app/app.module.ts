@@ -48,7 +48,7 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
-      { path: 'reportSummery', component: ReportSummeryComponent, canActivate: [AdalGuard] },
+      { path: 'reportSummery', component: ReportSummeryComponent },
       { path: 'reportCr', component: ReportCRComponent },
       
     ])
