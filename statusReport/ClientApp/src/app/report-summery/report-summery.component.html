@@ -9,7 +9,7 @@
   <div class="card-body">
 
 
-    <form [formGroup]="ReportSummery">
+    <form [formGroup]="ReportSummery" >
 
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label " for="clientName">Client Name</label>
@@ -59,7 +59,7 @@
                  placeholder="Team Accomplishments"
                  name="accomp"
                  formControlName="accomp"
-                 [(ngModel)]="e.accomp">
+                 [(ngModel)]="e.accomp" required>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
           </button>
 
-          <table class="table table-striped" *ngIf="reportCRDetails.length === 0">
+          <table class="table table-striped" *ngIf="reportCRDetails.length >0">
             <thead>
               <tr>
                 <th>CR Name</th>
@@ -96,49 +96,52 @@
             </tbody>
           </table>
 
-          <div formArrayName="crDetails" *ngIf="!showCRDiv">
-            <div>
-              <fieldset>
-                <div [formGroupName]="0">
-                  <div class="form-inline">
-                    <div class="form-group">
-                      <input type="text"
-                             class="form-control"
-                             id="city"
-                             placeholder="CR Name"
-                             name="type"
-                             formControlName="Name"
-                             style="margin-right:5px;">
-                      <input type="text"
-                             class="form-control"
-                             id="city"
-                             placeholder="CR Estimate Hrs"
-                             name="type"
-                             formControlName="estimateHrs"
-                             style="margin-right:5px;">
-                      <input type="text"
-                             class="form-control"
-                             id="city"
-                             placeholder="CR Actual Hrs"
-                             name="type"
-                             formControlName="actualHrs"
-                             style="margin-right:5px;">
-                      <input type="text"
-                             class="form-control"
-                             id="city"
-                             placeholder="CR Status"
-                             name="type"
-                             formControlName="status"
-                             style="margin-right:5px;">&nbsp;
-                      <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveCRDetails()">
-                        <span class="fa fa-check-square" aria-hidden="true"></span> save
-                      </button>
+          
+            <div formArrayName="crDetails" [formGroup]="crDetails" *ngIf="!showCRDiv">
+              <div>
+                <fieldset>
+                  <div [formGroupName]="0" id="CRform">
+                    <div class="form-inline">
+                      <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               id="city"
+                               placeholder="CR Name"
+                               name="Name"
+                               formControlName="Name"
+                               style="margin-right:5px;" required>
+                        <input type="number"
+                               class="form-control col-md-2"
+                               id="city"
+                               placeholder="CR Estimate Hrs"
+                               name="estimateHrs"
+                               formControlName="estimateHrs"
+                               style="margin-right:5px;" required>
+                        <input type="number"
+                               class="form-control col-md-2"
+                               id="city"
+                               placeholder="CR Actual Hrs"
+                               name="actualHrs"
+                               formControlName="actualHrs"
+                               style="margin-right:5px;" required>
+                        <input type="text"
+                               class="form-control"
+                               id="city"
+                               placeholder="CR Status"
+                               name="status"
+                               formControlName="status"
+                               style="margin-right:5px;" required>&nbsp;
+                        <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveCRDetails()">
+                          <span class="fa fa-check-square" aria-hidden="true"></span> save
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </fieldset>
+                </fieldset>
+              </div>
             </div>
-          </div>
+        
+        
 
         </div>
       </div>
@@ -151,7 +154,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New Activity
           </button>
 
-          <table class="table table-striped" *ngIf="reportActivityDetails.length === 0">
+          <table class="table table-striped" *ngIf="reportActivityDetails.length > 0">
             <thead>
               <tr>
                 <th>Sr No.</th>
@@ -176,23 +179,23 @@
           <div formArrayName="activityDetails" *ngIf="!showActDiv">
             <div>
               <fieldset>
-                <div [formGroupName]="0">
+                <div [formGroupName]="0" id="Activityform">
                   <div class="form-inline">
                     <div class="form-group">
                       <input type="text"
                              class="form-control"
                              id="city"
                              placeholder=" Milestone "
-                             name="type"
+                             name="milestones"
                              formControlName="milestones"
-                             style="margin-right:5px;">
-                      <input type="text"
+                             style="margin-right:5px;" required>
+                      <input type="number"
                              class="form-control"
                              id="city"
                              placeholder="Required ETA"
-                             name="type"
+                             name="eta"
                              formControlName="eta"
-                             style="margin-right:5px;">&nbsp;
+                             style="margin-right:5px;" required>&nbsp;
                       <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveActivityDetails()">
                         <span class="fa fa-check-square" aria-hidden="true"></span> save
                       </button>
@@ -320,7 +323,7 @@
       <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
       <div class="col-md-8" align="center">
         <button type="button" class="btn btn-primary" (click)="saveForm()">Save </button>&nbsp;&nbsp;
-        <button type="button" class="btn btn-success" (click)="onSubmit()">Submit </button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-success" (click)="onSubmit()" >Submit </button>&nbsp;&nbsp;
         <button type="button" class="btn btn-danger" (click)="open(content)">Reject</button>
       </div>
     </div>

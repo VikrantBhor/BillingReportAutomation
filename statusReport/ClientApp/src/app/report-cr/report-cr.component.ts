@@ -35,10 +35,10 @@ export class ReportCRComponent implements OnInit {
       CRdetails: this.reportCR
     })
 
-    this.reportservice.getCRdetails().subscribe(res => {
-      this.reportCR = res;
-      console.log(res);
-    }, error => console.log(error))
+    //this.reportservice.getCRdetails().subscribe(res => {
+    //  this.reportCR = res;
+    //  console.log(res);
+    //}, error => console.log(error))
 
   }
 

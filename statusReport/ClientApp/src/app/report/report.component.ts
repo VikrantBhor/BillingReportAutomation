@@ -59,7 +59,8 @@ export class ReportComponent implements OnInit {
     this.statusReport = 0;
     this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
-      debugger;
+
+      //debugger;
       this.reports = res;
       console.log(res);
     }, error => console.log(error))

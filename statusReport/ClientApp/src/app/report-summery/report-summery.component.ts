@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ReportService } from '../services/report.service';
 import { reportCR } from '../DTO/ReportCR';
@@ -8,6 +8,7 @@ import { error } from '@angular/compiler/src/util';
 import { reportActivity } from '../DTO/ReportActivity';
 import { generate } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Component({
@@ -23,7 +24,8 @@ export class ReportSummeryComponent implements OnInit {
   reportActivityDetails: reportActivity[];
   reportSummery: ReportSummery;
 
-  reportId: number;
+  // map report id here
+  reportId: number = 22;
 
   addCRBtn: boolean = true;
   showCRDiv: boolean = true;
@@ -52,6 +54,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
   public e: ReportSummery = {
+    id:0,
     clientName: '',
     projectName: '',
     projectType: '',
@@ -69,6 +72,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveReportSummery: ReportSummery = {
+    id: this.reportId != null ? this.reportId:0,
     clientName: '',
     projectName: '',
     projectType: '',
@@ -107,16 +111,16 @@ export class ReportSummeryComponent implements OnInit {
       clientName: [''],
       projectName: [''],
       projectType: [''],
-      accomp: [''],
+      accomp: ['', Validators.required],
       crDetails: this.fb.array([]),
       activityDetails: this.fb.array([]),
       clientAwtInfo: [''],
-      onShoreTotalHrs: [0],
-      onShoreHrsTillLastWeek: [0],
-      onShoreHrsCurrentWeek: [0],
-      offShoreTotalHrs: [0],
-      offShoreHrsTillLastWeek: [0],
-      offShoreHrsCurrentWeek: [0],
+      onShoreTotalHrs: [0, Validators.required],
+      onShoreHrsTillLastWeek: [0, Validators.required],
+      onShoreHrsCurrentWeek: [0, Validators.required],
+      offShoreTotalHrs: [0, Validators.required],
+      offShoreHrsTillLastWeek: [0, Validators.required],
+      offShoreHrsCurrentWeek: [0, Validators.required],
       notes: ['']
     })
 
@@ -125,29 +129,28 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
+    
 
-    this.reportservice.getCRdetails().subscribe(res => {
+    this.reportservice.getCRdetails(this.reportId).subscribe(res => {
       this.reportCRDetails = res;
       console.log(res);
     }, error => console.log(error))
 
-    this.reportservice.getActivitydetails().subscribe(res => {
+    this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
       this.reportActivityDetails = res;
       console.log(res);
     }, error => console.log(error))
 
-
     //debugger;
-    if (this.reportId == 21) {
-
-      this.reportservice.getReportSummeryDetails().subscribe(res => {
+    if (this.reportId != 0)
+    {
+      this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
         this.reportSummery = res;
         console.log(res);
         this.e = res
 
         //this.generateForm();
       }, error => console.log(error))
-
     }
   }
 
@@ -177,8 +180,6 @@ export class ReportSummeryComponent implements OnInit {
   }
 
  
-
-
   generateForm() {
     debugger;
     console.log(this.reportSummery.clientName); 
@@ -203,9 +204,6 @@ export class ReportSummeryComponent implements OnInit {
 
     //this.ReportSummery.setControl('crDetails', this.fb.array(this.reportCRDetails));
     //this.ReportSummery.setControl('activityDetails', this.fb.array(this.reportActivityDetails));
-
-
-
   }
 
   setCrDetails() {
@@ -233,7 +231,8 @@ export class ReportSummeryComponent implements OnInit {
 
   onSubmit() {
     console.log(this.ReportSummery.value);
-   // debugger;
+     debugger;
+    this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
     this.saveReportSummery.projectType = this.ReportSummery.controls.projectType.value;
@@ -249,10 +248,9 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.activityDetails = this.reportActivityDetails;
     this.saveReportSummery.notes = this.ReportSummery.controls.notes.value;
 
-
     console.log(this.saveReportSummery);
 
-
+    // if newreport is created.
     this.reportservice.saveReportDetails(this.saveReportSummery).subscribe(data => {
       //debugger;
       alert("Succesfully Added Product details");
@@ -262,6 +260,7 @@ export class ReportSummeryComponent implements OnInit {
     })
 
    // console.log(this.saveReportSummery);
+
   }
 
   saveForm() {
@@ -277,10 +276,10 @@ export class ReportSummeryComponent implements OnInit {
     let control = <FormArray>this.ReportSummery.controls.crDetails;
     control.push(
       this.fb.group({
-        Name: [''],
-        estimateHrs: [''],
-        actualHrs: [''],
-        status:['']
+        Name: ['', Validators.required],
+        estimateHrs: ['', Validators.required],
+        actualHrs: ['', Validators.required],
+        status: ['', Validators.required]
       })
     )
 
@@ -292,8 +291,8 @@ export class ReportSummeryComponent implements OnInit {
     let control = <FormArray>this.ReportSummery.controls.activityDetails;
     control.push(
       this.fb.group({
-        milestone: [''],
-        ETA: [''],
+        milestone: ['', Validators.required],
+        ETA: ['', Validators.required],
       })
     )
 

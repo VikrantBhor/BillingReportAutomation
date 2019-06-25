@@ -21,18 +21,19 @@ export class ReportService {
   }
 
   //need to pass reportID
-  getCRdetails(): Observable<reportCR[]> {
-    return this.http.get<reportCR[]>(this.Baseurl + 'api/ReportSummery/getCRDetails');
+  getCRdetails(reportId: number): Observable<reportCR[]> {
+    //debugger;
+    return this.http.get<reportCR[]>(this.Baseurl + 'api/ReportSummery/getCRDetails/' + reportId);
   }
 
   //need to pass reportID
-  getActivitydetails(): Observable<reportActivity[]> {
-    return this.http.get<reportActivity[]>(this.Baseurl + 'api/ReportSummery/getActivityDetails');
+  getActivitydetails(reportId: number): Observable<reportActivity[]> {
+    return this.http.get<reportActivity[]>(this.Baseurl + 'api/ReportSummery/getActivityDetails/' + reportId);
   }
 
-  getReportSummeryDetails(): Observable<ReportSummery> {
+  getReportSummeryDetails(reportId: number): Observable<ReportSummery> {
     //debugger;
-    return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails');
+    return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails/' + reportId);
   }
 
 
@@ -45,10 +46,22 @@ export class ReportService {
     let options = {
       headers: headers
     }; 
-
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
+  }
 
-  } 
+  //saveEditReprot(): Observable<any> {
+  //  let headers = new HttpHeaders({
+  //    'Content-Type': 'application/json',
+  //  });
+
+  //  let options = {
+  //    headers: headers
+  //  };
+
+  //  return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery',reportsumm)
+
+  //}
+
 
   getReports(role,reportStatus): Observable<reportList[]> {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
