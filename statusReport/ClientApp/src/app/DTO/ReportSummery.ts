@@ -2,6 +2,7 @@ import { reportCR } from "./ReportCR";
 import { reportActivity } from "./ReportActivity";
 
 export interface ReportSummery {
+  id: number,
   clientName: string,
   projectName: string,
   projectType: string,

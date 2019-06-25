@@ -8,6 +8,7 @@ import { ReportSummery } from '../DTO/ReportSummery';
 import { reportActivity } from '../DTO/ReportActivity';
 import { IClientList, IProgramList } from '../DTO/ClientInfo';
 import { IReportDetail } from '../../app/DTO/ReportSummery';
+import { formatDate } from '@angular/common';
 
 
 
@@ -23,33 +24,30 @@ export class ReportService {
   }
 
   //need to pass reportID
-  getCRdetails(): Observable<reportCR[]> {
-    return this.http.get<reportCR[]>(this.Baseurl + 'api/ReportSummery/getCRDetails');
+  getCRdetails(reportId: number): Observable<reportCR[]> {
+    //debugger;
+    return this.http.get<reportCR[]>(this.Baseurl + 'api/ReportSummery/getCRDetails/' + reportId);
   }
 
   //need to pass reportID
-  getActivitydetails(): Observable<reportActivity[]> {
-    return this.http.get<reportActivity[]>(this.Baseurl + 'api/ReportSummery/getActivityDetails');
+  getActivitydetails(reportId: number): Observable<reportActivity[]> {
+    return this.http.get<reportActivity[]>(this.Baseurl + 'api/ReportSummery/getActivityDetails/' + reportId);
   }
 
-  getReportSummeryDetails(): Observable<ReportSummery> {
+  getReportSummeryDetails(reportId: number): Observable<ReportSummery> {
     //debugger;
-    return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails');
+    return this.http.get<ReportSummery>(this.Baseurl + 'api/ReportSummery/getReportSummeryDetails/' + reportId);
   }
 
 
   saveReportDetails(reportSummery: ReportSummery): Observable<any> {
-   // debugger;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-
     let options = {
       headers: headers
     }; 
-
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
-
   } 
 
   getClientList(): Observable<IClientList[]> {
@@ -59,6 +57,18 @@ export class ReportService {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
   }
 
+  rejectReport(id, remark): Observable<void> {
+    debugger;
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    //const formData: FormData = new FormData();
+    //formData.append('remark', remark);
+    return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
+  }
   getProgramType(id): Observable<IProgramList[]> {
     return this.http.get<IProgramList[]>(this.Baseurl + 'api/Report/GetProgramType/' + id);
   }

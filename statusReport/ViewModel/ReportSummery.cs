@@ -7,7 +7,7 @@ namespace statusReport.ViewModel
 {
     public class ReportSummery
     {
-
+        public int id { get; set; }
         public string clientName { get; set; }
         public string projectName { get; set; }
         public string projectType { get; set; }

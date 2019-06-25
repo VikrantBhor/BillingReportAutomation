@@ -10,4 +10,22 @@
   }
 }
 
+.ng-touched, .ng-invalid {
+  border-color: red;
+}
+
+/*.ng-touched, .ng-invalid, .ng-pristine {
+  border-color: #ced4da;
+}*/
+
+.ng-untouched {
+  border-color: #ced4da;
+}
+
+.ng-valid {
+  border-color: #ced4da;
+}
+
+
+
  
