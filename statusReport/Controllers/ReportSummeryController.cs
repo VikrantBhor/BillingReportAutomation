@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using statusReport.BillingDBModels;
+using statusReport.DTO;
+using statusReport.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using statusReport.BillingDBModels;
-using statusReport.ViewModel;
 
 namespace statusReport.Controllers
 {
@@ -23,12 +24,13 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportCr.Where(x => x.ReportId == 21).Select(x=> new CRDetails ()
-                                                                            { crName = x.CrName,
-                                                                              estimateHrs =(int) x.EstimateHrs,
-                                                                              actualHrs = (int)x.ActualHrs,
-                                                                              status = Convert.ToString(x.Status)
-                                                                            }
+                    return context.TblReportCr.Where(x => x.ReportId == 21).Select(x => new CRDetails()
+                    {
+                        crName = x.CrName,
+                        estimateHrs = (int)x.EstimateHrs,
+                        actualHrs = (int)x.ActualHrs,
+                        status = Convert.ToString(x.Status)
+                    }
                     ).ToList();
                 }
             }
@@ -45,11 +47,11 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportActivity.Where(x => x.ReportId == 21).Select(x=> new ActivityDetails()
-                                                                                {
-                                                                                    milestones= x.Milestones,
-                                                                                    eta= Convert.ToInt32(x.Eta)
-                                                                                }
+                    return context.TblReportActivity.Where(x => x.ReportId == 21).Select(x => new ActivityDetails()
+                    {
+                        milestones = x.Milestones,
+                        eta = Convert.ToInt32(x.Eta)
+                    }
                     ).ToList();
                 }
 
@@ -71,23 +73,23 @@ namespace statusReport.Controllers
                     ReportSummery reportSummery = new ReportSummery();
 
                     reportSummery = (from RS in context.TblReportSummery
-                                  join RSD in context.TblReportSummeryDetails on RS.ReportId equals RSD.ReportId
-                                  where RS.ReportId == 21
-                                  select new ReportSummery
-                                  {
-                                      clientName = RS.ClientName,
-                                      projectName = RS.ProjectName,
-                                      projectType = RS.ProjectType,
-                                      accomp = RSD.Accomplishments,
-                                      clientAwtInfo = RSD.ClientAwtInfo,
-                                      onShoreTotalHrs = (int) RSD.OnshoreTotalHrs,
-                                      onShoreHrsTillLastWeek = (int) RSD.OnshoreLastWeekHrs,
-                                      onShoreHrsCurrentWeek = (int) RSD.OnshoreCurrentWeekHrs,
-                                      offShoreTotalHrs = (int) RSD.OnshoreTotalHrs,
-                                      offShoreHrsTillLastWeek = (int) RSD.OnshoreLastWeekHrs,
-                                      offShoreHrsCurrentWeek = (int) RSD.OnshoreCurrentWeekHrs,
-                                      notes = RSD.Notes
-                                  }).SingleOrDefault();
+                                     join RSD in context.TblReportSummeryDetails on RS.ReportId equals RSD.ReportId
+                                     where RS.ReportId == 21
+                                     select new ReportSummery
+                                     {
+                                         clientName = RS.ClientName,
+                                         projectName = RS.ProjectName,
+                                         projectType = RS.ProjectType,
+                                         accomp = RSD.Accomplishments,
+                                         clientAwtInfo = RSD.ClientAwtInfo,
+                                         onShoreTotalHrs = (int)RSD.OnshoreTotalHrs,
+                                         onShoreHrsTillLastWeek = (int)RSD.OnshoreLastWeekHrs,
+                                         onShoreHrsCurrentWeek = (int)RSD.OnshoreCurrentWeekHrs,
+                                         offShoreTotalHrs = (int)RSD.OnshoreTotalHrs,
+                                         offShoreHrsTillLastWeek = (int)RSD.OnshoreLastWeekHrs,
+                                         offShoreHrsCurrentWeek = (int)RSD.OnshoreCurrentWeekHrs,
+                                         notes = RSD.Notes
+                                     }).SingleOrDefault();
 
                     return reportSummery;
 
@@ -100,8 +102,6 @@ namespace statusReport.Controllers
                 throw ex;
             }
         }
-
-
 
         [HttpPost("saveReportSummery")]
         public ActionResult saveReportSummery([FromBody]ReportSummery reportSummery)
@@ -151,7 +151,7 @@ namespace statusReport.Controllers
                     context.TblReportSummeryDetails.Add(tblReportSummeryDetails);
                     context.SaveChanges();
 
-                     //first delete all existing record 
+                    //first delete all existing record 
 
                     foreach (CRDetails cR in reportSummery.crDetails)
                     {
@@ -182,7 +182,7 @@ namespace statusReport.Controllers
                     }
                     context.SaveChanges();
 
-                    return Ok(); 
+                    return Ok();
                 }
 
             }
@@ -191,6 +191,22 @@ namespace statusReport.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPut]
+        [Route("rejectReport/{id}/{remark}")]
+        public async Task<IActionResult> RejectReport([FromRoute]int id, [FromRoute] string remark)
+        {
+            using (BillingReportContext context = new BillingReportContext())
+            {
+                var report = context.TblReportSummery.Where(i => i.ReportId == id).FirstOrDefault();
+                report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
+                report.Remark = remark;
+                context.TblReportSummery.Update(report);
+                await context.SaveChangesAsync();
+
+            }
+            return Ok();
         }
     }
 }

@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FilterPipeModule } from 'ngx-filter-pipe'; 
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrModule } from 'ngx-toastr';
 
 import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
@@ -43,12 +44,14 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
     FilterPipeModule,
     NgxPaginationModule,
     NgbModule,
+    ToastrModule.forRoot(), // ToastrModule added
     RouterModule.forRoot([
       { path: '', component: ReportComponent, canActivate: [AdalGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
       { path: 'reportSummery', component: ReportSummeryComponent },
+      { path: 'report', component: ReportComponent },
       { path: 'reportCr', component: ReportCRComponent },
       
     ])

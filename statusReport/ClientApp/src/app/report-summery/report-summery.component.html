@@ -6,9 +6,8 @@
   <div class="card-header">
     <h6> {{reportType}} Hours Summery Report </h6>
   </div>
+
   <div class="card-body">
-
-
     <form [formGroup]="ReportSummery">
 
       <div class="form-group  row mb-2">
@@ -314,7 +313,6 @@
     </form>
   </div>
 
-
   <div class="card-footer">
     <div class="Zeropadding  row mb-2">
       <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
@@ -342,7 +340,7 @@
         <div class="input-group">
           <label class="control-label col-sm-4" for="">Remarks</label>
           <div class="input-group-append col-sm-8">
-            <input type="text" [(ngModel)]="comment" name="c" required>
+            <textarea rows="3" cols="50" [(ngModel)]="comment" name="c" required></textarea>
           </div>
         </div>
       </div>
