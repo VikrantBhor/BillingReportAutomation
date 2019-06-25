@@ -1,6 +1,6 @@
 export interface reportActivity {
-  actvityId: number;
-  reportID: number;
-  Milestone: string;
-  ETA: number;
+  //actvityId: number;
+  //reportID: number;
+  milestones: string;
+  eta: number;
 }

@@ -13,6 +13,9 @@ import { ProjectComponent } from './project/project.component';
 
 import { AdalService, AdalGuard, AdalInterceptor } from 'adal-angular4';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FilterPipeModule } from 'ngx-filter-pipe'; 
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
@@ -40,12 +43,15 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    FilterPipeModule,
+    NgxPaginationModule,
+    NgbModule,
     RouterModule.forRoot([
       { path: '', component: ReportComponent, canActivate: [AdalGuard], pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
-      { path: 'reportSummery', component: ReportSummeryComponent, canActivate: [AdalGuard] },
+      { path: 'reportSummery', component: ReportSummeryComponent },
       { path: 'reportCr', component: ReportCRComponent },
       { path: 'reportCreate', component: ReportCreateComponent },
     ]),
