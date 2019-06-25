@@ -6,6 +6,7 @@ import { Response } from '@angular/http';
 import { reportList } from '../DTO/ReportList';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { reportActivity } from '../DTO/ReportActivity';
+import { formatDate } from '@angular/common';
 
 
 
@@ -38,34 +39,29 @@ export class ReportService {
 
 
   saveReportDetails(reportSummery: ReportSummery): Observable<any> {
-   // debugger;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-
     let options = {
       headers: headers
     }; 
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
-  }
-
-  //saveEditReprot(): Observable<any> {
-  //  let headers = new HttpHeaders({
-  //    'Content-Type': 'application/json',
-  //  });
-
-  //  let options = {
-  //    headers: headers
-  //  };
-
-  //  return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery',reportsumm)
-
-  //}
-
+  } 
 
   getReports(role,reportStatus): Observable<reportList[]> {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
   }
 
-
+  rejectReport(id, remark): Observable<void> {
+    debugger;
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    //const formData: FormData = new FormData();
+    //formData.append('remark', remark);
+    return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
+  }
 }

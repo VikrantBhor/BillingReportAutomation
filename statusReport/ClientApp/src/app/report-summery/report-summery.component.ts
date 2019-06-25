@@ -8,8 +8,8 @@ import { error } from '@angular/compiler/src/util';
 import { reportActivity } from '../DTO/ReportActivity';
 import { generate } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-report-summery',
@@ -106,7 +106,7 @@ export class ReportSummeryComponent implements OnInit {
     ]
   }
 
-  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal) {
+  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private _router: Router, private toastr: ToastrService) {
     this.ReportSummery = this.fb.group({
       clientName: [''],
       projectName: [''],
@@ -160,7 +160,7 @@ export class ReportSummeryComponent implements OnInit {
       debugger;
       if (result == "Save click") {
         this.remark = this.comment;
-
+        this.rejectReport(1, this.remark);
       }
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -179,7 +179,6 @@ export class ReportSummeryComponent implements OnInit {
     }
   }
 
- 
   generateForm() {
     debugger;
     console.log(this.reportSummery.clientName); 
@@ -227,7 +226,6 @@ export class ReportSummeryComponent implements OnInit {
       }))
     })
   }
-
 
   onSubmit() {
     console.log(this.ReportSummery.value);
@@ -300,7 +298,6 @@ export class ReportSummeryComponent implements OnInit {
     this.showActDiv = false;
   }
 
-
   deleteCR(index) {
     //debugger;
     console.log(this.reportCRDetails);
@@ -308,7 +305,6 @@ export class ReportSummeryComponent implements OnInit {
     //control.removeAt(index)
     this.reportCRDetails.splice(index,1)
   }
-
 
   deleteActivity(index) {
     //debugger;
@@ -347,6 +343,15 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.reportActivityDetails)
   }
 
+  rejectReport(id, remark) {
+    debugger;
+    this.reportservice.rejectReport(id, remark).subscribe(data => {
+      debugger;
+      this._router.navigate(['/report/']).then(x => {
+        this.toastr.success('Report rejected successfully !', 'Success');
+      });
+    })
+  }
 }
 
 

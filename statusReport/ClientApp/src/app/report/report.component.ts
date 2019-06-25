@@ -5,6 +5,7 @@ import { FilterPipe } from 'ngx-filter-pipe';
 import { ReportService } from '../services/report.service';
 import { reportList } from '../DTO/ReportList';
 
+
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
@@ -19,6 +20,7 @@ export class ReportComponent implements OnInit {
   p: number = 1;
   searchTerm: any = { clientName: '' };;
   btnPendingClicked = false;
+  showLoader = true;
 
   constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService) {
     //debugger;
@@ -26,9 +28,11 @@ export class ReportComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.adalService.userInfo;
-    //debugger;
+    debugger;
+    this.showLoader = true;
     this.user.token = this.user.token.substring(0, 10) + '...';
     console.log(this.user.token);
+    //var r = Configuration["IdentityServerAddress"];
     if (this.user.userName.indexOf('Rumana') == 0) { // This block is for Rumana
       this.role = "Manager";
       this.getSubmittedReports();
@@ -59,8 +63,8 @@ export class ReportComponent implements OnInit {
     this.statusReport = 0;
     this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
-
-      //debugger;
+      debugger;
+      this.showLoader = false;
       this.reports = res;
       console.log(res);
     }, error => console.log(error))
@@ -71,6 +75,7 @@ export class ReportComponent implements OnInit {
     this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
       debugger;
+      this.showLoader = false;
       this.reports = res;
       console.log(res);
     }, error => console.log(error))
@@ -81,6 +86,7 @@ export class ReportComponent implements OnInit {
     this.statusReport = 3;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
       debugger;
+      this.showLoader = false;
       this.reports = res;
       console.log(res);
     }, error => console.log(error))

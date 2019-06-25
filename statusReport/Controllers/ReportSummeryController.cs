@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using statusReport.BillingDBModels;
+using statusReport.DTO;
+using statusReport.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using statusReport.BillingDBModels;
-using statusReport.ViewModel;
 
 namespace statusReport.Controllers
 {
@@ -103,8 +104,6 @@ namespace statusReport.Controllers
                 throw ex;
             }
         }
-
-
 
         [HttpPost("saveReportSummery")]
         public ActionResult saveReportSummery([FromBody]ReportSummery reportSummery)
@@ -278,6 +277,22 @@ namespace statusReport.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPut]
+        [Route("rejectReport/{id}/{remark}")]
+        public async Task<IActionResult> RejectReport([FromRoute]int id, [FromRoute] string remark)
+        {
+            using (BillingReportContext context = new BillingReportContext())
+            {
+                var report = context.TblReportSummery.Where(i => i.ReportId == id).FirstOrDefault();
+                report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
+                report.Remark = remark;
+                context.TblReportSummery.Update(report);
+                await context.SaveChangesAsync();
+
+            }
+            return Ok();
         }
     }
 }

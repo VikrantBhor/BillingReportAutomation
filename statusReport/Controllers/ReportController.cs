@@ -56,7 +56,8 @@ namespace statusReport.Controllers
                                       ClientName = reportSummary.ClientName,
                                       ProjectName = reportSummary.ProjectName,
                                       ProjectType = reportSummary.ProjectType,
-                                      CreatedDate = reportSummary.CreatedDate
+                                      CreatedDate = reportSummary.CreatedDate,
+                                      Remark = reportSummary.Remark
                                   }).ToList();
                     }
                 }

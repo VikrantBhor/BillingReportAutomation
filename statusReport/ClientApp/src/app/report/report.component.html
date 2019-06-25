@@ -6,6 +6,11 @@
   </div>
 </div>
 <br />
+<div id="loading" *ngIf="showLoader">
+  <div id="loading-center">
+    <div class="loader"></div>
+  </div>
+</div>
 <div class="row">
   <div class="col-sm-12">
     <div class="container container-border " style="background-color: white !important">
@@ -36,7 +41,7 @@
                   <td> <a routerLink="['/reportSummery/', report.id]">{{ report.clientName }} {{ report.projectName }} {{ report.projectType }}</a></td>
                   <td>{{ report.createdDate | date: 'mediumDate'}}</td>
                   <td *ngIf="this.role=='Manager'">{{ report.createdBy }}</td>
-                  <td *ngIf="this.btnPendingClicked == true ">{{ report.remarks }}</td>
+                  <td *ngIf="this.btnPendingClicked == true ">{{ report.remark }}</td>
                 </tr>
               </tbody>
             </table>
@@ -47,11 +52,7 @@
     </div>
   </div>
 </div>
-<br />
-<br />
-<br />
 
-
-<h6> {{user | json}}</h6>
+<!--<h6> {{user | json}}</h6>-->
 <!--<button name="Profile" (click)="profileClicked()">Get My Profile</button>-->
 <!--<h4 *ngIf="profile"> {{user | json}}</h4>-->
