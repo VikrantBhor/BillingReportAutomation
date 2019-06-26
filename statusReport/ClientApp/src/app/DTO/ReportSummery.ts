@@ -18,3 +18,11 @@ export interface ReportSummery {
   offShoreHrsCurrentWeek: number,
   notes: string
 }
+export interface IReportDetail {
+  ClientName: string;
+  ProjectName: string;
+  ProjectType: string;
+  ReportStartDate: string;
+  CreatedBy: string;
+  CreatedByEmail: string;
+}

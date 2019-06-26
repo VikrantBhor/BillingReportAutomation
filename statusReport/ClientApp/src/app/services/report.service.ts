@@ -6,6 +6,8 @@ import { Response } from '@angular/http';
 import { reportList } from '../DTO/ReportList';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { reportActivity } from '../DTO/ReportActivity';
+import { IClientList, IProgramList } from '../DTO/ClientInfo';
+import { IReportDetail } from '../../app/DTO/ReportSummery';
 import { formatDate } from '@angular/common';
 
 
@@ -48,6 +50,9 @@ export class ReportService {
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
   } 
 
+  getClientList(): Observable<IClientList[]> {
+    return this.http.get<IClientList[]>(this.Baseurl + 'api/Report/GetClientList');
+  }
   getReports(role,reportStatus): Observable<reportList[]> {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
   }
@@ -64,4 +69,18 @@ export class ReportService {
     //formData.append('remark', remark);
     return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
   }
+  getProgramType(id): Observable<IProgramList[]> {
+    return this.http.get<IProgramList[]>(this.Baseurl + 'api/Report/GetProgramType/' + id);
+  }
+
+  saveReport(reportDetail: IReportDetail): Observable<any> {
+    debugger;
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    return this.http.post(this.Baseurl + 'api/Report/SaveReportDetails',reportDetail,options);    
+  } 
 }

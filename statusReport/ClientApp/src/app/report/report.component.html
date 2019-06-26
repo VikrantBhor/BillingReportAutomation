@@ -2,7 +2,7 @@
   <div class="col-sm-12">
     <button *ngIf="this.role=='TL'" class=" btn btn-info" (click)="getSavedReports()">Saved Reports</button>&nbsp;&nbsp;
     <button *ngIf="this.role=='TL'" class=" btn btn-info" (click)="getPendingReports()">Pending Reports</button>
-    <button *ngIf="this.role=='TL'" class=" btn btn-primary" style="float:right">Create Report</button>
+    <button *ngIf="this.role=='TL'" [routerLink]="['/reportCreate']" class=" btn btn-primary" style="float:right">Create Report</button>
   </div>
 </div>
 <br />
@@ -50,6 +50,11 @@
         </div>
       </div>
     </div>
+    <!--<button class=" btn btn-info">Saved Reports</button>&nbsp;&nbsp;
+    <button class=" btn btn-info">Pending Reports</button>
+   
+      <button [routerLink]="['/reportCreate']" class="btn btn-primary" style="float:right">Create Report</button>-->
+   
   </div>
 </div>
 

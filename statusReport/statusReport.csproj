@@ -49,6 +49,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\DTO\ClientInfo.ts" />
+    <None Remove="ClientApp\src\app\DTO\ReportSummery.ts" />
+    <None Remove="ClientApp\src\app\report\CreateReport\report-create.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\app\services\" />
   </ItemGroup>
 
@@ -202,6 +208,12 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\DTO\ReportList.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\DTO\ClientInfo.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\DTO\ReportSummery.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\report\CreateReport\report-create.component.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

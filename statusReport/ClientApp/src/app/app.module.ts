@@ -23,6 +23,9 @@ import { LoginComponent } from './login/login.component';
 import { ReportComponent } from './report/report.component';
 import { ReportSummeryComponent } from './report-summery/report-summery.component';
 import { ReportCRComponent } from './report-cr/report-cr.component';
+import { ReportCreateComponent } from './report/CreateReport/report-create.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
     LoginComponent,
     ReportComponent,
     ReportSummeryComponent,
-    ReportCRComponent
+    ReportCRComponent,
+    ReportCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,8 +58,10 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
       { path: 'reportSummery', component: ReportSummeryComponent },
       { path: 'report', component: ReportComponent },
       { path: 'reportCr', component: ReportCRComponent },
-      
-    ])
+      { path: 'reportCreate', component: ReportCreateComponent },
+    ]),
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot() // DatePicker Module added   
   ],
   providers: [
     AdalService,
