@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MySql.Data.MySqlClient;
@@ -90,6 +91,10 @@ namespace statusReport.Models
         public virtual DbSet<WDaysRevision> WDaysRevision { get; set; }
         public virtual DbSet<WeekApprovalCurrentStatus> WeekApprovalCurrentStatus { get; set; }
         public virtual DbSet<WeekApprovalStatusHistory> WeekApprovalStatusHistory { get; set; }
+
+       
+
+
 
         // Unable to generate entity type for table 'actitime.invoice_bill_to_recent_entry'. Please see the warning messages.
         // Unable to generate entity type for table 'actitime.invoice_discount'. Please see the warning messages.
