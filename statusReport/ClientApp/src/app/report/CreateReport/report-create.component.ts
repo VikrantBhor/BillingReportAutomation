@@ -18,21 +18,26 @@ import { getLocaleDateTimeFormat } from '@angular/common';
 
 export class ReportCreateComponent implements OnInit {
   clientList: IClientList[];
+  user: any;
   programTypeList: IProgramList[];
   reportForm: FormGroup;
   reportDetail: IReportDetail = {
     ClientName : '0',
     ProjectName: '0',
     ProjectType: '0',
-    ReportStartDate: ''
+    CreatedBy: '',
+    CreatedByEmail: '',
+    ReportStartDate: ''   
   } ;
 
-  constructor(private reportservice: ReportService) {
+  constructor(private adalService: AdalService, private reportservice: ReportService) {
     
   }
 
 
   ngOnInit() {
+    debugger;
+    this.user = this.adalService.userInfo;
     this.GetClientList();
     this.reportForm = new FormGroup({
       clientName: new FormControl(),
@@ -45,18 +50,16 @@ export class ReportCreateComponent implements OnInit {
 
 
    SubmitReport() {
-    debugger;
-    var selectedClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
-    var selectedProjectName = this.programTypeList.find(x => x.id == parseInt(this.reportDetail.ProjectName)).name;
      this.AssignValues(this.reportDetail);
   }
 
 
    AssignValues(detail: IReportDetail) {
-
      detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
      detail.ProjectName = this.programTypeList.find(x => x.id == parseInt(this.reportDetail.ProjectName)).name;
      detail.ProjectType = this.reportDetail.ProjectType;
+     detail.CreatedBy = this.user.profile.name;
+     detail.CreatedByEmail = this.user.userName;
      let date = new Date(this.reportDetail.ReportStartDate).toLocaleDateString();
      detail.ReportStartDate = date;
 
@@ -69,14 +72,12 @@ export class ReportCreateComponent implements OnInit {
 }
 
   GetClientList() {
-    debugger;
     this.reportservice.getClientList().subscribe((response: any) => {
       this.clientList = response;
     });
   }
 
   OnClientChange(event:any) {
-    debugger;
     this.reportservice.getProgramType(event.target.value).subscribe((response: any) => {
       this.programTypeList = response;
     });

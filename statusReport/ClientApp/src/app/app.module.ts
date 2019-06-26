@@ -24,6 +24,7 @@ import { ReportComponent } from './report/report.component';
 import { ReportSummeryComponent } from './report-summery/report-summery.component';
 import { ReportCRComponent } from './report-cr/report-cr.component';
 import { ReportCreateComponent } from './report/CreateReport/report-create.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
@@ -59,7 +60,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
       { path: 'reportCr', component: ReportCRComponent },
       { path: 'reportCreate', component: ReportCreateComponent },
     ]),
-    BsDatepickerModule.forRoot()
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot() // DatePicker Module added   
   ],
   providers: [
     AdalService,

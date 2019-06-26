@@ -10,6 +10,8 @@ namespace statusReport.DTO
         public string ClientName { get; set; }
         public string ProjectName { get; set; }
         public string ProjectType { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedByEmail { get; set; }        
         public DateTime ReportStartDate { get; set; }
         
 

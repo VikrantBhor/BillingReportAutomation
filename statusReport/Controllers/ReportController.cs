@@ -122,8 +122,9 @@ namespace statusReport.Controllers
                 reportSummery.ApprovedBy = null;
                 reportSummery.ApprovedDate = null;
                 reportSummery.ClientName = reportDetail.ClientName;
-                reportSummery.CreatedBy = null;
-                reportSummery.CreatedDate = null;
+                reportSummery.CreatedBy = reportDetail.CreatedBy;
+                reportSummery.CreatedByEmail = reportDetail.CreatedByEmail;
+                reportSummery.CreatedDate = DateTime.Now;
                 reportSummery.IsApproved = false;
                 reportSummery.LastUpdatedBy = null;
                 reportSummery.LastUpdatedDate = null;
