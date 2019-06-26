@@ -51,14 +51,14 @@
 
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="accomp">Accomplishments</label>
-        <div class="col-md-8">
-          <input type="text"
+        <div class="col-md-9">
+          <textarea type="text"
                  id="accomp"
                  class="form-control"
-                 placeholder="Team Accomplishments"
+                 placeholder="Team Accomplishments...."
                  name="accomp"
                  formControlName="accomp"
-                 [(ngModel)]="e.accomp" required>
+                 [(ngModel)]="e.accomp" required></textarea>
         </div>
       </div>
 
@@ -96,7 +96,7 @@
           </table>
 
           
-            <div formArrayName="crDetails" [formGroup]="crDetails" *ngIf="!showCRDiv">
+            <div formArrayName="crDetails" *ngIf="!showCRDiv">
               <div>
                 <fieldset>
                   <div [formGroupName]="0" id="CRform">
@@ -110,14 +110,14 @@
                                formControlName="Name"
                                style="margin-right:5px;" required>
                         <input type="number"
-                               class="form-control col-md-2"
+                               class="form-control col-md-1"
                                id="city"
                                placeholder="CR Estimate Hrs"
                                name="estimateHrs"
                                formControlName="estimateHrs"
                                style="margin-right:5px;" required>
                         <input type="number"
-                               class="form-control col-md-2"
+                               class="form-control col-md-1"
                                id="city"
                                placeholder="CR Actual Hrs"
                                name="actualHrs"
@@ -130,8 +130,11 @@
                                name="status"
                                formControlName="status"
                                style="margin-right:5px;" required>&nbsp;
-                        <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveCRDetails()">
+                        <button style="margin-left:20px;" type="button" class="btn btn-success" (click)="saveCRDetails()" [disabled]="!this.ReportSummery.controls.crDetails.controls[0].valid">
                           <span class="fa fa-check-square" aria-hidden="true"></span> save
+                        </button>
+                        <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelCR()">
+                          <span class="fa fa-window-close" aria-hidden="true"></span> Cancel
                         </button>
                       </div>
                     </div>
@@ -194,9 +197,12 @@
                              placeholder="Required ETA"
                              name="eta"
                              formControlName="eta"
-                             style="margin-right:5px;" required>&nbsp;
-                      <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveActivityDetails()">
+                             style="margin-right:5px;" required>
+                      <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveActivityDetails()" [disabled]="!this.ReportSummery.controls.activityDetails.controls[0].valid">
                         <span class="fa fa-check-square" aria-hidden="true"></span> save
+                      </button>
+                      <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelActivity()">
+                        <span class="fa fa-window-close" aria-hidden="true"></span> Cancel
                       </button>
                     </div>
                   </div>
@@ -210,14 +216,14 @@
 
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="clientAwtInfo">Client Awaiting Information</label>
-        <div class="col-md-8">
-          <input type="text"
+        <div class="col-md-9">
+          <textarea type="text"
                  id="clientAwtInfo"
                  class="form-control"
-                 placeholder="Client Awaiting Information"
+                 placeholder="Client Awaiting Information...."
                  name="clientAwtInfo"
                  formControlName="clientAwtInfo"
-                 [(ngModel)]="e.clientAwtInfo">
+                 [(ngModel)]="e.clientAwtInfo"></textarea>
         </div>
       </div>
 
@@ -302,14 +308,14 @@
 
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="notes">Notes</label>
-        <div class="col-md-8">
-          <input type="text"
+        <div class="col-md-9">
+          <textarea type="text"
                  id="notes"
                  class="form-control"
-                 placeholder="Notes.."
+                 placeholder="Notes...."
                  name="notes"
                  formControlName="notes"
-                 [(ngModel)]="e.notes">
+                 [(ngModel)]="e.notes"></textarea>
         </div>
       </div>
 

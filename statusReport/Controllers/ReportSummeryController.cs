@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using statusReport.Models;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace statusReport.Controllers
 {
@@ -25,12 +28,12 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportCr.Where(x => x.ReportId == id).Select(x=> new CRDetails ()
-                                                                            { crName = x.CrName,
-                                                                              estimateHrs =(int) x.EstimateHrs,
-                                                                              actualHrs = (int)x.ActualHrs,
-                                                                              status = Convert.ToString(x.Status)
-                                                                            }
+                    return context.TblReportCr.Where(x => x.ReportId == id).Select(x => new CRDetails()
+                    { crName = x.CrName,
+                        estimateHrs = (int)x.EstimateHrs,
+                        actualHrs = (int)x.ActualHrs,
+                        status = Convert.ToString(x.Status)
+                    }
                     ).ToList();
                 }
             }
@@ -48,11 +51,11 @@ namespace statusReport.Controllers
             {
                 using (BillingReportContext context = new BillingReportContext())
                 {
-                    return context.TblReportActivity.Where(x => x.ReportId == id).Select(x=> new ActivityDetails()
-                                                                                {
-                                                                                    milestones= x.Milestones,
-                                                                                    eta= Convert.ToInt32(x.Eta)
-                                                                                }
+                    return context.TblReportActivity.Where(x => x.ReportId == id).Select(x => new ActivityDetails()
+                    {
+                        milestones = x.Milestones,
+                        eta = Convert.ToInt32(x.Eta)
+                    }
                     ).ToList();
                 }
 
@@ -75,23 +78,23 @@ namespace statusReport.Controllers
                     ReportSummery reportSummery = new ReportSummery();
 
                     reportSummery = (from RS in context.TblReportSummery
-                                  join RSD in context.TblReportSummeryDetails on RS.ReportId equals RSD.ReportId
-                                  where RS.ReportId == id
+                                     join RSD in context.TblReportSummeryDetails on RS.ReportId equals RSD.ReportId
+                                     where RS.ReportId == id
                                      select new ReportSummery
-                                  {
-                                      clientName = RS.ClientName,
-                                      projectName = RS.ProjectName,
-                                      projectType = RS.ProjectType,
-                                      accomp = RSD.Accomplishments,
-                                      clientAwtInfo = RSD.ClientAwtInfo,
-                                      onShoreTotalHrs = (int) RSD.OnshoreTotalHrs,
-                                      onShoreHrsTillLastWeek = (int) RSD.OnshoreLastWeekHrs,
-                                      onShoreHrsCurrentWeek = (int) RSD.OnshoreCurrentWeekHrs,
-                                      offShoreTotalHrs = (int) RSD.OnshoreTotalHrs,
-                                      offShoreHrsTillLastWeek = (int) RSD.OnshoreLastWeekHrs,
-                                      offShoreHrsCurrentWeek = (int) RSD.OnshoreCurrentWeekHrs,
-                                      notes = RSD.Notes
-                                  }).SingleOrDefault();
+                                     {
+                                         clientName = RS.ClientName,
+                                         projectName = RS.ProjectName,
+                                         projectType = RS.ProjectType,
+                                         accomp = RSD.Accomplishments,
+                                         clientAwtInfo = RSD.ClientAwtInfo,
+                                         onShoreTotalHrs = (int)RSD.OnshoreTotalHrs,
+                                         onShoreHrsTillLastWeek = (int)RSD.OnshoreLastWeekHrs,
+                                         onShoreHrsCurrentWeek = (int)RSD.OnshoreCurrentWeekHrs,
+                                         offShoreTotalHrs = (int)RSD.OnshoreTotalHrs,
+                                         offShoreHrsTillLastWeek = (int)RSD.OnshoreLastWeekHrs,
+                                         offShoreHrsCurrentWeek = (int)RSD.OnshoreCurrentWeekHrs,
+                                         notes = RSD.Notes
+                                     }).SingleOrDefault();
 
                     return reportSummery;
 
@@ -192,7 +195,7 @@ namespace statusReport.Controllers
                         TblReportSummery tblReportSummery = context.TblReportSummery.SingleOrDefault(x => x.ReportId == reportSummery.id);
 
                         if (tblReportSummery != null)
-                        { 
+                        {
                             tblReportSummery.ClientName = reportSummery.clientName;
                             tblReportSummery.ProjectName = reportSummery.projectName;
                             tblReportSummery.ProjectType = reportSummery.projectType;
@@ -294,5 +297,83 @@ namespace statusReport.Controllers
             }
             return Ok();
         }
+
+
+
+        [HttpGet]
+        [Route("GetComments/{id}")]
+        public IEnumerable<userCommends> GetComments( string id)
+        {
+            try
+            {
+                List<userCommends> userCommnets = new List<userCommends>();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select* from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) +  ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) +")", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+                        DataTable data = reader.GetSchemaTable();
+
+                        while (reader.Read())
+                        {
+                           // userCommnets.Add("test");
+                        }
+
+                    }
+
+                        return userCommnets;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("getActiTimeHrs/{id}")]
+        public int getActiTimeHrs(int id)
+        {
+            try
+            {
+                List<string> userCommnets = new List<string>();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand("select * from actitime.tt_record where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ")", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+                        DataTable data = reader.GetSchemaTable();
+
+                        while (reader.Read())
+                        {
+                            // userCommnets.Add("test");
+                        }
+
+                    }
+
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+        }
+
+
     }
 }

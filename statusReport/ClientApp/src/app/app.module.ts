@@ -55,7 +55,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'project', component: ProjectComponent },
-      { path: 'reportSummery', component: ReportSummeryComponent },
+      { path: 'reportSummery/:reportId', component: ReportSummeryComponent },
       { path: 'report', component: ReportComponent },
       { path: 'reportCr', component: ReportCRComponent },
       { path: 'reportCreate', component: ReportCreateComponent },
