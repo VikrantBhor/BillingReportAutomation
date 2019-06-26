@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MySql.Data.MySqlClient;
 
 namespace statusReport.Models
 {
@@ -13,6 +14,11 @@ namespace statusReport.Models
         public actitimeContext(string connectionString)
         {
             this.ConnectionString = connectionString;
+        }
+
+        public MySqlConnection GetConnection()
+        {
+            return new MySqlConnection(ConnectionString);
         }
 
         public actitimeContext(DbContextOptions<actitimeContext> options)

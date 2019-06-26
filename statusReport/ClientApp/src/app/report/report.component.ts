@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { ReportService } from '../services/report.service';
 import { reportList } from '../DTO/ReportList';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,13 +23,13 @@ export class ReportComponent implements OnInit {
   btnPendingClicked = false;
   showLoader = true;
 
-  constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService) {
+  constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService, private router: Router) {
     //debugger;
   }
 
   ngOnInit() {
     this.user = this.adalService.userInfo;
-    debugger;
+    //debugger;
     this.showLoader = true;
     this.user.token = this.user.token.substring(0, 10) + '...';
     console.log(this.user.token);
@@ -63,7 +64,7 @@ export class ReportComponent implements OnInit {
     this.statusReport = 0;
     this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
-      debugger;
+      //debugger;
       this.showLoader = false;
       this.reports = res;
       console.log(res);
@@ -74,7 +75,7 @@ export class ReportComponent implements OnInit {
     this.statusReport = 1;
     this.btnPendingClicked = false;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
-      debugger;
+      //debugger;
       this.showLoader = false;
       this.reports = res;
       console.log(res);
@@ -85,11 +86,24 @@ export class ReportComponent implements OnInit {
     this.btnPendingClicked = true;
     this.statusReport = 3;
     this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
-      debugger;
+      //debugger;
       this.showLoader = false;
       this.reports = res;
       console.log(res);
     }, error => console.log(error))
+  }
+
+  goToReport(url, id) {
+    //debugger;
+    var myurl = `${url}/${id}`;
+    this.router.navigateByUrl(myurl).then(e => {
+      if (e) {
+        console.log("Navigation is successful!");
+      } else {
+        console.log("Navigation has failed!");
+      }
+    });
+
   }
 
 }

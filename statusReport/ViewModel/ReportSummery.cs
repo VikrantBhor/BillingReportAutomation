@@ -39,13 +39,15 @@ namespace statusReport.ViewModel
         public string milestones { get; set; }
         public int eta { get; set; }
 
-        //public int? activityId { get; set; }
-        //public string report { get; set; }
-        //public int? reportId { get; set; }
+    }
 
+    public class userCommends
+    {
+        public int userId { get; set; }
+        public  int taskId { get; set; }
+        public DateTime date { get; set; }
+        public string comments { get; set; }
 
-          //      milestone: string;
-          //ETA: number;
     }
 
 }

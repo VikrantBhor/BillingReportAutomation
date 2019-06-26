@@ -106,7 +106,7 @@ export class ReportSummeryComponent implements OnInit {
     ]
   }
 
-  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private _router: Router, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService) {
     this.ReportSummery = this.fb.group({
       clientName: [''],
       projectName: [''],
@@ -129,7 +129,10 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
+    //debugger;
+    console.log(this.route.snapshot.data['reportId']);
+    this.reportId = +this.route.snapshot.paramMap.get('reportId');
 
     this.reportservice.getCRdetails(this.reportId).subscribe(res => {
       this.reportCRDetails = res;
@@ -251,9 +254,11 @@ export class ReportSummeryComponent implements OnInit {
     // if newreport is created.
     this.reportservice.saveReportDetails(this.saveReportSummery).subscribe(data => {
       //debugger;
+      this.toastr.success('Report Sumitted successfully !', 'Success');
       alert("Succesfully Added Product details");
     }, error => {
       console.log(error);
+      this.toastr.warning('failed while Sumitting report !', 'Warning');
       alert("failed while adding product details");
     })
 
@@ -271,6 +276,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
   addNewCR() {
+    //debugger;
     let control = <FormArray>this.ReportSummery.controls.crDetails;
     control.push(
       this.fb.group({
@@ -315,6 +321,9 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveCRDetails() {
+    debugger;
+    console.log(this.ReportSummery.controls.crDetails.value[0].Name.valid)
+
     console.log(this.ReportSummery.controls.crDetails.value[0]);
     this.newCRDetails.crName = this.ReportSummery.controls.crDetails.value[0].Name;
     this.newCRDetails.estimateHrs = this.ReportSummery.controls.crDetails.value[0].estimateHrs;
@@ -329,6 +338,11 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.reportCRDetails)
   }
 
+  cancelCR() {
+    this.addCRBtn = true;
+    this.showCRDiv = true;
+  }
+
   saveActivityDetails() {
     //debugger;
     console.log(this.ReportSummery.controls.activityDetails.value[0]);
@@ -341,6 +355,11 @@ export class ReportSummeryComponent implements OnInit {
     this.showActDiv = true;
 
     console.log(this.reportActivityDetails)
+  }
+
+  cancelActivity() {
+    this.addActBtn = true;
+    this.showActDiv = true;
   }
 
   rejectReport(id, remark) {
