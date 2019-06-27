@@ -57,6 +57,31 @@ export class ReportService {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
   }
 
+  getweekComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetWeekComments/' + projectId + '/' + reportDate);
+  }
+
+  getMonthComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetMonthComments/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentMonthHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastMonthHrs/' + projectId + '/' + reportDate);
+  }
+
+
   rejectReport(id, remark): Observable<void> {
     debugger;
     let headers = new HttpHeaders({

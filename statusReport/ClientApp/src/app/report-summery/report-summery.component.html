@@ -4,7 +4,7 @@
 <h3 align="center"> Report Summery </h3>
 <div class="card">
   <div class="card-header">
-    <h6> {{reportType}} Hours Summery Report </h6>
+    <h6> {{reportType}}ly Hours Summery Report </h6>
   </div>
 
   <div class="card-body">
@@ -50,15 +50,16 @@
       </div>
 
       <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="accomp">Accomplishments</label>
+        <label class="col-md-3 Zeropadding col-form-label" for="accomp"> Accomplishments</label>
         <div class="col-md-9">
           <textarea type="text"
+                 style="min-height:100px"
                  id="accomp"
                  class="form-control"
                  placeholder="Team Accomplishments...."
                  name="accomp"
                  formControlName="accomp"
-                 [(ngModel)]="e.accomp" required></textarea>
+                 [(ngModel)]="e.accomp" required readonly></textarea>
         </div>
       </div>
 
@@ -70,7 +71,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
           </button>
 
-          <table class="table table-striped" *ngIf="reportCRDetails.length >0">
+          <table class="table table-striped" *ngIf="reportCRDetails != 'Undefined' &&  reportCRDetails.length >0" >
             <thead>
               <tr>
                 <th>CR Name</th>
@@ -156,7 +157,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New Activity
           </button>
 
-          <table class="table table-striped" *ngIf="reportActivityDetails.length > 0">
+          <table class="table table-striped" *ngIf="reportActivityDetails != 'Undefined' &&  reportActivityDetails.length >0">
             <thead>
               <tr>
                 <th>Sr No.</th>
@@ -236,12 +237,12 @@
                  placeholder="00.00"
                  name="onShoreTotalHrs"
                  formControlName="onShoreTotalHrs"
-                 [(ngModel)]="e.onShoreTotalHrs">
+                 [(ngModel)]="e.onShoreTotalHrs" required >
         </div>
       </div>
 
       <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsTillLastWeek">On-Shore Hrs Till Last Week </label>
+        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsTillLastWeek">On-Shore Hrs Till Last {{reportType}} </label>
         <div class="col-md-2">
           <input type="number"
                  id="onShoreHrsTillLastWeek"
@@ -249,12 +250,12 @@
                  placeholder="00.00"
                  name="onShoreHrsTillLastWeek"
                  formControlName="onShoreHrsTillLastWeek"
-                 [(ngModel)]="e.onShoreHrsTillLastWeek">
+                 [(ngModel)]="e.onShoreHrsTillLastWeek" required>
         </div>
       </div>
 
       <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">On-Shore Hrs Current Week </label>
+        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">On-Shore Hrs Current {{reportType}} </label>
         <div class="col-md-2">
           <input type="number"
                  id="onShoreHrsCurrentWeek"
@@ -262,7 +263,7 @@
                  placeholder="00.00"
                  name="onShoreHrsCurrentWeek"
                  formControlName="onShoreHrsCurrentWeek"
-                 [(ngModel)]="e.onShoreHrsCurrentWeek">
+                 [(ngModel)]="e.onShoreHrsCurrentWeek" required >
         </div>
       </div>
 
@@ -276,12 +277,12 @@
                  placeholder="00.00"
                  name="offShoreTotalHrs"
                  formControlName="offShoreTotalHrs"
-                 [(ngModel)]="e.offShoreTotalHrs">
+                 [(ngModel)]="e.offShoreTotalHrs" required>
         </div>
       </div>
 
       <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Off-Shore Hrs Till Last Week </label>
+        <label class="col-md-3 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Off-Shore Hrs Till Last {{reportType}} </label>
         <div class="col-md-2">
           <input type="number"
                  id="offShoreHrsTillLastWeek"
@@ -289,12 +290,12 @@
                  placeholder="00.00"
                  name="offShoreHrsTillLastWeek"
                  formControlName="offShoreHrsTillLastWeek"
-                 [(ngModel)]="e.offShoreHrsTillLastWeek">
+                 [(ngModel)]="e.offShoreHrsTillLastWeek" required  readonly>
         </div>
       </div>
 
       <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">Off-Shore Hrs Current Week </label>
+        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">Off-Shore Hrs Current {{reportType}} </label>
         <div class="col-md-2">
           <input type="number"
                  id="offShoreHrsCurrentWeek"
@@ -302,7 +303,7 @@
                  placeholder="00.00"
                  name="offShoreHrsCurrentWeek"
                  formControlName="offShoreHrsCurrentWeek"
-                 [(ngModel)]="e.offShoreHrsCurrentWeek">
+                 [(ngModel)]="e.offShoreHrsCurrentWeek"required readonly >
         </div>
       </div>
 
@@ -327,7 +328,10 @@
       <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
       <div class="col-md-8" align="center">
         <button type="button" class="btn btn-primary" (click)="saveForm()">Save </button>&nbsp;&nbsp;
-        <button type="button" class="btn btn-success" (click)="onSubmit()" >Submit </button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!(this.ReportSummery.controls.accomp.valid && this.ReportSummery.controls.onShoreTotalHrs.valid &&
+                                                                                        this.ReportSummery.controls.onShoreHrsTillLastWeek.valid && this.ReportSummery.controls.onShoreHrsCurrentWeek.valid &&
+                                                                                        this.ReportSummery.controls.offShoreTotalHrs.valid && this.ReportSummery.controls.offShoreHrsTillLastWeek.valid &&
+                                                                                          this.ReportSummery.controls.offShoreHrsCurrentWeek.valid )">Submit </button>&nbsp;&nbsp;
         <button type="button" class="btn btn-danger" (click)="open(content)">Reject</button>
       </div>
     </div>
