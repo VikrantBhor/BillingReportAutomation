@@ -114,7 +114,7 @@ namespace statusReport.Controllers
 
         // POST api/<controller>
         [HttpPost("SaveReportDetails")]
-        public void SaveReportDetails([FromBody]Report reportDetail)
+        public int SaveReportDetails([FromBody]Report reportDetail)
         {
             using (BillingReportContext context = new BillingReportContext())
             {
@@ -132,13 +132,14 @@ namespace statusReport.Controllers
                 reportSummery.ProjectName = reportDetail.ProjectName;
                 reportSummery.ProjectType = reportDetail.ProjectType;
                 reportSummery.ReportStartDate = reportDetail.ReportStartDate;
+                reportSummery.ReportEndDate = reportDetail.ReportEndDate;
                 reportSummery.Remark = null;
-                reportSummery.ReportStatus = null;
+                reportSummery.ReportStatus = reportDetail.ReportStatus;
 
                 context.Add(reportSummery);
                 context.SaveChanges();
-
-               
+                int id = reportSummery.ReportId;
+                return id;
             }
 
          }
@@ -167,7 +168,7 @@ namespace statusReport.Controllers
                     if (reportStatus == 0) // Saved
                     {
                         result = (from reportSummary in context.TblReportSummery
-                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved)
+                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
                                   orderby reportSummary.CreatedDate
                                   select new ReportList
                                   {
