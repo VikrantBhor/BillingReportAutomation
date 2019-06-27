@@ -147,7 +147,7 @@ namespace statusReport.Controllers
                         tblReportSummeryDetails.Crid = 1;
                         tblReportSummeryDetails.ActivityId = 1;
                         tblReportSummeryDetails.OnshoreTotalHrs = reportSummery.onShoreTotalHrs;
-                        tblReportSummeryDetails.OnshoreLastWeekHrs = reportSummery.onShoreHrsTillLastWeek;
+                        tblReportSummeryDetails.OnshoreLastWeekHrs =  reportSummery.onShoreHrsTillLastWeek;
                         tblReportSummeryDetails.OnshoreCurrentWeekHrs = reportSummery.onShoreHrsCurrentWeek;
                         tblReportSummeryDetails.OffShoreTotalHrs = reportSummery.offShoreTotalHrs;
                         tblReportSummeryDetails.OffshoreLastWeekHrs = reportSummery.offShoreHrsTillLastWeek;
@@ -167,7 +167,7 @@ namespace statusReport.Controllers
                             tblReportCr.CrName = cR.crName;
                             tblReportCr.ActualHrs = cR.actualHrs;
                             tblReportCr.EstimateHrs = cR.estimateHrs;
-                            tblReportCr.Status = Convert.ToInt16(cR.status);
+                            tblReportCr.Status = cR.status;
 
                             context.TblReportCr.Add(tblReportCr);
 
@@ -246,7 +246,7 @@ namespace statusReport.Controllers
                             tblReportCr.CrName = cR.crName;
                             tblReportCr.ActualHrs = cR.actualHrs;
                             tblReportCr.EstimateHrs = cR.estimateHrs;
-                            tblReportCr.Status = Convert.ToInt16(cR.status);
+                            tblReportCr.Status = cR.status;
 
                             context.TblReportCr.Add(tblReportCr);
 

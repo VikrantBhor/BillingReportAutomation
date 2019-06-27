@@ -46,7 +46,8 @@ export class ReportService {
     });
     let options = {
       headers: headers
-    }; 
+    };
+    debugger;
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
   } 
 

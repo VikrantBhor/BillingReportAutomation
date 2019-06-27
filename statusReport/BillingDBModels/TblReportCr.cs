@@ -15,7 +15,7 @@ namespace statusReport.BillingDBModels
         public string CrName { get; set; }
         public decimal? EstimateHrs { get; set; }
         public decimal? ActualHrs { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public virtual TblReportSummery Report { get; set; }
         public virtual ICollection<TblReportSummeryDetails> TblReportSummeryDetails { get; set; }
