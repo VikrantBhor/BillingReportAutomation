@@ -15,12 +15,12 @@ namespace statusReport.ViewModel
         public List<CRDetails> crDetails { get; set; }
         public List<ActivityDetails> activityDetails { get; set; }
         public string clientAwtInfo { get; set; }
-        public int onShoreTotalHrs { get; set; }
-        public int onShoreHrsTillLastWeek { get; set; }
-        public int onShoreHrsCurrentWeek { get; set; }
-        public int offShoreTotalHrs { get; set; }
-        public int offShoreHrsTillLastWeek { get; set; }
-        public int offShoreHrsCurrentWeek { get; set; }
+        public Decimal onShoreTotalHrs { get; set; }
+        public Decimal onShoreHrsTillLastWeek { get; set; }
+        public Decimal onShoreHrsCurrentWeek { get; set; }
+        public Decimal offShoreTotalHrs { get; set; }
+        public Decimal offShoreHrsTillLastWeek { get; set; }
+        public Decimal offShoreHrsCurrentWeek { get; set; }
         public string notes { get; set; }
 
     }
@@ -28,8 +28,8 @@ namespace statusReport.ViewModel
     public class CRDetails
     {
         public string crName { get; set; }
-        public int estimateHrs { get; set; }
-        public int actualHrs { get; set; }
+        public Decimal estimateHrs { get; set; }
+        public Decimal actualHrs { get; set; }
         public string status { get; set; }
 
     }
@@ -37,7 +37,7 @@ namespace statusReport.ViewModel
     public class ActivityDetails
     {
         public string milestones { get; set; }
-        public int eta { get; set; }
+        public Decimal eta { get; set; }
 
     }
 

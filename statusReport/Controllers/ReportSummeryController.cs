@@ -147,7 +147,7 @@ namespace statusReport.Controllers
                         tblReportSummeryDetails.Crid = 1;
                         tblReportSummeryDetails.ActivityId = 1;
                         tblReportSummeryDetails.OnshoreTotalHrs = reportSummery.onShoreTotalHrs;
-                        tblReportSummeryDetails.OnshoreLastWeekHrs = reportSummery.onShoreHrsTillLastWeek;
+                        tblReportSummeryDetails.OnshoreLastWeekHrs =  reportSummery.onShoreHrsTillLastWeek;
                         tblReportSummeryDetails.OnshoreCurrentWeekHrs = reportSummery.onShoreHrsCurrentWeek;
                         tblReportSummeryDetails.OffShoreTotalHrs = reportSummery.offShoreTotalHrs;
                         tblReportSummeryDetails.OffshoreLastWeekHrs = reportSummery.offShoreHrsTillLastWeek;
@@ -167,7 +167,7 @@ namespace statusReport.Controllers
                             tblReportCr.CrName = cR.crName;
                             tblReportCr.ActualHrs = cR.actualHrs;
                             tblReportCr.EstimateHrs = cR.estimateHrs;
-                            tblReportCr.Status = Convert.ToInt16(cR.status);
+                            tblReportCr.Status = cR.status;
 
                             context.TblReportCr.Add(tblReportCr);
 
@@ -246,7 +246,7 @@ namespace statusReport.Controllers
                             tblReportCr.CrName = cR.crName;
                             tblReportCr.ActualHrs = cR.actualHrs;
                             tblReportCr.EstimateHrs = cR.estimateHrs;
-                            tblReportCr.Status = Convert.ToInt16(cR.status);
+                            tblReportCr.Status = cR.status;
 
                             context.TblReportCr.Add(tblReportCr);
 
@@ -301,12 +301,20 @@ namespace statusReport.Controllers
 
 
         [HttpGet]
-        [Route("GetComments/{id}")]
-        public IEnumerable<userCommends> GetComments( string id)
+        [Route("GetWeekComments/{id}/{reportDate}")]
+        public ActionResult GetWeekComments( string id, int reportDate)
         {
             try
-            {
-                List<userCommends> userCommnets = new List<userCommends>();
+            { 
+                //List<userCommends> userCommnets = new List<userCommends>();
+                string userCommnets = String.Empty;
+                
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() +'-'+ month.ToString() +'-'+ day.ToString();
 
                 using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
                 {
@@ -314,25 +322,247 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select* from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) +  ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) +")", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) +  ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(comment_date) = week('"+ date + "')",conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
 
                         while (reader.Read())
                         {
-                           // userCommnets.Add("test");
+                            userCommnets += reader["comments"].ToString();
+                            userCommnets += " , ";
                         }
-
-                    }
-
-                        return userCommnets;
+                    } 
                 }
+
+                return Ok(new { weekComments = userCommnets });
+
             }
             catch (Exception ex)
             {
 
                 throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetMonthComments/{id}/{reportDate}")]
+        public ActionResult GetMonthComments(string id, int reportDate)
+        {
+            try
+            {
+                string MonthCommnets = String.Empty;
+
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(comment_date) = month('" + date + "')", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+                        DataTable data = reader.GetSchemaTable();
+
+                        while (reader.Read())
+                        {
+                            MonthCommnets += reader["comments"].ToString();
+                            MonthCommnets += " , ";
+                        }
+                    }
+                }
+
+                return Ok(new { monthComments = MonthCommnets });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("getCurrentWeekHrs/{id}/{reportDate}")]
+        public ActionResult getCurrentWeekHrs(int id, int reportDate)
+        {
+
+            try
+            {
+                double currentweekHrs = 0.0;
+
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(record_date) = week('" + date + "')", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+                        
+                        while (reader.Read())
+                        {
+                            currentweekHrs = Convert.ToDouble(reader["Hrs"]);
+                        }
+                        
+                    }
+                }
+
+                return Ok(new { currentWKHrs = currentweekHrs });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("getLastWeekHrs/{id}/{reportDate}")]
+        public ActionResult getLastWeekHrs(int id, int reportDate)
+        {
+
+            try
+            {
+                double lastweekHrs =  0.0;
+
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(record_date) = week('" + date + "') -1", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            lastweekHrs = Convert.ToDouble(reader["Hrs"]);
+                        }
+                    }
+                }
+
+                return Ok(new { lastWKHrs = lastweekHrs });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        [HttpGet]
+        [Route("getCurrentMonthHrs/{id}/{reportDate}")]
+        public ActionResult getCurrentMonthHrs(int id, int reportDate)
+        {
+
+            try
+            { 
+                double currentMonthHrs = 0.0;
+
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "')", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            currentMonthHrs = Convert.ToDouble(reader["Hrs"]);
+                        }
+                    }
+                }
+
+                return Ok(new { currentMnthHrs = currentMonthHrs });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("getLastMonthHrs/{id}/{reportDate}")]
+        public ActionResult getLastMonthHrs(int id, int reportDate)
+        {
+
+            try
+            {
+                double lastMonthHrs = 0.0;
+
+                //&date=20091202   (yyyymmdd)
+                int year = reportDate / 10000;
+                int month = ((reportDate - (10000 * year)) / 100);
+                int day = (reportDate - (10000 * year) - (100 * month));
+
+                string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
+
+                using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
+                {
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "') -1", conn);
+
+                        MySqlDataReader reader = cmd.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            lastMonthHrs = Convert.ToDouble(reader["Hrs"]);
+                        }
+                    }
+                }
+
+                return Ok(new { lastMnthHrs = lastMonthHrs });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
 

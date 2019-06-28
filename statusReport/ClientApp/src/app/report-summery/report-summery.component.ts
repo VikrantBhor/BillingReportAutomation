@@ -18,14 +18,11 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ReportSummeryComponent implements OnInit {
 
-  reportType: string = 'Monthly';
+  reportType: string = 'Week';
   ReportSummery: FormGroup;
-  reportCRDetails: reportCR[];
-  reportActivityDetails: reportActivity[];
+  reportCRDetails: reportCR[] = [];
+  reportActivityDetails: reportActivity[]=[];
   reportSummery: ReportSummery;
-
-  // map report id here
-  reportId: number = 22;
 
   addCRBtn: boolean = true;
   showCRDiv: boolean = true;
@@ -36,6 +33,17 @@ export class ReportSummeryComponent implements OnInit {
   closeResult: string;
   comment: string;
   remark: string;
+
+  //Mapping parameters
+  // map report id here
+  reportId: number = 22;
+  projectId: number = 1041;
+  reportDate: number = 20190617;
+  //startDate: number = 20190401;
+  //endDate: number = 20190430;
+  accomplishment: any;
+  currentHrs: any;
+  lastHrs : any
 
   newCRDetails: reportCR = {
     crName: '',
@@ -58,16 +66,16 @@ export class ReportSummeryComponent implements OnInit {
     clientName: '',
     projectName: '',
     projectType: '',
-    accomp: '',
+    accomp: this.accomplishment,
     crDetails: this.saveReportCRDetails,
     activityDetails: this.saveReportActivityDetails,
     clientAwtInfo: '',
-    onShoreTotalHrs: 0,
-    onShoreHrsTillLastWeek: 0,
-    onShoreHrsCurrentWeek: 0,
-    offShoreTotalHrs: 0,
-    offShoreHrsTillLastWeek: 0,
-    offShoreHrsCurrentWeek: 0,
+    onShoreTotalHrs: null,
+    onShoreHrsTillLastWeek: null,
+    onShoreHrsCurrentWeek: null,
+    offShoreTotalHrs: null,
+    offShoreHrsTillLastWeek: this.lastHrs,
+    offShoreHrsCurrentWeek: this.currentHrs,
     notes: ''
   }
 
@@ -76,16 +84,16 @@ export class ReportSummeryComponent implements OnInit {
     clientName: '',
     projectName: '',
     projectType: '',
-    accomp: '',
+    accomp: this.accomplishment,
     crDetails: this.saveReportCRDetails,
     activityDetails: this.saveReportActivityDetails,
     clientAwtInfo: '',
     onShoreTotalHrs: 0,
-    onShoreHrsTillLastWeek: 0,
+    onShoreHrsTillLastWeek:0,
     onShoreHrsCurrentWeek: 0,
     offShoreTotalHrs: 0,
-    offShoreHrsTillLastWeek: 0,
-    offShoreHrsCurrentWeek: 0,
+    offShoreHrsTillLastWeek: this.lastHrs,
+    offShoreHrsCurrentWeek: this.currentHrs,
     notes:''
   }
 
@@ -111,16 +119,16 @@ export class ReportSummeryComponent implements OnInit {
       clientName: [''],
       projectName: [''],
       projectType: [''],
-      accomp: ['', Validators.required],
+      accomp: [this.accomplishment, Validators.required],
       crDetails: this.fb.array([]),
       activityDetails: this.fb.array([]),
       clientAwtInfo: [''],
-      onShoreTotalHrs: [0, Validators.required],
-      onShoreHrsTillLastWeek: [0, Validators.required],
-      onShoreHrsCurrentWeek: [0, Validators.required],
-      offShoreTotalHrs: [0, Validators.required],
-      offShoreHrsTillLastWeek: [0, Validators.required],
-      offShoreHrsCurrentWeek: [0, Validators.required],
+      onShoreTotalHrs: [null, Validators.required],
+      onShoreHrsTillLastWeek: [null, Validators.required],
+      onShoreHrsCurrentWeek: [null, Validators.required],
+      offShoreTotalHrs: [null, Validators.required],
+      offShoreHrsTillLastWeek: [this.lastHrs, Validators.required],
+      offShoreHrsCurrentWeek: [this.currentHrs, Validators.required],
       notes: ['']
     })
 
@@ -134,27 +142,119 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.route.snapshot.data['reportId']);
     this.reportId = +this.route.snapshot.paramMap.get('reportId');
 
-    this.reportservice.getCRdetails(this.reportId).subscribe(res => {
-      this.reportCRDetails = res;
-      console.log(res);
-    }, error => console.log(error))
-
-    this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
-      this.reportActivityDetails = res;
-      console.log(res);
-    }, error => console.log(error))
-
-    //debugger;
-    if (this.reportId != 0)
+    if (this.reportId == 0)
     {
+      if (this.reportType == 'Week')
+      {
+        //debugger;
+        this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
+          //debugger;
+          this.e.accomp = res.weekComments;
+          console.log(res);
+          console.log(this.e);
+          console.log(this.e.accomp);
+
+          this.reportservice.getcurrentWkHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+            //debugger;
+            this.e.offShoreHrsCurrentWeek = resp.currentWKHrs;
+            console.log(resp);
+            console.log(this.e);
+            console.log(this.e.offShoreHrsCurrentWeek);
+
+            this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+              //debugger;
+              this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
+              console.log(respn);
+              console.log(this.e);
+              console.log(this.e.offShoreHrsTillLastWeek);
+
+            }, error => console.log(error))
+
+          }, error => console.log(error))
+
+        }, error => console.log(error))
+
+        //debugger;
+        console.log(this.reportCRDetails);
+        
+      }
+      else if (this.reportType == 'Month') {
+
+        this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
+          //debugger;
+          this.e.accomp = res.monthComments;
+          console.log(res);
+
+          this.reportservice.getcurrentMonthHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+            //debugger;
+            this.e.offShoreHrsCurrentWeek = resp.currentMnthHrs;
+            console.log(resp);
+
+            this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+              //debugger;
+              this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
+              console.log(respn);
+            }, error => console.log(error))
+
+          }, error => console.log(error))
+
+        }, error => console.log(error))
+
+      }
+
+    }
+    else
+    {
+
+      this.reportservice.getCRdetails(this.reportId).subscribe(res => {
+        this.reportCRDetails = res;
+        console.log(res);
+      }, error => console.log(error))
+
+      this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
+        this.reportActivityDetails = res;
+        console.log(res);
+      }, error => console.log(error))
+
       this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
         this.reportSummery = res;
         console.log(res);
         this.e = res
-
         //this.generateForm();
       }, error => console.log(error))
+
     }
+  
+
+    //this.reportservice.getCRdetails(this.reportId).subscribe(res => {
+    //  this.reportCRDetails = res;
+    //  console.log(res);
+    //}, error => console.log(error))
+
+    //this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
+    //  this.reportActivityDetails = res;
+    //  console.log(res);
+    //}, error => console.log(error))
+
+    //debugger;
+    //this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
+    //  debugger;
+    //  this.e.accomp = res.comments;
+    // // this.accomplishment = res.comments;
+    //  console.log(res.comments);
+    //}, error => console.log(error))
+
+    //debugger;
+    //if (this.reportId != 0)
+    //{
+    //  this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
+    //    this.reportSummery = res;
+    //    console.log(res);
+    //    this.e = res
+
+    //    //this.generateForm();
+    //  }, error => console.log(error))
+    //}
   }
 
   open(content) {
@@ -268,6 +368,10 @@ export class ReportSummeryComponent implements OnInit {
 
   saveForm() {
     alert("Report have been saved successfully");
+
+    debugger;
+    console.log(this.ReportSummery.controls.clientName.valid);
+
   }
 
   rejectForm() {
@@ -321,7 +425,8 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveCRDetails() {
-    debugger;
+    //debugger;
+    console.log(this.reportCRDetails);
     console.log(this.ReportSummery.controls.crDetails.value[0].Name.valid)
 
     console.log(this.ReportSummery.controls.crDetails.value[0]);

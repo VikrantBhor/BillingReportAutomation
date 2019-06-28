@@ -46,7 +46,8 @@ export class ReportService {
     });
     let options = {
       headers: headers
-    }; 
+    };
+    debugger;
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
   } 
 
@@ -56,6 +57,31 @@ export class ReportService {
   getReports(role,reportStatus): Observable<reportList[]> {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
   }
+
+  getweekComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetWeekComments/' + projectId + '/' + reportDate);
+  }
+
+  getMonthComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetMonthComments/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentMonthHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastMonthHrs/' + projectId + '/' + reportDate);
+  }
+
 
   rejectReport(id, remark): Observable<void> {
     debugger;
