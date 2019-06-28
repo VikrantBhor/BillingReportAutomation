@@ -23,6 +23,8 @@ export interface IReportDetail {
   ProjectName: string;
   ProjectType: string;
   ReportStartDate: string;
+  ReportEndDate: string;
   CreatedBy: string;
   CreatedByEmail: string;
+  ReportStatus: number;
 }

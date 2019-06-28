@@ -10,6 +10,7 @@ namespace statusReport.DTO
         Saved = 0,
         Submitted = 1,
         Rejected = 2,
-        Uploaded = 3
+        Uploaded = 3,
+        Created = 4
     }
 }

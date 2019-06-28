@@ -16,7 +16,7 @@ namespace statusReport.BillingDBModels
         public string ClientName { get; set; }
         public string ProjectName { get; set; }
         public string ProjectType { get; set; }
-        public DateTime ReportStartDate { get; set; }
+        public DateTime ReportStartDate { get; set; }       
         public DateTime ProjectEndDate { get; set; }
         public string CreatedBy { get; set; }
         public string CreatedByEmail { get; set; }        
@@ -28,6 +28,7 @@ namespace statusReport.BillingDBModels
         public string Remark { get; set; }
         public bool? IsApproved { get; set; }
         public int? ReportStatus { get; set; }
+        public DateTime ReportEndDate { get; set; }
 
         public virtual ICollection<TblReportActivity> TblReportActivity { get; set; }
         public virtual ICollection<TblReportCr> TblReportCr { get; set; }
