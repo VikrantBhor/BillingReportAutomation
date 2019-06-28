@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { AdalService } from 'adal-angular4';
 import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ReportService } from '../../services/report.service';
 import { IClientList, IProgramList } from '../../DTO/ClientInfo';
 import { IReportDetail } from '../../DTO/ReportSummery';
@@ -47,17 +47,23 @@ export class ReportCreateComponent implements OnInit {
     this.user = this.adalService.userInfo;
     this.GetClientList();
     this.reportForm = new FormGroup({
-      clientName: new FormControl(),
-      projectType: new FormControl(),
-      projectDuration: new FormControl(),
-      projectDate: new FormControl()
+      clientName: new FormControl('0', Validators.required),
+      projectType: new FormControl('0', Validators.required),
+      projectDuration: new FormControl('0', Validators.required),
+      projectDate: new FormControl('', Validators.required)
     });
 
   }
 
 
-   SubmitReport() {
-     this.AssignValues(this.reportDetail);
+  SubmitReport() {
+
+    if (this.reportForm.valid == true) {
+      this.AssignValues(this.reportDetail);
+    } else {
+      this.toastr.error('Please fill all the required(*) field', 'Error');
+    }
+    
   }
 
 
