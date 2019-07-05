@@ -9,6 +9,8 @@ import { IReportDetail } from '../../DTO/ReportSummery';
 import { parseDate } from 'ngx-bootstrap/chronos/public_api';
 import { getLocaleDateTimeFormat } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { SharedObject } from '../../DTO/SharedObject';
+import { DataService } from '../../services/SharedDataService';
 //import { IReportDetail } from '../../app/DTO/ReportSummery';
 
 @Component({
@@ -18,8 +20,12 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class ReportCreateComponent implements OnInit {
+  sharedData: SharedObject = new SharedObject('','','','','','','','');
   clientList: IClientList[];
   user: any;
+
+  showLoader: boolean=true;
+  projectID: string;
   programTypeList: IProgramList[];
   reportForm: FormGroup;
   reportDetail: IReportDetail = {
@@ -37,7 +43,7 @@ export class ReportCreateComponent implements OnInit {
   StartDate: Date;
   EndDate: Date;
 
-  constructor(private adalService: AdalService, private reportservice: ReportService, private _router: Router, private toastr: ToastrService) {
+  constructor(private adalService: AdalService, private reportservice: ReportService, private _router: Router, private toastr: ToastrService, private data: DataService) {
     
   }
 
@@ -52,7 +58,8 @@ export class ReportCreateComponent implements OnInit {
       projectDuration: new FormControl('0', Validators.required),
       projectDate: new FormControl('', Validators.required)
     });
-
+    this.data.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
+    console.log("this.sharedData", this.sharedData)
   }
 
 
@@ -69,17 +76,14 @@ export class ReportCreateComponent implements OnInit {
 
   AssignValues(detail: IReportDetail) {
     try {
-
-   
     debugger;
-     detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
+      detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
+      this.projectID = this.reportDetail.ProjectName;
     detail.ProjectName = this.programTypeList.find(x => x.id == parseInt(this.reportDetail.ProjectName)).name;
     this.ReportProjectType = this.reportDetail.ProjectType;
     detail.ProjectType = this.ReportProjectType;
      detail.CreatedBy = this.user.profile.name;
      detail.CreatedByEmail = this.user.userName;
-    let date = new Date(this.reportDetail.ReportStartDate).toLocaleDateString();
- 
 
     let today = new Date(this.reportDetail.ReportStartDate)
      
@@ -106,17 +110,35 @@ export class ReportCreateComponent implements OnInit {
       detail.ReportEndDate = this.EndDate.toDateString();
       debugger;
       detail.ReportStatus = 4;
-      this.reportservice.saveReport(detail).subscribe((data: number) => {
-        debugger;        
-          this._router.navigate(['reportSummery/',data]).then(x => {
-        this.toastr.success('Report Created successfully !', 'Success');
-      });      
-    }, error => {
-      this.toastr.error('Error! Please Try Again','Error');
-        })
+
+      //To save in DB 
+      //this.reportservice.saveReport(detail).subscribe((data: number) => {
+      //  debugger;
+      //  this._router.navigate(['reportSummery/', data]).then(x => {
+      //    this.toastr.success('Report Created successfully !', 'Success');
+      //  });
+      //}, error => {
+      //  this.toastr.error('Error! Please Try Again', 'Error');
+      //  });
+
+
+      //To save data in Shared Service
+      this.sharedData.clientName = detail.ClientName;
+      this.sharedData.projectId = this.projectID;
+      this.sharedData.reportId = '0';
+      this.sharedData.reportType = this.reportDetail.ProjectType == "Weekly" ? "Week" : "Month";
+      this.sharedData.reportDate = today.toJSON().split('T')[0];
+      this.sharedData.reportStartDate = this.StartDate.toJSON().split('T')[0];
+      this.sharedData.reportEndDate = this.EndDate.toJSON().split('T')[0];
+      this.sharedData.projectName = detail.ProjectName;
+      this.data.changeMessage(this.sharedData);
+
+      this._router.navigate(['reportSummery/', 0]).then(x => {
+        //this.toastr.success('Report Created successfully !', 'Success');
+      });
 
     } catch (e) {
-      this.toastr.error('Error! Please Try Again', 'Error');
+      this.toastr.error('Error! Fill all mandatory Field', 'Error');
     }
 
   }
@@ -126,12 +148,15 @@ export class ReportCreateComponent implements OnInit {
   GetClientList() {
     this.reportservice.getClientList().subscribe((response: any) => {
       this.clientList = response;
+      this.showLoader = false;
     });
   }
 
-  OnClientChange(event:any) {
+  OnClientChange(event: any) {
+    this.showLoader = true;
     this.reportservice.getProgramType(event.target.value).subscribe((response: any) => {
       this.programTypeList = response;
+      this.showLoader = false;
     });
   }
 

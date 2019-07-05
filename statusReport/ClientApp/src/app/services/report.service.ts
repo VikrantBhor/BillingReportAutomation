@@ -49,6 +49,18 @@ export class ReportService {
     };
     debugger;
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
+  }
+
+
+  draftReportDetails(reportSummery: ReportSummery): Observable<any> {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    debugger;
+    return this.http.post(this.Baseurl + 'api/ReportSummery/draftReportSummery', reportSummery, options);
   } 
 
   getClientList(): Observable<IClientList[]> {

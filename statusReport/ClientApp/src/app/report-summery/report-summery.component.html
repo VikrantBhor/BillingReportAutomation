@@ -1,6 +1,14 @@
 <!--<p>
   report-summery works!
 </p>-->
+
+<div id="loading" *ngIf="showLoader">
+  <div id="loading-center">
+    <div class="loader"></div>
+  </div>
+</div>
+
+
 <h3 align="center"> Report Summery </h3>
 <div class="card">
   <div class="card-header">
@@ -19,7 +27,7 @@
                  placeholder="Client Name"
                  name="clientName"
                  formControlName="clientName"
-                 [(ngModel)]="e.clientName">
+                 [(ngModel)]="e.clientName" readonly>
         </div>
       </div>
 
@@ -32,7 +40,7 @@
                  placeholder="Project Name"
                  name="projectName"
                  formControlName="projectName"
-                 [(ngModel)]="e.projectName">
+                 [(ngModel)]="e.projectName" readonly>
         </div>
       </div>
 
@@ -45,7 +53,7 @@
                  placeholder="Project Type"
                  name="projectType"
                  formControlName="projectType"
-                 [(ngModel)]="e.projectType">
+                 [(ngModel)]="e.projectType" readonly>
         </div>
       </div>
 
@@ -53,13 +61,13 @@
         <label class="col-md-3 Zeropadding col-form-label" for="accomp"> Accomplishments</label>
         <div class="col-md-9">
           <textarea type="text"
-                 style="min-height:100px"
-                 id="accomp"
-                 class="form-control"
-                 placeholder="Team Accomplishments...."
-                 name="accomp"
-                 formControlName="accomp"
-                 [(ngModel)]="e.accomp" required readonly></textarea>
+                    style="min-height:100px"
+                    id="accomp"
+                    class="form-control"
+                    placeholder="Team Accomplishments...."
+                    name="accomp"
+                    formControlName="accomp"
+                    [(ngModel)]="e.accomp" required readonly></textarea>
         </div>
       </div>
 
@@ -71,7 +79,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
           </button>
 
-          <table class="table table-striped" *ngIf="reportCRDetails != 'Undefined' &&  reportCRDetails.length >0" >
+          <table class="table table-striped" *ngIf="reportCRDetails != 'Undefined' &&  reportCRDetails.length >0">
             <thead>
               <tr>
                 <th>CR Name</th>
@@ -96,55 +104,55 @@
             </tbody>
           </table>
 
-          
-            <div formArrayName="crDetails" *ngIf="!showCRDiv">
-              <div>
-                <fieldset>
-                  <div [formGroupName]="0" id="CRform">
-                    <div class="form-inline">
-                      <div class="form-group">
-                        <input type="text"
-                               class="form-control"
-                               id="city"
-                               placeholder="CR Name"
-                               name="Name"
-                               formControlName="Name"
-                               style="margin-right:5px;" required>
-                        <input type="number"
-                               class="form-control col-md-1"
-                               id="city"
-                               placeholder="CR Estimate Hrs"
-                               name="estimateHrs"
-                               formControlName="estimateHrs"
-                               style="margin-right:5px;" required>
-                        <input type="number"
-                               class="form-control col-md-1"
-                               id="city"
-                               placeholder="CR Actual Hrs"
-                               name="actualHrs"
-                               formControlName="actualHrs"
-                               style="margin-right:5px;" required>
-                        <input type="text"
-                               class="form-control"
-                               id="city"
-                               placeholder="CR Status"
-                               name="status"
-                               formControlName="status"
-                               style="margin-right:5px;" required>&nbsp;
-                        <button style="margin-left:20px;" type="button" class="btn btn-success" (click)="saveCRDetails()" [disabled]="!this.ReportSummery.controls.crDetails.controls[0].valid">
-                          <span class="fa fa-check-square" aria-hidden="true"></span> save
-                        </button>
-                        <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelCR()">
-                          <span class="fa fa-window-close" aria-hidden="true"></span> Cancel
-                        </button>
-                      </div>
+
+          <div formArrayName="crDetails" *ngIf="!showCRDiv">
+            <div>
+              <fieldset>
+                <div [formGroupName]="0" id="CRform">
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <input type="text"
+                             class="form-control"
+                             id="city"
+                             placeholder="CR Name"
+                             name="Name"
+                             formControlName="Name"
+                             style="margin-right:5px;" required>
+                      <input type="number"
+                             class="form-control col-md-1"
+                             id="city"
+                             placeholder="CR Estimate Hrs"
+                             name="estimateHrs"
+                             formControlName="estimateHrs"
+                             style="margin-right:5px;" required>
+                      <input type="number"
+                             class="form-control col-md-1"
+                             id="city"
+                             placeholder="CR Actual Hrs"
+                             name="actualHrs"
+                             formControlName="actualHrs"
+                             style="margin-right:5px;" required>
+                      <input type="text"
+                             class="form-control"
+                             id="city"
+                             placeholder="CR Status"
+                             name="status"
+                             formControlName="status"
+                             style="margin-right:5px;" required>&nbsp;
+                      <button style="margin-left:20px;" type="button" class="btn btn-success" (click)="saveCRDetails()" [disabled]="!this.ReportSummery.controls.crDetails.controls[0].valid">
+                        <span class="fa fa-check-square" aria-hidden="true"></span> save
+                      </button>
+                      <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelCR()">
+                        <span class="fa fa-window-close" aria-hidden="true"></span> Cancel
+                      </button>
                     </div>
                   </div>
-                </fieldset>
-              </div>
+                </div>
+              </fieldset>
             </div>
-        
-        
+          </div>
+
+
 
         </div>
       </div>
@@ -219,91 +227,12 @@
         <label class="col-md-3 Zeropadding col-form-label" for="clientAwtInfo">Client Awaiting Information</label>
         <div class="col-md-9">
           <textarea type="text"
-                 id="clientAwtInfo"
-                 class="form-control"
-                 placeholder="Client Awaiting Information...."
-                 name="clientAwtInfo"
-                 formControlName="clientAwtInfo"
-                 [(ngModel)]="e.clientAwtInfo"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreTotalHrs">On-Shore Total Hrs</label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="onShoreTotalHrs"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="onShoreTotalHrs"
-                 formControlName="onShoreTotalHrs"
-                 [(ngModel)]="e.onShoreTotalHrs" required >
-        </div>
-      </div>
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsTillLastWeek">On-Shore Hrs Till Last {{reportType}} </label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="onShoreHrsTillLastWeek"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="onShoreHrsTillLastWeek"
-                 formControlName="onShoreHrsTillLastWeek"
-                 [(ngModel)]="e.onShoreHrsTillLastWeek" required>
-        </div>
-      </div>
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">On-Shore Hrs Current {{reportType}} </label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="onShoreHrsCurrentWeek"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="onShoreHrsCurrentWeek"
-                 formControlName="onShoreHrsCurrentWeek"
-                 [(ngModel)]="e.onShoreHrsCurrentWeek" required >
-        </div>
-      </div>
-
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="offShoreTotalHrs">Off-Shore Total Hrs</label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="offShoreTotalHrs"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="offShoreTotalHrs"
-                 formControlName="offShoreTotalHrs"
-                 [(ngModel)]="e.offShoreTotalHrs" required>
-        </div>
-      </div>
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Off-Shore Hrs Till Last {{reportType}} </label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="offShoreHrsTillLastWeek"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="offShoreHrsTillLastWeek"
-                 formControlName="offShoreHrsTillLastWeek"
-                 [(ngModel)]="e.offShoreHrsTillLastWeek" required  readonly>
-        </div>
-      </div>
-
-      <div class="form-group  row mb-2">
-        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">Off-Shore Hrs Current {{reportType}} </label>
-        <div class="col-md-2">
-          <input type="number"
-                 id="offShoreHrsCurrentWeek"
-                 class="form-control"
-                 placeholder="00.00"
-                 name="offShoreHrsCurrentWeek"
-                 formControlName="offShoreHrsCurrentWeek"
-                 [(ngModel)]="e.offShoreHrsCurrentWeek"required readonly >
+                    id="clientAwtInfo"
+                    class="form-control"
+                    placeholder="Client Awaiting Information...."
+                    name="clientAwtInfo"
+                    formControlName="clientAwtInfo"
+                    [(ngModel)]="e.clientAwtInfo"></textarea>
         </div>
       </div>
 
@@ -311,14 +240,161 @@
         <label class="col-md-3 Zeropadding col-form-label" for="notes">Notes</label>
         <div class="col-md-9">
           <textarea type="text"
-                 id="notes"
-                 class="form-control"
-                 placeholder="Notes...."
-                 name="notes"
-                 formControlName="notes"
-                 [(ngModel)]="e.notes"></textarea>
+                    id="notes"
+                    class="form-control"
+                    placeholder="Notes...."
+                    name="notes"
+                    formControlName="notes"
+                    [(ngModel)]="e.notes"></textarea>
         </div>
       </div>
+
+
+      <fieldset>
+        <legend class="col-md-3 col-sm-5">On Shore:</legend>
+        <div class="row">
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreTotalHrs"> Total Hrs</label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="onShoreTotalHrs"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="onShoreTotalHrs"
+                     formControlName="onShoreTotalHrs"
+                     [(ngModel)]="e.onShoreTotalHrs" required>
+            </div>
+          </div>
+
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsTillLastWeek"> Hrs Till Last {{reportType}} </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="onShoreHrsTillLastWeek"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="onShoreHrsTillLastWeek"
+                     formControlName="onShoreHrsTillLastWeek"
+                     [(ngModel)]="e.onShoreHrsTillLastWeek" required>
+            </div>
+          </div>
+
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsCurrentWeek"> Hrs Current {{reportType}} </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="onShoreHrsCurrentWeek"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="onShoreHrsCurrentWeek"
+                     formControlName="onShoreHrsCurrentWeek"
+                     [(ngModel)]="e.onShoreHrsCurrentWeek" required>
+            </div>
+          </div>
+
+
+
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsUtilized">Total Hours Utilized </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="onShoreHrsUtilized"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="onShoreHrsUtilized"
+                     value="{{e.onShoreHrsTillLastWeek + e.onShoreHrsCurrentWeek }}"
+                     formControlName="onShoreHrsUtilized"
+                     [(ngModel)]="e.onShoreHrsUtilized" required>
+            </div>
+          </div>
+
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsRemaining">Total Hours Remaining</label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="onShoreHrsRemaining"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="onShoreHrsRemaining"
+                     formControlName="onShoreHrsRemaining"
+                     [(ngModel)]="e.onShoreHrsRemaining" required>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend class="col-md-3 col-sm-5">Off Shore:</legend>
+        <div class="row">
+          <div class="form-group col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="offShoreTotalHrs">Total Hrs</label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="offShoreTotalHrs"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="offShoreTotalHrs"
+                     formControlName="offShoreTotalHrs"
+                     [(ngModel)]="e.offShoreTotalHrs" required>
+            </div>
+          </div>
+
+          <div class="form-group  col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Hrs Till Last {{reportType}} </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="offShoreHrsTillLastWeek"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="offShoreHrsTillLastWeek"
+                     formControlName="offShoreHrsTillLastWeek"
+                     [(ngModel)]="e.offShoreHrsTillLastWeek" required>
+            </div>
+          </div>
+
+          <div class="form-group  col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsCurrentWeek">Hrs Current {{reportType}} </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="offShoreHrsCurrentWeek"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="offShoreHrsCurrentWeek"
+                     formControlName="offShoreHrsCurrentWeek"
+                     [(ngModel)]="e.offShoreHrsCurrentWeek" required>
+            </div>
+          </div>
+
+          <div class="form-group  col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsUtilized">Total Hours Utilized </label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="OffShoreHrsUtilized"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="OffShoreHrsUtilized"
+                     value="{{e.offShoreHrsTillLastWeek + e.offShoreHrsCurrentWeek }}"
+                     pattern="^\d*(\.\d{0,3})?$"
+                     step="0.001"
+                     formControlName="OffShoreHrsUtilized"
+                     [(ngModel)]="e.OffShoreHrsUtilized" required>
+            </div>
+          </div>
+
+          <div class="form-group  col-md-3 mb-2">
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsRemaining">Total Hours Remaining</label>
+            <div class="col-md-12">
+              <input type="number"
+                     id="OffShoreHrsRemaining"
+                     class="form-control"
+                     placeholder="00.00"
+                     name="OffShoreHrsRemaining"
+                     formControlName="OffShoreHrsRemaining"
+                     [(ngModel)]="e.OffShoreHrsRemaining" required>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
 
     </form>
   </div>
@@ -327,11 +403,13 @@
     <div class="Zeropadding  row mb-2">
       <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
       <div class="col-md-8" align="center">
-        <button type="button" class="btn btn-primary" (click)="saveForm()">Save </button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-primary" (click)="saveForm()">Save As Draft </button>&nbsp;&nbsp;
         <button type="button" class="btn btn-success" (click)="onSubmit()" [disabled]="!(this.ReportSummery.controls.accomp.valid && this.ReportSummery.controls.onShoreTotalHrs.valid &&
                                                                                         this.ReportSummery.controls.onShoreHrsTillLastWeek.valid && this.ReportSummery.controls.onShoreHrsCurrentWeek.valid &&
                                                                                         this.ReportSummery.controls.offShoreTotalHrs.valid && this.ReportSummery.controls.offShoreHrsTillLastWeek.valid &&
-                                                                                          this.ReportSummery.controls.offShoreHrsCurrentWeek.valid )">Submit </button>&nbsp;&nbsp;
+                                                                                          this.ReportSummery.controls.offShoreHrsCurrentWeek.valid )">
+          Submit
+        </button>&nbsp;&nbsp;
         <button type="button" class="btn btn-danger" (click)="open(content)">Reject</button>
       </div>
     </div>

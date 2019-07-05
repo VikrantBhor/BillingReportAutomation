@@ -36,6 +36,8 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\DTO\ReportList.ts" />
+    <None Remove="ClientApp\src\app\DTO\SharedObject.ts" />
+    <None Remove="ClientApp\src\app\services\SharedDataService.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,10 +54,6 @@
     <None Remove="ClientApp\src\app\DTO\ClientInfo.ts" />
     <None Remove="ClientApp\src\app\DTO\ReportSummery.ts" />
     <None Remove="ClientApp\src\app\report\CreateReport\report-create.component.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientApp\src\app\services\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -213,7 +211,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\DTO\ClientInfo.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\DTO\ReportSummery.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\DTO\SharedObject.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\report\CreateReport\report-create.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\SharedDataService.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

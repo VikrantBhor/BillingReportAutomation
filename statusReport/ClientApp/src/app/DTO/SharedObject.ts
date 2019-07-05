@@ -1,0 +1,15 @@
+export class SharedObject {
+  constructor(
+    public reportId: string,
+    public projectId: string,
+    public projectName: string,
+    public clientName: string,    
+    public reportType: string,
+    public reportDate: string,
+    public reportStartDate: string,
+    public reportEndDate: string,
+  ) {
+  }
+
+
+}
