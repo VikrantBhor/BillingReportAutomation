@@ -49,13 +49,25 @@ export class ReportService {
     };
     debugger;
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
+  }
+
+
+  draftReportDetails(reportSummery: ReportSummery): Observable<any> {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    debugger;
+    return this.http.post(this.Baseurl + 'api/ReportSummery/draftReportSummery', reportSummery, options);
   } 
 
   getClientList(): Observable<IClientList[]> {
     return this.http.get<IClientList[]>(this.Baseurl + 'api/Report/GetClientList');
   }
-  getReports(role,reportStatus): Observable<reportList[]> {
-    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
+  getReports(role, reportStatus, userEmail): Observable<reportList[]> {
+    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus + '/' + userEmail);
   }
 
   getweekComments(projectId, reportDate): Observable<string> {

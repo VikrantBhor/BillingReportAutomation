@@ -157,8 +157,8 @@ namespace statusReport.Controllers
         //}
 
         [HttpGet]
-        [Route("reportStatus/{role}/{reportStatus}")]
-        public async Task<IActionResult> GetReport([FromRoute]string role, [FromRoute]int reportStatus = 0)
+        [Route("reportStatus/{role}/{reportStatus}/{userEmail}")]
+        public async Task<IActionResult> GetReport([FromRoute]string role, [FromRoute]int reportStatus,[FromRoute]string userEmail)
         {
             var result = new List<ReportList>();
             using (BillingReportContext context = new BillingReportContext())
@@ -168,7 +168,8 @@ namespace statusReport.Controllers
                     if (reportStatus == 0) // Saved
                     {
                         result = (from reportSummary in context.TblReportSummery
-                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
+                                  where (reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created))
+                                  && reportSummary.CreatedByEmail == userEmail
                                   orderby reportSummary.CreatedDate
                                   select new ReportList
                                   {
@@ -176,13 +177,16 @@ namespace statusReport.Controllers
                                       ClientName = reportSummary.ClientName,
                                       ProjectName = reportSummary.ProjectName,
                                       ProjectType = reportSummary.ProjectType,
-                                      CreatedDate = reportSummary.CreatedDate
+                                      CreatedDate = reportSummary.CreatedDate,
+                                      ReportStartDate = reportSummary.ReportStartDate,
+                                      ReportEndDate = reportSummary.ReportEndDate
                                   }).ToList();
                     }
-                    if (reportStatus == 3) // Rejected
+                    if (reportStatus == 2) // Rejected
                     {
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected)
+                                  && reportSummary.CreatedByEmail == userEmail
                                   orderby reportSummary.LastUpdatedDate
                                   select new ReportList
                                   {
@@ -191,6 +195,8 @@ namespace statusReport.Controllers
                                       ProjectName = reportSummary.ProjectName,
                                       ProjectType = reportSummary.ProjectType,
                                       CreatedDate = reportSummary.CreatedDate,
+                                      ReportStartDate = reportSummary.ReportStartDate,
+                                      ReportEndDate = reportSummary.ReportEndDate,
                                       Remark = reportSummary.Remark
                                   }).ToList();
                     }
@@ -201,7 +207,7 @@ namespace statusReport.Controllers
                     if (reportStatus == 1) // Submitted and Rejected
                     {
                         result = (from reportSummary in context.TblReportSummery
-                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Submitted)
+                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
                                   orderby reportSummary.LastUpdatedDate
                                   select new ReportList
                                   {
@@ -210,6 +216,9 @@ namespace statusReport.Controllers
                                       ProjectName = reportSummary.ProjectName,
                                       ProjectType = reportSummary.ProjectType,
                                       CreatedDate = reportSummary.CreatedDate,
+                                      SubmittedBy = reportSummary.CreatedBy,
+                                      ReportStartDate = reportSummary.ReportStartDate,
+                                      ReportEndDate = reportSummary.ReportEndDate,
                                       Remark = reportSummary.Remark
                                   }).ToList();
                     }

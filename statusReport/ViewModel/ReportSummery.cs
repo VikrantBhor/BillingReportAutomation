@@ -22,7 +22,10 @@ namespace statusReport.ViewModel
         public Decimal offShoreHrsTillLastWeek { get; set; }
         public Decimal offShoreHrsCurrentWeek { get; set; }
         public string notes { get; set; }
-
+        public DateTime ReportStartDate { get; set; }
+        public DateTime ReportEndDate { get; set; }
+        public string CreatedByEmail { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class CRDetails

@@ -25,6 +25,7 @@ import { ReportCRComponent } from './report-cr/report-cr.component';
 import { ReportCreateComponent } from './report/CreateReport/report-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { DataService } from './services/SharedDataService';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
   providers: [
     AdalService,
     AdalGuard,
+    DataService,
     { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
