@@ -66,7 +66,11 @@ export class ReportSummeryComponent implements OnInit {
   lastHrs : any
 
   formData: any = {
-    data: ''
+    data: '',
+    reportType: '',
+    reportStartDate: '',
+    reportEndDate: '',
+    projectName:''
   };
 
   newCRDetails: reportCR = {
@@ -177,7 +181,7 @@ export class ReportSummeryComponent implements OnInit {
 
   ngOnInit() {
     debugger;
-    if (this.adalService.userInfo.userName.indexOf('Rumana') == 0) { // This block is for Rumana
+    if (this.adalService.userInfo.userName.indexOf('Ankur') == 0) { // This block is for Rumana
       debugger;
       this.isManager = true;
       this.isTL = false;
@@ -629,6 +633,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   public downloadDocs(): void {
+    this.showLoader = true;
     const clientName = "Atidan";
     const projectName = "StatusReport";
     var date = new Date().getMonth() + 1;
@@ -656,14 +661,21 @@ export class ReportSummeryComponent implements OnInit {
       //const formData: FormData = new FormData();
       //formData.append('logo', string);
       this.formData.data = string;
+      this.formData.reportType = this.reportType;
+      this.formData.reportStartDate = this.reportSummery.reportStartDate;
+      this.formData.reportEndDate = this.reportSummery.reportEndDate;
+      this.formData.projectName = this.reportSummery.projectName;
+
       debugger;
       this.reportservice.postData(this.formData).subscribe(data => {
         //debugger;
-        this.toastr.success('Report Sumitted successfully !', 'Success');
+        this.showLoader = false;
+        this.toastr.success('Report uploaded successfully !', 'Success');
         //alert("Succesfully Added Product details");
       }, error => {
         console.log(error);
-        this.toastr.warning('failed while Sumitting report !', 'Warning');
+        this.showLoader = false;
+        this.toastr.warning('Failed while uploading report !', 'Warning');
         //alert("failed while adding product details");
       })
     });

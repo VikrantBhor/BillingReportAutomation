@@ -12,8 +12,8 @@ export class GenerateReport {
     const docs = new Document();
     //debugger;
     docs.Styles.createParagraphStyle("heading1", "Heading 1").spacing({ before: 150, after: 120 }).size(40).bold().color('999989');
-    docs.Styles.createParagraphStyle("title", "Title").spacing({ before: 150 }).size(50).bold();
-    docs.Styles.createParagraphStyle("heading2", "Heading 2").spacing({ before: 150, after: 120 }).size(30).color('999980').bold();
+    docs.Styles.createParagraphStyle("title", "Title").spacing({ before: 150 }).size(50).color('FF0000').bold().underline();
+    docs.Styles.createParagraphStyle("heading2", "Heading 2").spacing({ before: 150, after: 120 }).size(30).color('000080').bold();
     docs.Styles.createParagraphStyle("heading3", "Heading 3").spacing({ before: 150, after: 120 }).bold().center();
     docs.Styles.createParagraphStyle("heading5", "Heading 5").spacing({ before: 150, after: 120 }).bold().center();
 
@@ -27,7 +27,7 @@ export class GenerateReport {
     }
 
     docs.addParagraph(this.createHeading("Name of Project")); //Name of Project
-    docs.addParagraph(this.createHeading(reportSummery.reportStartDate + " - " + reportSummery.reportEndDate)); //Start and end date of report
+    docs.addParagraph(this.createHeading(new Date(reportSummery.reportStartDate).toDateString() + " - " + new Date(reportSummery.reportEndDate).toDateString())); //Start and end date of report
 
     docs.addParagraph(this.createSubHeading("Project Type : " + reportSummery.projectName));
 
