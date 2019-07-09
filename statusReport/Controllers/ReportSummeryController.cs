@@ -94,7 +94,11 @@ namespace statusReport.Controllers
                                          offShoreTotalHrs = (int)RSD.OnshoreTotalHrs,
                                          offShoreHrsTillLastWeek = (int)RSD.OnshoreLastWeekHrs,
                                          offShoreHrsCurrentWeek = (int)RSD.OnshoreCurrentWeekHrs,
-                                         notes = RSD.Notes
+                                         notes = RSD.Notes,
+                                         CreatedBy = RS.CreatedBy,
+                                         CreatedByEmail = RS.CreatedByEmail,
+                                         ReportStartDate = RS.ReportStartDate,
+                                         ReportEndDate = RS.ReportEndDate
                                      }).SingleOrDefault();
 
                     return reportSummery;
@@ -125,9 +129,9 @@ namespace statusReport.Controllers
                         tblReportSummery.ClientName = reportSummery.clientName;
                         tblReportSummery.ProjectName = reportSummery.projectName;
                         tblReportSummery.ProjectType = reportSummery.projectType;
-                        tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
-                        tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
-                        tblReportSummery.CreatedBy = "Admin";
+                        tblReportSummery.ReportStartDate = reportSummery.ReportStartDate; //Convert.ToDateTime("2019-01-01");
+                        tblReportSummery.ProjectEndDate = DateTime.UtcNow;//Convert.ToDateTime("2019-01-01");
+                        tblReportSummery.CreatedBy = reportSummery.CreatedBy;
                         tblReportSummery.CreatedDate = DateTime.Now;
                         tblReportSummery.LastUpdatedBy = "Admin";
                         tblReportSummery.LastUpdatedDate = DateTime.Now;
@@ -136,6 +140,8 @@ namespace statusReport.Controllers
                         tblReportSummery.Remark = reportSummery.notes;
                         tblReportSummery.IsApproved = true;
                         tblReportSummery.ReportStatus = 4;
+                        tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
+                        tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
 
                         context.TblReportSummery.Add(tblReportSummery);
                         context.SaveChanges();
@@ -200,11 +206,11 @@ namespace statusReport.Controllers
                             tblReportSummery.ClientName = reportSummery.clientName;
                             tblReportSummery.ProjectName = reportSummery.projectName;
                             tblReportSummery.ProjectType = reportSummery.projectType;
-                            tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
-                            tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
-                            tblReportSummery.CreatedBy = "UpdateAdmin";
-                            tblReportSummery.CreatedDate = DateTime.Now;
-                            tblReportSummery.LastUpdatedBy = "UpdateAdmin";
+                            //tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
+                            //tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
+                            //tblReportSummery.CreatedBy = reportSummery.CreatedBy;
+                            //tblReportSummery.CreatedDate = DateTime.Now;
+                            tblReportSummery.LastUpdatedBy = reportSummery.CreatedBy;
                             tblReportSummery.LastUpdatedDate = DateTime.Now;
                             tblReportSummery.ApprovedBy = "UpdateAdmin";
                             tblReportSummery.ApprovedDate = DateTime.Now;
@@ -302,9 +308,9 @@ namespace statusReport.Controllers
                             tblReportSummery.ClientName = reportSummery.clientName;
                             tblReportSummery.ProjectName = reportSummery.projectName;
                             tblReportSummery.ProjectType = reportSummery.projectType;
-                            tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
-                            tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
-                            tblReportSummery.CreatedBy = "Admin";
+                            tblReportSummery.ReportStartDate = reportSummery.ReportStartDate; //Convert.ToDateTime("2019-01-01");
+                            tblReportSummery.ProjectEndDate = DateTime.UtcNow;//Convert.ToDateTime("2019-01-01");
+                            tblReportSummery.CreatedBy = reportSummery.CreatedBy;
                             tblReportSummery.CreatedDate = DateTime.Now;
                             tblReportSummery.LastUpdatedBy = "Admin";
                             tblReportSummery.LastUpdatedDate = DateTime.Now;
@@ -313,6 +319,8 @@ namespace statusReport.Controllers
                             tblReportSummery.Remark = reportSummery.notes;
                             tblReportSummery.IsApproved = true;
                             tblReportSummery.ReportStatus = 0;
+                            tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
+                            tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
 
                             context.TblReportSummery.Add(tblReportSummery);
                             context.SaveChanges();
@@ -364,7 +372,7 @@ namespace statusReport.Controllers
 
                             }
                             context.SaveChanges();
-                            return Ok();
+                            return Ok(report_id);
                         }
                         else
                         {
@@ -377,11 +385,11 @@ namespace statusReport.Controllers
                                 tblReportSummery.ClientName = reportSummery.clientName;
                                 tblReportSummery.ProjectName = reportSummery.projectName;
                                 tblReportSummery.ProjectType = reportSummery.projectType;
-                                tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
-                                tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
-                                tblReportSummery.CreatedBy = "UpdateAdmin";
-                                tblReportSummery.CreatedDate = DateTime.Now;
-                                tblReportSummery.LastUpdatedBy = "UpdateAdmin";
+                                //tblReportSummery.ReportStartDate = Convert.ToDateTime("2019-01-01");
+                                //tblReportSummery.ProjectEndDate = Convert.ToDateTime("2019-01-01");
+                                //tblReportSummery.CreatedBy = "UpdateAdmin";
+                                //tblReportSummery.CreatedDate = DateTime.Now;
+                                tblReportSummery.LastUpdatedBy = reportSummery.CreatedBy;
                                 tblReportSummery.LastUpdatedDate = DateTime.Now;
                                 tblReportSummery.ApprovedBy = "UpdateAdmin";
                                 tblReportSummery.ApprovedDate = DateTime.Now;
@@ -447,7 +455,7 @@ namespace statusReport.Controllers
                             }
                             context.SaveChanges();
 
-                            return Ok();
+                            return Ok(reportSummery.id);
                         }
 
                     }

@@ -66,8 +66,8 @@ export class ReportService {
   getClientList(): Observable<IClientList[]> {
     return this.http.get<IClientList[]>(this.Baseurl + 'api/Report/GetClientList');
   }
-  getReports(role,reportStatus): Observable<reportList[]> {
-    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
+  getReports(role, reportStatus, userEmail): Observable<reportList[]> {
+    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus + '/' + userEmail);
   }
 
   getweekComments(projectId, reportDate): Observable<string> {

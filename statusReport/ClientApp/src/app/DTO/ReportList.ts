@@ -5,5 +5,7 @@ export interface reportList {
   projectType: string;
   createdDate: string;
   submittedBy: string;
+  reportStartDate: string,
+  reportEndDate: string,
   remarks: string;
 }

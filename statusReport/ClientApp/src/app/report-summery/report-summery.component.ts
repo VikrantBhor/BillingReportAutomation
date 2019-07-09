@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedObject } from '../DTO/SharedObject';
 import { DataService } from '../services/SharedDataService';
 import { parse } from 'querystring';
+import { AdalService } from 'adal-angular4';
 
 @Component({
   selector: 'app-report-summery',
@@ -42,12 +43,17 @@ export class ReportSummeryComponent implements OnInit {
   reportId: number = 22;
   projectId: number = 1041;
   reportDate: number = 20190617;
-  repoStartDate: number = 20190401;
-  repoEndDate: number = 20190430;
+  //repoStartDate: number = 20190401;
+  //repoEndDate: number = 20190430;
+  repoStartDate: string = '';
+  repoEndDate: string = '';
+  createdByEmail: string;
+  createdBy: string;
   cName: string ='';
   prName: string='';
   prType: string=''
-
+  isManager: boolean = false;
+  isTL: boolean = true;
 
   accomplishment: any;
   currentHrs: any;
@@ -84,7 +90,11 @@ export class ReportSummeryComponent implements OnInit {
     offShoreTotalHrs: null,
     offShoreHrsTillLastWeek: this.lastHrs,
     offShoreHrsCurrentWeek: this.currentHrs,
-    notes: ''
+    notes: '',
+    reportStartDate: '',
+    reportEndDate: '',
+    createdByEmail: '',
+    createdBy: ''
   }
 
   saveReportSummery: ReportSummery = {
@@ -102,7 +112,11 @@ export class ReportSummeryComponent implements OnInit {
     offShoreTotalHrs: 0,
     offShoreHrsTillLastWeek: this.lastHrs,
     offShoreHrsCurrentWeek: this.currentHrs,
-    notes:''
+    notes: '',
+    reportStartDate: '',
+    reportEndDate: '',
+    createdByEmail: '',
+    createdBy: ''
   }
 
   data = {
@@ -122,7 +136,7 @@ export class ReportSummeryComponent implements OnInit {
     ]
   }
 
-  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService, private dataservice: DataService) {
+  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService, private dataservice: DataService,private adalService: AdalService,) {
     debugger;
     this.GetReportDetail();
     this.ReportSummery = this.fb.group({
@@ -136,9 +150,13 @@ export class ReportSummeryComponent implements OnInit {
       onShoreTotalHrs: [null, Validators.required],
       onShoreHrsTillLastWeek: [null, Validators.required],
       onShoreHrsCurrentWeek: [null, Validators.required],
+      onShoreHrsUtilized: [null],
+      onShoreHrsRemaining:[null],
       offShoreTotalHrs: [null, Validators.required],
       offShoreHrsTillLastWeek: [this.lastHrs, Validators.required],
       offShoreHrsCurrentWeek: [this.currentHrs, Validators.required],
+      OffShoreHrsUtilized: [null],
+      OffShoreHrsRemaining: [null],
       notes: ['']
     })
 
@@ -148,19 +166,29 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
+   
+    if (this.adalService.userInfo.userName.indexOf('Rumana') == 0) { // This block is for Rumana
+      this.isManager = true;
+      this.isTL = false;
+    }
     var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
     //Mapping parameters
     // map report id here
     debugger;
     this.projectId = parseInt(this.sharedData.projectId);
-    this.e.projectType = this.sharedData.projectName;
+    this.e.projectName = this.sharedData.projectName;
+    this.e.projectType = this.sharedData.reportType;
     this.reportType = this.sharedData.reportType;
     this.e.clientName = this.sharedData.clientName;
     this.e.projectName = this.sharedData.projectName;
     this.reportDate = parseInt(this.sharedData.reportDate.replace("-","").replace("-",""));
-    this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
-    this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
-   
+    //this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    //this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    this.createdByEmail = this.sharedData.createdByEmail;
+    this.createdBy = this.sharedData.createdBy;
+
     //debugger;
     console.log(this.route.snapshot.data['reportId']);
     this.reportId = +this.route.snapshot.paramMap.get('reportId');
@@ -184,7 +212,7 @@ export class ReportSummeryComponent implements OnInit {
             console.log(this.e.offShoreHrsCurrentWeek);
 
             this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              //debugger;
+              debugger;
               this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
               this.showLoader = false;
               console.log(respn);
@@ -214,7 +242,7 @@ export class ReportSummeryComponent implements OnInit {
             console.log(resp);
 
             this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              //debugger;
+              debugger;
               this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
               this.showLoader = false;
               console.log(respn);
@@ -225,6 +253,7 @@ export class ReportSummeryComponent implements OnInit {
         }, error => console.log(error))
 
       } else {
+        debugger;
         this.showLoader = false;
       }
 
@@ -246,6 +275,7 @@ export class ReportSummeryComponent implements OnInit {
         this.reportSummery = res;
         console.log(res);
         this.e = res
+        this.showLoader = false;
         //this.generateForm();
       }, error => console.log(error))
 
@@ -289,7 +319,7 @@ export class ReportSummeryComponent implements OnInit {
       debugger;
       if (result == "Save click") {
         this.remark = this.comment;
-        this.rejectReport(1, this.remark);
+        this.rejectReport(this.reportId, this.remark);
       }
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -346,8 +376,10 @@ export class ReportSummeryComponent implements OnInit {
     this.cName = this.sharedData.clientName;
     this.prName = this.sharedData.projectName;
     this.reportDate = parseInt(this.sharedData.reportDate.replace("-", "").replace("-", ""));
-    this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
-    this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));    
+    //this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    //this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));    
   }
 
 
@@ -375,6 +407,7 @@ export class ReportSummeryComponent implements OnInit {
 
   onSubmit() {
     console.log(this.ReportSummery.value);
+    //this.GetReportDetail();
      debugger;
     this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
@@ -391,14 +424,21 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.crDetails = this.reportCRDetails;
     this.saveReportSummery.activityDetails = this.reportActivityDetails;
     this.saveReportSummery.notes = this.ReportSummery.controls.notes.value;
+    this.saveReportSummery.reportStartDate = this.reportSummery == undefined ? this.repoStartDate : this.reportSummery.reportStartDate;
+    this.saveReportSummery.reportEndDate = this.reportSummery == undefined ? this.repoEndDate : this.reportSummery.reportEndDate;
+    this.saveReportSummery.createdByEmail = this.reportSummery == undefined ? this.createdByEmail : this.reportSummery.createdByEmail;
+    this.saveReportSummery.createdBy = this.reportSummery == undefined ? this.createdBy : this.reportSummery.createdBy;
 
     console.log(this.saveReportSummery);
 
     // if newreport is created.
     this.reportservice.saveReportDetails(this.saveReportSummery).subscribe(data => {
       //debugger;
-      this.toastr.success('Report Submitted successfully !', 'Success');
-      alert("Succesfully Added Product details");
+      this._router.navigate(['report/']).then(x => {
+        this.toastr.success('Report Submitted successfully !', 'Success');
+      });
+      
+      //alert("Succesfully Added Product details");
     }, error => {
       console.log(error);
       this.toastr.warning('failed while Submitting report !', 'Warning');
@@ -433,14 +473,19 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.crDetails = this.reportCRDetails;
     this.saveReportSummery.activityDetails = this.reportActivityDetails;
     this.saveReportSummery.notes = this.ReportSummery.controls.notes.value;
-
+    this.saveReportSummery.reportStartDate = this.reportSummery == undefined ? this.repoStartDate : this.reportSummery.reportStartDate;
+    this.saveReportSummery.reportEndDate = this.reportSummery == undefined ? this.repoEndDate : this.reportSummery.reportEndDate;
+    this.saveReportSummery.createdByEmail = this.reportSummery == undefined ? this.createdByEmail : this.reportSummery.createdByEmail;
+    this.saveReportSummery.createdBy = this.reportSummery == undefined ? this.createdBy : this.reportSummery.createdBy;
+    //this.reportId = 
     console.log(this.saveReportSummery);
 
     // if newreport is created.
     this.reportservice.draftReportDetails(this.saveReportSummery).subscribe(data => {
-      //debugger;
+      debugger;
+      this.reportId = data;
       this.toastr.success('Report Drafted successfully !', 'Success');
-      alert("Succesfully Added Product details");
+      //alert("Succesfully Added Product details");
     }, error => {
       debugger;
       console.log(error);

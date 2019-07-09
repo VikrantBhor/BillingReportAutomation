@@ -12,6 +12,9 @@ namespace statusReport.DTO
         public string ProjectName { get; set; }
         public string ProjectType { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public DateTime? ReportStartDate { get; set; }
+        public DateTime? ReportEndDate { get; set; }
+        public string SubmittedBy { get; set; }
         public string Remark { get; set; }
 
     }

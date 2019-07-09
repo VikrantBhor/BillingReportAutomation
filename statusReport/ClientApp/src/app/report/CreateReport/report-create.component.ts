@@ -20,7 +20,7 @@ import { DataService } from '../../services/SharedDataService';
 })
 
 export class ReportCreateComponent implements OnInit {
-  sharedData: SharedObject = new SharedObject('','','','','','','','');
+  sharedData: SharedObject = new SharedObject('','','','','','','','','','');
   clientList: IClientList[];
   user: any;
 
@@ -128,9 +128,11 @@ export class ReportCreateComponent implements OnInit {
       this.sharedData.reportId = '0';
       this.sharedData.reportType = this.reportDetail.ProjectType == "Weekly" ? "Week" : "Month";
       this.sharedData.reportDate = today.toJSON().split('T')[0];
-      this.sharedData.reportStartDate = this.StartDate.toJSON().split('T')[0];
-      this.sharedData.reportEndDate = this.EndDate.toJSON().split('T')[0];
+      this.sharedData.reportStartDate = detail.ReportStartDate;//  this.StartDate.toJSON().split('T')[0];
+      this.sharedData.reportEndDate = detail.ReportEndDate; //this.EndDate.toJSON().split('T')[0];
       this.sharedData.projectName = detail.ProjectName;
+      this.sharedData.createdByEmail = this.user.userName;
+      this.sharedData.createdBy = this.user.profile.name;
       this.data.changeMessage(this.sharedData);
 
       this._router.navigate(['reportSummery/', 0]).then(x => {

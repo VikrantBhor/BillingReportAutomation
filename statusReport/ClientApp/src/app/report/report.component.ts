@@ -22,6 +22,7 @@ export class ReportComponent implements OnInit {
   searchTerm: any = { clientName: '' };;
   btnPendingClicked = false;
   showLoader = true;
+  userEmail: string;
 
   constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService, private router: Router) {
     //debugger;
@@ -29,6 +30,7 @@ export class ReportComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.adalService.userInfo;
+    this.userEmail = this.adalService.userInfo.userName;
     //debugger;
     this.showLoader = true;
     this.user.token = this.user.token.substring(0, 10) + '...';
@@ -63,7 +65,7 @@ export class ReportComponent implements OnInit {
   getSavedReports() {
     this.statusReport = 0;
     this.btnPendingClicked = false;
-    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+    this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {
       //debugger;
       this.showLoader = false;
       this.reports = res;
@@ -74,7 +76,7 @@ export class ReportComponent implements OnInit {
   getSubmittedReports() {
     this.statusReport = 1;
     this.btnPendingClicked = false;
-    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+    this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {
       //debugger;
       this.showLoader = false;
       this.reports = res;
@@ -84,8 +86,8 @@ export class ReportComponent implements OnInit {
 
   getPendingReports() {
     this.btnPendingClicked = true;
-    this.statusReport = 3;
-    this.reportservice.getReports(this.role, this.statusReport).subscribe(res => {
+    this.statusReport = 2;
+    this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {
       //debugger;
       this.showLoader = false;
       this.reports = res;
