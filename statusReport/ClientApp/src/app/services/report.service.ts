@@ -46,8 +46,21 @@ export class ReportService {
     });
     let options = {
       headers: headers
-    }; 
+    };
+    debugger;
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
+  }
+
+
+  draftReportDetails(reportSummery: ReportSummery): Observable<any> {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    debugger;
+    return this.http.post(this.Baseurl + 'api/ReportSummery/draftReportSummery', reportSummery, options);
   } 
 
   postData(formData): Observable<any> {
@@ -83,9 +96,34 @@ export class ReportService {
   getClientList(): Observable<IClientList[]> {
     return this.http.get<IClientList[]>(this.Baseurl + 'api/Report/GetClientList');
   }
-  getReports(role,reportStatus): Observable<reportList[]> {
-    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus);
+  getReports(role, reportStatus, userEmail): Observable<reportList[]> {
+    return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus + '/' + userEmail);
   }
+
+  getweekComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetWeekComments/' + projectId + '/' + reportDate);
+  }
+
+  getMonthComments(projectId, reportDate): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetMonthComments/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastWkHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastWeekHrs/' + projectId + '/' + reportDate);
+  }
+
+  getcurrentMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentMonthHrs/' + projectId + '/' + reportDate);
+  }
+
+  getLastMonthHrs(projectId, reportDate): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastMonthHrs/' + projectId + '/' + reportDate);
+  }
+
 
   rejectReport(id, remark): Observable<void> {
     debugger;

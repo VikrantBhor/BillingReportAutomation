@@ -38,9 +38,9 @@
                 <!--<tr *ngFor="let report of reports | filter : searchTerm; let i=index">-->
                 <tr *ngFor="let report of reports | filterBy: searchTerm |  paginate: { itemsPerPage: 10, currentPage: p }; let i=index">
                   <td>{{i + 1}}</td>
-                  <td> <a routerLink= "['/reportSummery',report.reportId]" (click)="goToReport('/reportSummery',report.reportId)">{{ report.clientName }} {{ report.projectName }} {{ report.projectType }}</a></td>
+                  <td> <a routerLink="['/reportSummery',report.reportId]" (click)="goToReport('/reportSummery',report.reportId)">{{ report.clientName }} {{ report.projectName }} {{ report.reportStartDate | date: 'mediumDate'}} - {{ report.reportEndDate | date: 'mediumDate'}}</a></td>
                   <td>{{ report.createdDate | date: 'mediumDate'}}</td>
-                  <td *ngIf="this.role=='Manager'">{{ report.createdBy }}</td>
+                  <td *ngIf="this.role=='Manager'">{{ report.submittedBy }}</td>
                   <td *ngIf="this.btnPendingClicked == true ">{{ report.remark }}</td>
                 </tr>
               </tbody>

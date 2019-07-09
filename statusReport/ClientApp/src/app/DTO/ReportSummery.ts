@@ -16,13 +16,19 @@ export interface ReportSummery {
   offShoreTotalHrs: number,
   offShoreHrsTillLastWeek: number,
   offShoreHrsCurrentWeek: number,
-  notes: string
+  notes: string,
+  reportStartDate: string,
+  reportEndDate: string,
+  createdByEmail: string,
+  createdBy: string
 }
 export interface IReportDetail {
   ClientName: string;
   ProjectName: string;
   ProjectType: string;
   ReportStartDate: string;
+  ReportEndDate: string;
   CreatedBy: string;
   CreatedByEmail: string;
+  ReportStatus: number;
 }

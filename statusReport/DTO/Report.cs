@@ -13,7 +13,10 @@ namespace statusReport.DTO
         public string CreatedBy { get; set; }
         public string CreatedByEmail { get; set; }        
         public DateTime ReportStartDate { get; set; }
+        public int? ReportStatus { get; set; }
+        public DateTime ReportEndDate { get; set; }
         
+
 
     }
 }
