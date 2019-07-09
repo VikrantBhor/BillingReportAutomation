@@ -2,15 +2,15 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { reportCR } from '../DTO/ReportCR';
 import { Observable } from 'rxjs';
-import { Response } from '@angular/http';
+import { Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { reportList } from '../DTO/ReportList';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { reportActivity } from '../DTO/ReportActivity';
 import { IClientList, IProgramList } from '../DTO/ClientInfo';
 import { IReportDetail } from '../../app/DTO/ReportSummery';
 import { formatDate } from '@angular/common';
-
-
+import { Options } from 'selenium-webdriver';
+import { Http } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ import { formatDate } from '@angular/common';
 export class ReportService {
   Baseurl: string;
   reportCRList: reportCR[];
-
+  form: string;
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.Baseurl = baseUrl;
   }
@@ -48,6 +48,36 @@ export class ReportService {
       headers: headers
     }; 
     return this.http.post(this.Baseurl + 'api/ReportSummery/saveReportSummery', reportSummery, options);
+  } 
+
+  postData(formData): Observable<any> {
+    //let headers = new HttpHeaders({
+    //  'Content-Type': 'application/json',
+    //  'Accept': 'application/json',
+    //  'Access-Control-Allow-Headers': 'Content-Type'
+    //});
+    //let options = {
+    //  headers: headers
+    //};
+    let hdrs = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Headers': 'X-Requested-With,Content-Type',
+      'Access-Control-Allow-Credentials':'true'
+    });
+    //let headers = {
+    //  headers: new HttpHeaders({
+    //    'Content-Type': 'application/json'
+    //  })
+    //};
+
+    var value = "Val";
+    this.form = formData.data;
+    //let body = JSON.stringify({ formData }); 
+    debugger;
+    return this.http.post('http://localhost:2142/api/UploadReport/Post/', formData, { headers: hdrs });
+    
   } 
 
   getClientList(): Observable<IClientList[]> {

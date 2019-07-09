@@ -326,8 +326,9 @@
     <div class="Zeropadding  row mb-2">
       <label class="col-md-3 Zeropadding col-form-label" for="notes"></label>
       <div class="col-md-8" align="center">
+        <button (click)="downloadDocs()">Generate My Status Report!</button>
         <button type="button" class="btn btn-primary" (click)="saveForm()">Save </button>&nbsp;&nbsp;
-        <button type="button" class="btn btn-success" (click)="onSubmit()" >Submit </button>&nbsp;&nbsp;
+        <button type="button" class="btn btn-success" (click)="onSubmit()">Submit </button>&nbsp;&nbsp;
         <button type="button" class="btn btn-danger" (click)="open(content)">Reject</button>
       </div>
     </div>

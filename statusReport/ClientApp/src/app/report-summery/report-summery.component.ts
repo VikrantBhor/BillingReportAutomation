@@ -6,10 +6,16 @@ import { reportCR } from '../DTO/ReportCR';
 import { ReportSummery } from '../DTO/ReportSummery';
 import { error } from '@angular/compiler/src/util';
 import { reportActivity } from '../DTO/ReportActivity';
-import { generate } from 'rxjs';
+import { generate, from } from 'rxjs';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Packer } from 'docx';
+import { saveAs } from 'file-saver/FileSaver';
+import { GenerateReport } from '../generate-report/generateReport.component';
+import { HttpClient, HttpParams } from '@angular/common/http';
+
+
 
 @Component({
   selector: 'app-report-summery',
@@ -37,16 +43,20 @@ export class ReportSummeryComponent implements OnInit {
   comment: string;
   remark: string;
 
+  formData: any = {
+    data: ''
+  };
+
   newCRDetails: reportCR = {
     crName: '',
     estimateHrs: 0,
     actualHrs: 0,
-    status:''
+    status: ''
   };
 
   newActivityDetails: reportActivity = {
     milestones: '',
-    eta:0
+    eta: 0
   }
 
   saveReportCRDetails: reportCR[] = [];
@@ -54,7 +64,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
   public e: ReportSummery = {
-    id:0,
+    id: 0,
     clientName: '',
     projectName: '',
     projectType: '',
@@ -72,7 +82,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveReportSummery: ReportSummery = {
-    id: this.reportId != null ? this.reportId:0,
+    id: this.reportId != null ? this.reportId : 0,
     clientName: '',
     projectName: '',
     projectType: '',
@@ -86,7 +96,7 @@ export class ReportSummeryComponent implements OnInit {
     offShoreTotalHrs: 0,
     offShoreHrsTillLastWeek: 0,
     offShoreHrsCurrentWeek: 0,
-    notes:''
+    notes: ''
   }
 
   data = {
@@ -101,12 +111,12 @@ export class ReportSummeryComponent implements OnInit {
     activityDetails: [
       {
         milestones: "",
-        eta:""
+        eta: ""
       }
     ]
   }
 
-  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService, private http: HttpClient) {
     this.ReportSummery = this.fb.group({
       clientName: [''],
       projectName: [''],
@@ -135,19 +145,21 @@ export class ReportSummeryComponent implements OnInit {
     this.reportId = +this.route.snapshot.paramMap.get('reportId');
 
     this.reportservice.getCRdetails(this.reportId).subscribe(res => {
+      debugger;
       this.reportCRDetails = res;
       console.log(res);
     }, error => console.log(error))
 
     this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
+      debugger;
       this.reportActivityDetails = res;
       console.log(res);
     }, error => console.log(error))
 
     //debugger;
-    if (this.reportId != 0)
-    {
+    if (this.reportId != 0) {
       this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
+        debugger;
         this.reportSummery = res;
         console.log(res);
         this.e = res
@@ -184,7 +196,7 @@ export class ReportSummeryComponent implements OnInit {
 
   generateForm() {
     debugger;
-    console.log(this.reportSummery.clientName); 
+    console.log(this.reportSummery.clientName);
 
     this.ReportSummery = new FormGroup({
       clientName: new FormControl({ value: this.reportSummery.clientName }),
@@ -232,7 +244,7 @@ export class ReportSummeryComponent implements OnInit {
 
   onSubmit() {
     console.log(this.ReportSummery.value);
-     debugger;
+    debugger;
     this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
@@ -262,7 +274,7 @@ export class ReportSummeryComponent implements OnInit {
       alert("failed while adding product details");
     })
 
-   // console.log(this.saveReportSummery);
+    // console.log(this.saveReportSummery);
 
   }
 
@@ -309,7 +321,7 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.reportCRDetails);
     //let control = <FormArray>this.ReportSummery.controls.crDetails;
     //control.removeAt(index)
-    this.reportCRDetails.splice(index,1)
+    this.reportCRDetails.splice(index, 1)
   }
 
   deleteActivity(index) {
@@ -348,7 +360,7 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.ReportSummery.controls.activityDetails.value[0]);
     this.newActivityDetails.milestones = this.ReportSummery.controls.activityDetails.value[0].milestones;
     this.newActivityDetails.eta = this.ReportSummery.controls.activityDetails.value[0].eta;
-    
+
     this.reportActivityDetails.push(this.newActivityDetails);
 
     this.addActBtn = true;
@@ -370,6 +382,52 @@ export class ReportSummeryComponent implements OnInit {
         this.toastr.success('Report rejected successfully !', 'Success');
       });
     })
+  }
+
+  public downloadDocs(): void {
+    const clientName = "Atidan";
+    const projectName = "StatusReport";
+    var date = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    const statusReport = new GenerateReport();
+    debugger;
+    const doc = statusReport.generateReport(this.reportSummery,this.reportCRDetails,this.reportActivityDetails);
+    const packer = new Packer();
+
+    //packer.toBlob(doc).then(blob => {
+    //  debugger;
+    //  console.log(blob);
+    //  saveAs(blob, "weekly_" + clientName + "_" + projectName + "_" + date + "_" + year + ".docx");
+    //  console.log("Document created successfully");
+    //});
+
+    //packer.toBuffer(doc).then((buffer) => {
+    //  fs.writeFileSync("My Document.docx", buffer);
+    //});
+
+    packer.toBase64String(doc).then((string) => {
+      var reqHeader = new Headers({
+        'Content-Type': 'application/zip'
+      });
+      //const formData: FormData = new FormData();
+      //formData.append('logo', string);
+      this.formData.data = string;
+      debugger;
+      this.reportservice.postData(this.formData).subscribe(data => {
+        //debugger;
+        this.toastr.success('Report Sumitted successfully !', 'Success');
+        //alert("Succesfully Added Product details");
+      }, error => {
+        console.log(error);
+        this.toastr.warning('failed while Sumitting report !', 'Warning');
+        //alert("failed while adding product details");
+      })
+    });
+
+    //const docx = require("docx");
+    ////const doc = new docx.Document();
+    //const exporter = new docx.StreamPacker(doc);
+    //const stream = exporter.pack();
   }
 }
 
