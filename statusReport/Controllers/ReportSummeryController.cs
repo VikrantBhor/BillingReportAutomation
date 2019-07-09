@@ -244,6 +244,7 @@ namespace statusReport.Controllers
                         //delete existing entry
                         // db.ProRel.RemoveRange(db.ProRel.Where(c => c.ProjectId == Project_id));
                         context.TblReportCr.RemoveRange(context.TblReportCr.Where(x => x.ReportId == reportSummery.id));
+                        context.SaveChanges();
 
                         foreach (CRDetails cR in reportSummery.crDetails)
                         {

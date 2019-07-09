@@ -176,10 +176,15 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
-   
+    debugger;
     if (this.adalService.userInfo.userName.indexOf('Rumana') == 0) { // This block is for Rumana
+      debugger;
       this.isManager = true;
       this.isTL = false;
+    }
+    else {
+      this.isManager = false;
+      this.isTL = true;
     }
     var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
     //Mapping parameters
@@ -284,6 +289,7 @@ export class ReportSummeryComponent implements OnInit {
       this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
         debugger;
         this.reportSummery = res;
+        this.reportType = res.projectType;
         console.log(res);
         this.e = res
         this.showLoader = false;
@@ -514,7 +520,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
   addNewCR() {
-    //debugger;
+    debugger;
     let control = <FormArray>this.ReportSummery.controls.crDetails;
     control.push(
       this.fb.group({
@@ -559,17 +565,26 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveCRDetails() {
-    //debugger;
+    debugger;
     console.log(this.reportCRDetails);
     console.log(this.ReportSummery.controls.crDetails.value[0].Name.valid)
-
     console.log(this.ReportSummery.controls.crDetails.value[0]);
-    this.newCRDetails.crName = this.ReportSummery.controls.crDetails.value[0].Name;
-    this.newCRDetails.estimateHrs = this.ReportSummery.controls.crDetails.value[0].estimateHrs;
-    this.newCRDetails.actualHrs = this.ReportSummery.controls.crDetails.value[0].actualHrs;
-    this.newCRDetails.status = this.ReportSummery.controls.crDetails.value[0].status;
 
-    this.reportCRDetails.push(this.newCRDetails);
+    
+
+    //this.newCRDetails.crName = this.ReportSummery.controls.crDetails.value[0].Name;
+    //this.newCRDetails.estimateHrs = this.ReportSummery.controls.crDetails.value[0].estimateHrs;
+    //this.newCRDetails.actualHrs = this.ReportSummery.controls.crDetails.value[0].actualHrs;
+    //this.newCRDetails.status = this.ReportSummery.controls.crDetails.value[0].status;
+
+    //this.reportCRDetails.push(this.newCRDetails);
+
+    this.reportCRDetails.push({
+      'crName': this.ReportSummery.controls.crDetails.value[0].Name,
+      'estimateHrs': this.ReportSummery.controls.crDetails.value[0].estimateHrs,
+      'actualHrs': this.ReportSummery.controls.crDetails.value[0].actualHrs,
+      'status': this.ReportSummery.controls.crDetails.value[0].status
+    });
 
     this.addCRBtn = true;
     this.showCRDiv = true;
@@ -585,10 +600,12 @@ export class ReportSummeryComponent implements OnInit {
   saveActivityDetails() {
     //debugger;
     console.log(this.ReportSummery.controls.activityDetails.value[0]);
-    this.newActivityDetails.milestones = this.ReportSummery.controls.activityDetails.value[0].milestones;
-    this.newActivityDetails.eta = this.ReportSummery.controls.activityDetails.value[0].eta;
+    //this.newActivityDetails.milestones = this.ReportSummery.controls.activityDetails.value[0].milestones;
+    //this.newActivityDetails.eta = this.ReportSummery.controls.activityDetails.value[0].eta;
 
-    this.reportActivityDetails.push(this.newActivityDetails);
+    //this.reportActivityDetails.push(this.newActivityDetails);
+
+    this.reportActivityDetails.push({ 'milestones': this.ReportSummery.controls.activityDetails.value[0].milestones, 'eta': this.ReportSummery.controls.activityDetails.value[0].eta});
 
     this.addActBtn = true;
     this.showActDiv = true;
