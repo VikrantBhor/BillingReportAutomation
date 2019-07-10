@@ -75,7 +75,7 @@
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="Cr">CR Details</label>
         <div class="col-md-9">
-          <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewCR()" [disabled]="!addCRBtn">
+          <button *ngIf="this.isTL" style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewCR()" [disabled]="!addCRBtn">
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
           </button>
 
@@ -96,7 +96,7 @@
                 <td>{{CR.actualHrs}}</td>
                 <td>{{CR.status}}</td>
                 <td>
-                  <button type="button" class="btn btn-danger btn-sm" (click)="deleteCR(i)">
+                  <button *ngIf="this.isTL" type="button" class="btn btn-danger btn-sm" (click)="deleteCR(i)">
                     <span class="fa fa-trash" aria-hidden="true"></span>
                   </button>
                 </td>
@@ -161,7 +161,7 @@
       <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="Cr">Activity Details</label>
         <div class="col-md-9">
-          <button style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewActivity()" [disabled]="!addActBtn">
+          <button *ngIf="this.isTL" style="margin-top:5px; margin-bottom:5px;" type="button" class="btn btn-primary btn-sm" (click)="addNewActivity()" [disabled]="!addActBtn">
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New Activity
           </button>
 
@@ -179,7 +179,7 @@
                 <td>{{Activity.milestones}}</td>
                 <td>{{Activity.eta}}</td>
                 <td>
-                  <button type="button" class="btn btn-danger btn-sm" (click)="deleteActivity(i)">
+                  <button *ngIf="this.isTL" type="button" class="btn btn-danger btn-sm" (click)="deleteActivity(i)">
                     <span class="fa fa-trash" aria-hidden="true"></span>
                   </button>
                 </td>

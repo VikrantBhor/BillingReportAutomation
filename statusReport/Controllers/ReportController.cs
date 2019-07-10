@@ -58,7 +58,7 @@ namespace statusReport.Controllers
                 using (MySqlConnection conn = context.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from project where customer_Id = "+ Convert.ToInt32(id), conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from project where customer_Id = "+ Convert.ToInt32(id) +" order by Name", conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -86,7 +86,7 @@ namespace statusReport.Controllers
             using (MySqlConnection conn = context.GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("select * from customer", conn);
+                MySqlCommand cmd = new MySqlCommand("select * from customer order by name", conn);
 
                 using (var reader = cmd.ExecuteReader())
                 {
