@@ -254,7 +254,7 @@
         <legend class="col-md-3 col-sm-5">On Shore:</legend>
         <div class="row">
           <div class="form-group col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="onShoreTotalHrs"> Total Hrs</label>
+            <label class="col-md-12 Zeropadding col-form-label" for="onShoreTotalHrs"> Total Budget Hrs</label>
             <div class="col-md-12">
               <input type="number"
                      id="onShoreTotalHrs"
@@ -316,6 +316,7 @@
                      class="form-control"
                      placeholder="00.00"
                      name="onShoreHrsRemaining"
+                     value="{{e.onShoreTotalHrs - e.onShoreHrsUtilized }}"
                      formControlName="onShoreHrsRemaining"
                      [(ngModel)]="e.onShoreHrsRemaining" required>
             </div>
@@ -326,15 +327,16 @@
         <legend class="col-md-3 col-sm-5">Off Shore:</legend>
         <div class="row">
           <div class="form-group col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="offShoreTotalHrs">Total Hrs</label>
+            <label class="col-md-12 Zeropadding col-form-label" for="offShoreTotalHrs">Total Budget Hrs</label>
             <div class="col-md-12">
               <input type="number"
                      id="offShoreTotalHrs"
                      class="form-control"
                      placeholder="00.00"
                      name="offShoreTotalHrs"
+                     value="e.onShoreTotalHrs"
                      formControlName="offShoreTotalHrs"
-                     [(ngModel)]="e.offShoreTotalHrs" required>
+                     [(ngModel)]="e.onShoreTotalHrs" disabled required>
             </div>
           </div>
 
@@ -388,6 +390,7 @@
                      class="form-control"
                      placeholder="00.00"
                      name="OffShoreHrsRemaining"
+                     value="{{e.offShoreTotalHrs - e.OffShoreHrsUtilized }}"
                      formControlName="OffShoreHrsRemaining"
                      [(ngModel)]="e.OffShoreHrsRemaining" required>
             </div>

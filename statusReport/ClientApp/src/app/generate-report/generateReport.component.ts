@@ -77,7 +77,6 @@ export class GenerateReport {
 
       var i = 1;
       for (let cR of reportCRDetails) {
-        debugger;
         table.getCell(i, 0).addContent(new Paragraph(cR.crName).heading5().left());
         table.getCell(i, 1).addContent(new Paragraph(cR.estimateHrs).heading5().center());
         table.getCell(i, 2).addContent(new Paragraph(cR.actualHrs).heading5().center());
@@ -109,25 +108,32 @@ export class GenerateReport {
   createBillDetails(reportSummery) {
     const table2 = new Document().createTable(11, 2).setWidth(WidthType.PERCENTAGE, "100%");
 
+    debugger;
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+
+
     table2.getCell(0, 0).addContent(new Paragraph("Activities").heading3());
     table2.getCell(0, 1).addContent(new Paragraph("Duration (in hrs.)").heading5());
     table2.getCell(1, 0).addContent(new Paragraph("Total On-Shore Hours").heading3().left());
     table2.getCell(1, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till Last" + this.reportType));
+    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till " + (new Date(reportSummery.reportStartDate).getDate() - 1) + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()]));
     table2.getCell(2, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek).heading5());
-    table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours This" + this.reportType));
+    table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
     table2.getCell(3, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek).heading5());
     table2.getCell(4, 0).addContent(new Paragraph("Total On-Shore Hours Utilized").heading3());
     table2.getCell(4, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek).heading5());
     //table2.getCell(5, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
     //table2.getCell(5, 1).addContent(new Paragraph("640.75 – 940.75").heading5());
-    table2.getCell(6, 0).addContent(new Paragraph("Total On-Shore Hours").heading3().left());
+    table2.getCell(6, 0).addContent(new Paragraph("Total Off-Shore Hours").heading3().left());
     table2.getCell(6, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(7, 0).addContent(this.createBullet("On-Shore Hours Till Last" + this.reportType));
+    table2.getCell(7, 0).addContent(this.createBullet("Off-Shore Hours Till " + (new Date(reportSummery.reportStartDate).getDate() - 1) + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()]));
     table2.getCell(7, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek).heading5());
-    table2.getCell(8, 0).addContent(this.createBullet("On-Shore Hours This" + this.reportType));
+    table2.getCell(8, 0).addContent(this.createBullet("Off-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
     table2.getCell(8, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek).heading5());
-    table2.getCell(9, 0).addContent(new Paragraph("Total On-Shore Hours Utilized").heading3());
+    table2.getCell(9, 0).addContent(new Paragraph("Total Off-Shore Hours Utilized").heading3());
     table2.getCell(9, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek).heading5());
     //table2.getCell(10, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
     //table2.getCell(10, 1).addContent(new Paragraph("640.75 – 940.75").heading5());
