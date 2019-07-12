@@ -197,7 +197,7 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
-                        EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null, reportSummery);
+                        //EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null, reportSummery);
                         return Ok();
                     }
                     else
@@ -281,7 +281,7 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
-                        EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null,reportSummery);
+                        //EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null,reportSummery);
                         return Ok();
                     }
 
@@ -492,7 +492,7 @@ namespace statusReport.Controllers
                 report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
                 report.Remark = remark;
                 context.TblReportSummery.Update(report);
-                EmailHelper.ReportRejected(report.CreatedByEmail, emailSender, "",remark, report);
+                //EmailHelper.ReportRejected(report.CreatedByEmail, emailSender, "",remark, report);
                 await context.SaveChangesAsync();
 
             }
