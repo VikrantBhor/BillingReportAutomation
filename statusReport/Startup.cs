@@ -1,20 +1,15 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
+using statusReport.Common;
 using statusReport.Models;
-using System;
+using statusReport.Services;
+using statusReport.Services.Implementation;
 
 namespace statusReport
 {
@@ -49,7 +44,7 @@ namespace statusReport
             //    options.CallbackPath = "/report";
             //    options.SignedOutRedirectUri = "http://localhost:49203";
             //    options.TokenValidationParameters.NameClaimType = "name";
-                
+
             //})
             //.AddCookie();
 
@@ -63,8 +58,20 @@ namespace statusReport
             //     );
             //}));
 
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.Add(new ServiceDescriptor(typeof(actitimeContext), new actitimeContext(Configuration.GetConnectionString("DefaultConnection"))));
+            services.AddOptions();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddScoped<IEmailSender, EmailSender>();
+
+    //        services.AddIdentity<IdentityUser, IdentityRole>(config =>
+    //        {
+    //            config.SignIn.RequireConfirmedEmail = true;
+    //            config.User.RequireUniqueEmail = true;
+    //        })
+    //.AddDefaultUI(UIFramework.Bootstrap4)
+    //.AddEntityFrameworkStores<actitimeContext>();
 
 
             // In production, the Angular files will be served from this directory
@@ -87,7 +94,7 @@ namespace statusReport
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-               // app.UseHsts();
+                // app.UseHsts();
             }
 
             //var options = new RewriteOptions()
@@ -96,13 +103,13 @@ namespace statusReport
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-           // app.UseSpaStaticFiles();
+            // app.UseSpaStaticFiles();
 
             // app.UseCors("AzurePolicy");
 
             app.UseAuthentication();
 
-           
+
 
             app.UseMvc(routes =>
             {

@@ -10,6 +10,8 @@ using statusReport.Models;
 using Microsoft.AspNetCore.Mvc;
 using statusReport.BillingDBModels;
 using statusReport.DTO;
+using statusReport.Utils;
+using statusReport.Services.Implementation;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,11 +22,12 @@ namespace statusReport.Controllers
     public class ReportController : Controller
     {
         private actitimeContext dbContext;
+        private readonly IEmailSender emailSender;
 
-        public ReportController(actitimeContext context)
+        public ReportController(actitimeContext context,IEmailSender _emailSender)
         {
-                this.dbContext = context;
-
+            dbContext = context;
+            emailSender = _emailSender;
         }
 
         //// GET: api/<controller>
@@ -58,7 +61,7 @@ namespace statusReport.Controllers
                 using (MySqlConnection conn = context.GetConnection())
                 {
                     conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("select * from project where customer_Id = "+ Convert.ToInt32(id) +" order by Name", conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from project where customer_Id = "+ Convert.ToInt32(id), conn);
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -86,7 +89,7 @@ namespace statusReport.Controllers
             using (MySqlConnection conn = context.GetConnection())
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("select * from customer order by name", conn);
+                MySqlCommand cmd = new MySqlCommand("select * from customer", conn);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -163,6 +166,7 @@ namespace statusReport.Controllers
             var result = new List<ReportList>();
             using (BillingReportContext context = new BillingReportContext())
             {
+                EmailHelper.ReportSubmitted("1","2","ankur.gautam@atidan.com", emailSender,null);
                 if (role == "TL")
                 {
                     if (reportStatus == 0) // Saved
