@@ -5,24 +5,53 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using statusReport.BillingDBModels;
 using statusReport.Services.Implementation;
+using statusReport.ViewModel;
 
 namespace statusReport.Utils
 {
     public class EmailHelper
     {
-        public static void ReportSubmitted(string ccID, string owner, string email, IEmailSender svc, string attachment)
+        public static void ReportSaved(string email, IEmailSender svc, string attachment,ReportSummery reportSummery)
         {
             Task.Run(async () =>
             {
                 var sb = new StringBuilder();
-                sb.Append($"<h2>Survey Submitted successfully</h2>");
-                var timeUtc = DateTime.UtcNow;
-                TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                DateTime estDate = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
-                sb.Append($"<h4>Survey with CCID {ccID} was successfully submitted by {owner} on {estDate.ToLongDateString()} {estDate.ToLongTimeString()} </h4>");
+                sb.Append($"<h2>Report has been saved successfully</h2>");
+                sb.Append($"<h4>Client Name:  {reportSummery.clientName}</h4>");
+                sb.Append($"<h4>Project Name:  {reportSummery.projectName}</h4>");
+                sb.Append($"<h4>Report Type:  {reportSummery.projectType}</h4>");
                 var body = sb.ToString();
-                await SendEmail("Survey submitted successfully", "admin@universalccc.com", email, "", "", body, new List<string>() { attachment }, true, svc);
+                await SendEmail("Report saved!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
+            });
+        }
+
+        public static void ReportSubmitted(string email, IEmailSender svc, string attachment, ReportSummery reportSummery)
+        {
+            Task.Run(async () =>
+            {
+                var sb = new StringBuilder();
+                sb.Append($"<h2>Report has been submitted successfully</h2>");
+                sb.Append($"<h4>Client Name:  {reportSummery.clientName}</h4>");
+                sb.Append($"<h4>Project Name:  {reportSummery.projectName}</h4>");
+                sb.Append($"<h4>Report Type:  {reportSummery.projectType}</h4>");
+                var body = sb.ToString();
+                await SendEmail("Report submitted!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
+            });
+        }
+
+        public static void ReportRejected(string email, IEmailSender svc, string attachment,string remark,TblReportSummery reportSummery)
+        {
+            Task.Run(async () =>
+            {
+                var sb = new StringBuilder();
+                sb.Append($"<h2>Report has been Rejected</h2>");
+                sb.Append($"<h4>Client Name:  {reportSummery.ClientName}</h4>");
+                sb.Append($"<h4>Project Name:  {reportSummery.ProjectName}</h4>");
+                sb.Append($"<h4>Report Type:  {reportSummery.ProjectType}</h4>");
+                var body = sb.ToString();
+                await SendEmail("Report Rejected!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
             });
         }
 
@@ -40,7 +69,7 @@ namespace statusReport.Utils
                 }
             }
 
-            await svc.SendEmailAsync("1", "2", "2");
+            await svc.SendEmailAsync(to, subject, body);
         }
 
     }

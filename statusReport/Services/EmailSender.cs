@@ -42,7 +42,7 @@ namespace statusReport.Services
                 {
                     Port = _emailSettings.Value.MailPort,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
+                   
                     Host = _emailSettings.Value.MailServer,
                     EnableSsl = false,
                     Credentials = credentials

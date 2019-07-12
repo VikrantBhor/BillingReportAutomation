@@ -22,12 +22,10 @@ namespace statusReport.Controllers
     public class ReportController : Controller
     {
         private actitimeContext dbContext;
-        private readonly IEmailSender emailSender;
-
+        
         public ReportController(actitimeContext context,IEmailSender _emailSender)
         {
             dbContext = context;
-            emailSender = _emailSender;
         }
 
         //// GET: api/<controller>
@@ -166,7 +164,6 @@ namespace statusReport.Controllers
             var result = new List<ReportList>();
             using (BillingReportContext context = new BillingReportContext())
             {
-                EmailHelper.ReportSubmitted("1","2","ankur.gautam@atidan.com", emailSender,null);
                 if (role == "TL")
                 {
                     if (reportStatus == 0) // Saved

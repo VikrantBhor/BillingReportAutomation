@@ -3,6 +3,8 @@ using MySql.Data.MySqlClient;
 using statusReport.BillingDBModels;
 using statusReport.DTO;
 using statusReport.Models;
+using statusReport.Services.Implementation;
+using statusReport.Utils;
 using statusReport.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,11 @@ namespace statusReport.Controllers
     [Route("api/[controller]")]
     public class ReportSummeryController : Controller
     {
-        public IActionResult Index()
+        private readonly IEmailSender emailSender;
+        
+        public ReportSummeryController(IEmailSender _emailSender)
         {
-            return View();
+            emailSender = _emailSender;
         }
 
         [HttpGet]
@@ -193,6 +197,7 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
+                        EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null, reportSummery);
                         return Ok();
                     }
                     else
@@ -276,7 +281,7 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
-
+                        EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null,reportSummery);
                         return Ok();
                     }
 
@@ -477,12 +482,6 @@ namespace statusReport.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpPut]
         [Route("rejectReport/{id}/{remark}")]
         public async Task<IActionResult> RejectReport([FromRoute]int id, [FromRoute] string remark)
@@ -493,6 +492,7 @@ namespace statusReport.Controllers
                 report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
                 report.Remark = remark;
                 context.TblReportSummery.Update(report);
+                EmailHelper.ReportRejected(report.CreatedByEmail, emailSender, "",remark, report);
                 await context.SaveChangesAsync();
 
             }
