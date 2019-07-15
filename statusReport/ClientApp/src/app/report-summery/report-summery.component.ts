@@ -65,7 +65,8 @@ export class ReportSummeryComponent implements OnInit {
   accomplishment: any;
   currentHrs: any;
   lastHrs : any
-
+  remainingHoursOffShore: number;
+  remainingHoursOnShore: number;
   formData: any = {
     data: '',
     reportType: '',
@@ -158,7 +159,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder, private reportservice: ReportService, private modalService: NgbModal, private route: ActivatedRoute, private _router: Router, private toastr: ToastrService, private dataservice: DataService,private adalService: AdalService,) {
-    debugger;
+    
     this.GetReportDetail();
     this.ReportSummery = this.fb.group({
       clientName: [this.cName],
@@ -187,9 +188,9 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
+    
     if (this.adalService.userInfo.userName.indexOf('Ankur') == 0) { // This block is for Rumana
-      debugger;
+      
       this.isManager = true;
       this.isTL = false;
     }
@@ -200,7 +201,7 @@ export class ReportSummeryComponent implements OnInit {
     var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
     //Mapping parameters
     // map report id here
-    debugger;
+    
     this.projectId = parseInt(this.sharedData.projectId);
     this.e.projectName = this.sharedData.projectName;
     this.e.projectType = this.sharedData.reportType;
@@ -215,30 +216,30 @@ export class ReportSummeryComponent implements OnInit {
     this.createdByEmail = this.sharedData.createdByEmail;
     this.createdBy = this.sharedData.createdBy;
 
-    //debugger;
+    //
     console.log(this.route.snapshot.data['reportId']);
     this.reportId = +this.route.snapshot.paramMap.get('reportId');
 
     if (this.reportId == 0)
     {
       if (this.reportType == 'Week') {
-        //debugger;
+        //
         this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
-          //debugger;
+          //
           this.e.accomp = res.weekComments;
           console.log(res);
           console.log(this.e);
           console.log(this.e.accomp);
 
           this.reportservice.getcurrentWkHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
-            //debugger;
+            //
             this.e.offShoreHrsCurrentWeek = resp.currentWKHrs;
             console.log(resp);
             console.log(this.e);
             console.log(this.e.offShoreHrsCurrentWeek);
 
             this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              debugger;
+              
               this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
               this.showLoader = false;
               console.log(respn);
@@ -251,24 +252,24 @@ export class ReportSummeryComponent implements OnInit {
 
         }, error => console.log(error))
 
-        //debugger;
+        //
         console.log(this.reportCRDetails);
 
       }
       else if (this.reportType == 'Month') {
 
         this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
-          //debugger;
+          //
           this.e.accomp = res.monthComments;
           console.log(res);
 
           this.reportservice.getcurrentMonthHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
-            //debugger;
+            //
             this.e.offShoreHrsCurrentWeek = resp.currentMnthHrs;
             console.log(resp);
 
             this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              debugger;
+              
               this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
               this.showLoader = false;
               console.log(respn);
@@ -279,7 +280,7 @@ export class ReportSummeryComponent implements OnInit {
         }, error => console.log(error))
 
       } else {
-        debugger;
+        
         this.showLoader = false;
       }
 
@@ -298,7 +299,7 @@ export class ReportSummeryComponent implements OnInit {
       }, error => console.log(error))
 
       this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
-        debugger;
+        
         this.reportSummery = res;
         this.reportType = res.projectType;
         console.log(res);
@@ -320,15 +321,15 @@ export class ReportSummeryComponent implements OnInit {
     //  console.log(res);
     //}, error => console.log(error))
 
-    //debugger;
+    //
     //this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
-    //  debugger;
+    //  
     //  this.e.accomp = res.comments;
     // // this.accomplishment = res.comments;
     //  console.log(res.comments);
     //}, error => console.log(error))
 
-    //debugger;
+    //
     //if (this.reportId != 0)
     //{
     //  this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
@@ -342,9 +343,8 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   open(content) {
-    debugger;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      debugger;
+      
       if (result == "Save click") {
         this.remark = this.comment;
         this.rejectReport(this.reportId, this.remark);
@@ -352,11 +352,11 @@ export class ReportSummeryComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+      });    
   }
 
   private getDismissReason(reason: any): string {
-    debugger;
+    
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -367,7 +367,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   //generateForm() {
-  //  debugger;
+  //  
   //  console.log(this.reportSummery.clientName); 
 
   //  //this.ReportSummery = new FormGroup({
@@ -397,7 +397,7 @@ export class ReportSummeryComponent implements OnInit {
     var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
     //Mapping parameters
     // map report id here
-    debugger;
+    
     this.projectId = parseInt(this.sharedData.projectId);
     this.prType = this.sharedData.reportType;
     this.reportType = this.sharedData.reportType;
@@ -433,9 +433,19 @@ export class ReportSummeryComponent implements OnInit {
     })
   }
 
+
+  SetRemainingOffShoreHours() {
+    this.remainingHoursOffShore = (this.e.onShoreTotalHrs) - (this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek);  
+  }
+
+  SetRemainingOnShoreHours() {
+    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek);
+  }
+
+
   onSubmit() {
     console.log(this.ReportSummery.value);
-    debugger;
+    
     this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
@@ -460,7 +470,7 @@ export class ReportSummeryComponent implements OnInit {
 
     // if newreport is created.
     this.reportservice.saveReportDetails(this.saveReportSummery).subscribe(data => {
-      //debugger;
+      //
       this._router.navigate(['report/']).then(x => {
         this.toastr.success('Report Submitted successfully !', 'Success');
       });
@@ -479,12 +489,12 @@ export class ReportSummeryComponent implements OnInit {
   saveForm() {
     //alert("Report have been saved successfully");
 
-    //debugger;
+    //
     //console.log(this.ReportSummery.controls.clientName.valid);
 
 
     console.log(this.ReportSummery.value);
-    debugger;
+    
     this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
@@ -509,12 +519,12 @@ export class ReportSummeryComponent implements OnInit {
 
     // if newreport is created.
     this.reportservice.draftReportDetails(this.saveReportSummery).subscribe(data => {
-      debugger;
+      
       this.reportId = data;
       this.toastr.success('Report Drafted successfully !', 'Success');
       //alert("Succesfully Added Product details");
     }, error => {
-      debugger;
+      
       console.log(error);
       this.toastr.warning('Please fill all the inputs!', 'Warning');
       //alert("failed while adding product details");
@@ -531,7 +541,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
   addNewCR() {
-    debugger;
+    
     let control = <FormArray>this.ReportSummery.controls.crDetails;
     control.push(
       this.fb.group({
@@ -560,7 +570,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   deleteCR(index) {
-    //debugger;
+    //
     console.log(this.reportCRDetails);
     //let control = <FormArray>this.ReportSummery.controls.crDetails;
     //control.removeAt(index)
@@ -568,7 +578,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   deleteActivity(index) {
-    //debugger;
+    //
     console.log(this.reportActivityDetails);
     //let control = <FormArray>this.ReportSummery.controls.crDetails;
     //control.removeAt(index)
@@ -576,7 +586,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveCRDetails() {
-    debugger;
+    
     console.log(this.reportCRDetails);
     console.log(this.ReportSummery.controls.crDetails.value[0].Name.valid)
     console.log(this.ReportSummery.controls.crDetails.value[0]);
@@ -609,7 +619,7 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   saveActivityDetails() {
-    //debugger;
+    //
     console.log(this.ReportSummery.controls.activityDetails.value[0]);
     //this.newActivityDetails.milestones = this.ReportSummery.controls.activityDetails.value[0].milestones;
     //this.newActivityDetails.eta = this.ReportSummery.controls.activityDetails.value[0].eta;
@@ -630,9 +640,9 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   rejectReport(id, remark) {
-    debugger;
+    
     this.reportservice.rejectReport(id, remark).subscribe(data => {
-      debugger;
+      
       this._router.navigate(['/report/']).then(x => {
         this.toastr.success('Report rejected successfully !', 'Success');
       });
@@ -646,12 +656,12 @@ export class ReportSummeryComponent implements OnInit {
     var date = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     const statusReport = new GenerateReport();
-    debugger;
+    
     const doc = statusReport.generateReport(this.reportSummery,this.reportCRDetails,this.reportActivityDetails);
     const packer = new Packer();
 
     //packer.toBlob(doc).then(blob => {
-    //  debugger;
+    //  
     //  console.log(blob);
     //  saveAs(blob, "weekly_" + clientName + "_" + projectName + "_" + date + "_" + year + ".docx");
     //  console.log("Document created successfully");
@@ -673,11 +683,21 @@ export class ReportSummeryComponent implements OnInit {
       this.formData.reportEndDate = this.reportSummery.reportEndDate;
       this.formData.projectName = this.reportSummery.projectName;
 
-      debugger;
+      
       this.reportservice.postData(this.formData).subscribe(data => {
-        //debugger;
+        
         this.showLoader = false;
-        this.toastr.success('Report uploaded successfully !', 'Success');
+
+
+        this.reportservice.uploadReport(this.reportId).subscribe(data => {
+          
+          this.showLoader = false;
+          this.toastr.success('Report uploaded successfully !', 'Success');
+          //this.generateForm();
+        }, error => console.log(error))
+
+
+        //this.toastr.success('Report uploaded successfully !', 'Success');
         //alert("Succesfully Added Product details");
       }, error => {
         console.log(error);

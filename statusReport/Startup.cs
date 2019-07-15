@@ -63,6 +63,7 @@ namespace statusReport
             services.Add(new ServiceDescriptor(typeof(actitimeContext), new actitimeContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<ManagerSettings>(Configuration.GetSection("ManagerSettings"));
             services.AddScoped<IEmailSender, EmailSender>();
 
     //        services.AddIdentity<IdentityUser, IdentityRole>(config =>

@@ -13,13 +13,17 @@ namespace statusReport.Services
     public class EmailSender : IEmailSender
     {
         private IOptions<EmailSettings>  _emailSettings;
+        private readonly IOptions<ManagerSettings> _managerSettings;
 
-        public EmailSender(IOptions<EmailSettings> emailSettings)
+        public EmailSender(IOptions<EmailSettings> emailSettings, IOptions<ManagerSettings> managerSettings)
         {
             _emailSettings = emailSettings;
+            _managerSettings = managerSettings;
         }
+        
 
-        public Task SendEmailAsync(string email, string subject, string message)
+
+        public Task SendEmailAsync(string toEmail, string subject, string message)
         {
             try
             {
@@ -35,7 +39,12 @@ namespace statusReport.Services
                     IsBodyHtml = true
                 };
 
-                mail.To.Add(new MailAddress("ankur.gautam@atidan.com"));
+                var emails = toEmail.Split(';');            
+                foreach(var email in emails)
+                {
+                    mail.To.Add(new MailAddress(email));
+                }
+                            
 
                 // Smtp client
                 var client = new SmtpClient()
