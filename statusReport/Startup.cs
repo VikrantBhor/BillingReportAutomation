@@ -25,61 +25,17 @@ namespace statusReport
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthorization();
-
-            //adding the azure authentication
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //})
-            //.AddOpenIdConnect(options =>
-            //{
-            //    options.Authority = "https://login.microsoftonline.com/74c3a4b1-a2a5-4e48-9d7b-434f36d335ed";
-            //    //options.Authority = "https://login.microsoftonline.com/74c3a4b1-a2a5-4e48-9d7b-434f36d335ed/v2.0/.well-known/openid-configuration";
-            //    options.ClientId = "95becc1f-0f6d-4da6-aa19-c2057867e3bd";
-            //    options.ResponseType = OpenIdConnectResponseType.IdToken;
-            //    //options.CallbackPath = "/auth/signin-callback";
-            //    options.CallbackPath = "/report";
-            //    options.SignedOutRedirectUri = "http://localhost:49203";
-            //    options.TokenValidationParameters.NameClaimType = "name";
-
-            //})
-            //.AddCookie();
-
-            //services.AddCors((options =>
-            //{
-            //    options.AddPolicy("AzurePolicy", builder => builder
-            //                .WithOrigins()
-            //                .AllowAnyMethod()
-            //                .AllowAnyHeader()
-            //                .AllowCredentials()
-            //     );
-            //}));
-
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.Add(new ServiceDescriptor(typeof(actitimeContext), new actitimeContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddScoped<IEmailSender, EmailSender>();
 
-    //        services.AddIdentity<IdentityUser, IdentityRole>(config =>
-    //        {
-    //            config.SignIn.RequireConfirmedEmail = true;
-    //            config.User.RequireUniqueEmail = true;
-    //        })
-    //.AddDefaultUI(UIFramework.Bootstrap4)
-    //.AddEntityFrameworkStores<actitimeContext>();
-
-
             // In production, the Angular files will be served from this directory
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/dist";
-            //});
-
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,7 +59,7 @@ namespace statusReport
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            // app.UseSpaStaticFiles();
+            app.UseSpaStaticFiles();
 
             // app.UseCors("AzurePolicy");
 

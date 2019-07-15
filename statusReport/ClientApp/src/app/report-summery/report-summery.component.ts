@@ -188,7 +188,7 @@ export class ReportSummeryComponent implements OnInit {
 
   ngOnInit() {
     debugger;
-    if (this.adalService.userInfo.userName.indexOf('Ankur') == 0) { // This block is for Rumana
+    if (this.adalService.userInfo.userName.indexOf('Rumana') == 0) { // This block is for Rumana
       debugger;
       this.isManager = true;
       this.isTL = false;
