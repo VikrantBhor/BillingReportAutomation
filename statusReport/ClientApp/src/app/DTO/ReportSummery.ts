@@ -20,7 +20,10 @@ export interface ReportSummery {
   reportStartDate: string,
   reportEndDate: string,
   createdByEmail: string,
-  createdBy: string
+  createdBy: string,
+  //offhoreTotalHrs: number,
+  //OffShoreHrsUtilized: number,
+  //OnShoreHrsUtilized: number
 }
 export interface IReportDetail {
   ClientName: string;

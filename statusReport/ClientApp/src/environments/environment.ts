@@ -12,7 +12,8 @@ export const environment = {
     cacheLocation: 'localStorage',
     endpoints: {
       'https://graph.microsoft.com': '74c3a4b1-a2a5-4e48-9d7b-434f36d335ed'
-    }
+    },
+    //production: true,
   }
 };
 

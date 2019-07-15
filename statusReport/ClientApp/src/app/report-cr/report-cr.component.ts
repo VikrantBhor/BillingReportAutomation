@@ -14,6 +14,7 @@ export class ReportCRComponent implements OnInit {
   reportCR: reportCR[];
   reportSummery: FormGroup;
   newAttribute: any = {};
+  CRdetails: reportCR[];
 
   constructor(private reportservice: ReportService, private fb: FormBuilder) { }
 

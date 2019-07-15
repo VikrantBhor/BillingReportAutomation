@@ -79,7 +79,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New CR
           </button>
 
-          <table class="table table-striped" *ngIf="reportCRDetails != 'Undefined' &&  reportCRDetails.length >0">
+          <table class="table table-striped" *ngIf="reportCRDetails.length >0">
             <thead>
               <tr>
                 <th>CR Name</th>
@@ -165,7 +165,7 @@
             <span class="fa fa-plus-square" aria-hidden="true"></span> Add New Activity
           </button>
 
-          <table class="table table-striped" *ngIf="reportActivityDetails != 'Undefined' &&  reportActivityDetails.length >0">
+          <table class="table table-striped" *ngIf="reportActivityDetails.length >0">
             <thead>
               <tr>
                 <th>Sr No.</th>
@@ -304,7 +304,7 @@
                      name="onShoreHrsUtilized"
                      value="{{e.onShoreHrsTillLastWeek + e.onShoreHrsCurrentWeek }}"
                      formControlName="onShoreHrsUtilized"
-                     [(ngModel)]="e.onShoreHrsUtilized" required>
+                     required>
             </div>
           </div>
 
@@ -316,9 +316,8 @@
                      class="form-control"
                      placeholder="00.00"
                      name="onShoreHrsRemaining"
-                     value="{{e.onShoreTotalHrs - e.onShoreHrsUtilized }}"
                      formControlName="onShoreHrsRemaining"
-                     [(ngModel)]="e.onShoreHrsRemaining" required>
+                     required>
             </div>
           </div>
         </div>
@@ -378,7 +377,7 @@
                      pattern="^\d*(\.\d{0,3})?$"
                      step="0.001"
                      formControlName="OffShoreHrsUtilized"
-                     [(ngModel)]="e.OffShoreHrsUtilized" required>
+                     required>
             </div>
           </div>
 
@@ -390,9 +389,9 @@
                      class="form-control"
                      placeholder="00.00"
                      name="OffShoreHrsRemaining"
-                     value="{{e.offShoreTotalHrs - e.OffShoreHrsUtilized }}"
+                     
                      formControlName="OffShoreHrsRemaining"
-                     [(ngModel)]="e.OffShoreHrsRemaining" required>
+                     required>
             </div>
           </div>
         </div>

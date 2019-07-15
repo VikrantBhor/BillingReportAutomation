@@ -18,6 +18,7 @@ import { Packer } from 'docx';
 import { saveAs } from 'file-saver/FileSaver';
 import { GenerateReport } from '../generate-report/generateReport.component';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Num } from 'docx/build/file/numbering/num';
 
 
 
@@ -87,7 +88,7 @@ export class ReportSummeryComponent implements OnInit {
 
   saveReportCRDetails: reportCR[] = [];
   saveReportActivityDetails: reportActivity[] = []
-
+  
 
   public e: ReportSummery = {
     id: 0,
@@ -108,7 +109,10 @@ export class ReportSummeryComponent implements OnInit {
     reportStartDate: '',
     reportEndDate: '',
     createdByEmail: '',
-    createdBy: ''
+    createdBy: '',
+    //offhoreTotalHrs: 0,
+    //OffShoreHrsUtilized: 0,
+    //OnShoreHrsUtilized: 0
   }
 
   saveReportSummery: ReportSummery = {
@@ -130,7 +134,10 @@ export class ReportSummeryComponent implements OnInit {
     reportStartDate: '',
     reportEndDate: '',
     createdByEmail: '',
-    createdBy: ''
+    createdBy: '',
+    //offhoreTotalHrs: 0,
+    //OffShoreHrsUtilized: 0,
+    //OnShoreHrsUtilized: 0
   }
 
   data = {
