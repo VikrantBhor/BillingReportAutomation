@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using statusReport.BillingDBModels;
+using statusReport.Common;
 using statusReport.DTO;
 using statusReport.Models;
 using statusReport.Services.Implementation;
@@ -17,12 +19,16 @@ namespace statusReport.Controllers
     [Route("api/[controller]")]
     public class ReportSummeryController : Controller
     {
-        private readonly IEmailSender emailSender;
-        
-        public ReportSummeryController(IEmailSender _emailSender)
+        private readonly IEmailSender emailSender;       
+
+        private readonly IOptions<ManagerSettings> _managerSettings;
+
+        public ReportSummeryController(IOptions<ManagerSettings> managerSettings, IEmailSender _emailSender)
         {
+            _managerSettings = managerSettings;
             emailSender = _emailSender;
         }
+
 
         [HttpGet]
         [Route("getCRDetails/{id}")]
@@ -197,7 +203,8 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
-                        //EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null, reportSummery);
+                        //var mail =reportSummery.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
+                        //EmailHelper.ReportSaved(mail, emailSender, null, reportSummery);
                         return Ok();
                     }
                     else
@@ -280,7 +287,7 @@ namespace statusReport.Controllers
                             context.TblReportActivity.Add(tblReportActivity);
 
                         }
-                        context.SaveChanges();
+                        context.SaveChanges();                        
                         //EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null,reportSummery);
                         return Ok();
                     }
@@ -492,13 +499,37 @@ namespace statusReport.Controllers
                 report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
                 report.Remark = remark;
                 context.TblReportSummery.Update(report);
-                //EmailHelper.ReportRejected(report.CreatedByEmail, emailSender, "",remark, report);
+                //var mail =report.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
+                //EmailHelper.ReportRejected(mail, emailSender, "",remark, report);
                 await context.SaveChangesAsync();
 
             }
             return Ok();
         }
 
+        [HttpGet]
+        [Route("uploadReport/{id}")]
+        public async Task<IActionResult> ReportUpload(int id)
+        {
+            try
+            {
+                using (BillingReportContext context = new BillingReportContext())
+                {
+                    var report = context.TblReportSummery.Where(i => i.ReportId == id).FirstOrDefault();
+                    //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                    //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                    await context.SaveChangesAsync();
+
+                }
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
 
         [HttpGet]

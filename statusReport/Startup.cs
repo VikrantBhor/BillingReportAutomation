@@ -29,6 +29,7 @@ namespace statusReport
             services.Add(new ServiceDescriptor(typeof(actitimeContext), new actitimeContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<ManagerSettings>(Configuration.GetSection("ManagerSettings"));
             services.AddScoped<IEmailSender, EmailSender>();
 
             // In production, the Angular files will be served from this directory

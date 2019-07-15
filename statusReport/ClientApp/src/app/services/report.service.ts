@@ -137,6 +137,22 @@ export class ReportService {
     //formData.append('remark', remark);
     return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
   }
+
+  uploadReport(id): Observable<void> {
+    debugger;
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    return this.http.get<void>(this.Baseurl + 'api/ReportSummery/uploadReport/' + id);
+    //return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/uploadReport/${id}`, options);
+
+  }
+
+
+
   getProgramType(id): Observable<IProgramList[]> {
     return this.http.get<IProgramList[]>(this.Baseurl + 'api/Report/GetProgramType/' + id);
   }
