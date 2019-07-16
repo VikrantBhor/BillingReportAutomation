@@ -36,7 +36,7 @@ export class ReportComponent implements OnInit {
     this.user.token = this.user.token.substring(0, 10) + '...';
     console.log(this.user.token);
     //var r = Configuration["IdentityServerAddress"];
-    if (this.user.userName.indexOf('Rumana') == 0) { // This block is for Rumana
+    if (this.user.userName.indexOf('Dhruv') == 0) { // This block is for Rumana
       this.role = "Manager";
       this.getSubmittedReports();
     }
