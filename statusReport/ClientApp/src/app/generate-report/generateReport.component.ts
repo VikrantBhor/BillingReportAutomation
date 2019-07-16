@@ -8,6 +8,11 @@ import { type } from "os";
 
 export class GenerateReport {
   reportType: string;
+  onShoreHoursUtilized: number;
+  offShoreHoursUtilized: number;
+  onShoreHoursRemaining: number;
+  offShoreHoursRemaining: number;
+
   generateReport(reportSummery: ReportSummery, reportCRDetails: reportCR[], reportActivityDetails: reportActivity[]) {
     const docs = new Document();
     //debugger;
@@ -113,7 +118,10 @@ export class GenerateReport {
       "July", "August", "September", "October", "November", "December"
     ];
 
-
+    this.onShoreHoursUtilized = reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek;
+    this.offShoreHoursUtilized = reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek;
+    this.onShoreHoursRemaining = reportSummery.onShoreTotalHrs - this.onShoreHoursUtilized;
+    this.offShoreHoursRemaining = reportSummery.onShoreTotalHrs - this.offShoreHoursUtilized;
 
     table2.getCell(0, 0).addContent(new Paragraph("Activities").heading3());
     table2.getCell(0, 1).addContent(new Paragraph("Duration (in hrs.)").heading5());
@@ -124,9 +132,9 @@ export class GenerateReport {
     table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
     table2.getCell(3, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek).heading5());
     table2.getCell(4, 0).addContent(new Paragraph("Total On-Shore Hours Utilized").heading3());
-    table2.getCell(4, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek).heading5());
-    //table2.getCell(5, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
-    //table2.getCell(5, 1).addContent(new Paragraph("640.75 – 940.75").heading5());
+    table2.getCell(4, 1).addContent(new Paragraph(this.onShoreHoursUtilized.toString()).heading5());
+    table2.getCell(5, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
+    table2.getCell(5, 1).addContent(new Paragraph(this.onShoreHoursRemaining.toString()).heading5());
     table2.getCell(6, 0).addContent(new Paragraph("Total Off-Shore Hours").heading3().left());
     table2.getCell(6, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
     table2.getCell(7, 0).addContent(this.createBullet("Off-Shore Hours Till " + (new Date(reportSummery.reportStartDate).getDate() - 1) + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()]));
@@ -134,9 +142,9 @@ export class GenerateReport {
     table2.getCell(8, 0).addContent(this.createBullet("Off-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
     table2.getCell(8, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek).heading5());
     table2.getCell(9, 0).addContent(new Paragraph("Total Off-Shore Hours Utilized").heading3());
-    table2.getCell(9, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek).heading5());
-    //table2.getCell(10, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
-    //table2.getCell(10, 1).addContent(new Paragraph("640.75 – 940.75").heading5());
+    table2.getCell(9, 1).addContent(new Paragraph(this.offShoreHoursUtilized.toString()).heading5());
+    table2.getCell(10, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3());
+    table2.getCell(10, 1).addContent(new Paragraph(this.offShoreHoursRemaining.toString()).heading5());
 
     return table2;
   }
