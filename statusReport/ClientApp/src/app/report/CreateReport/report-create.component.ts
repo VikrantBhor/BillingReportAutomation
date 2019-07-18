@@ -57,9 +57,9 @@ export class ReportCreateComponent implements OnInit {
     this.user = this.adalService.userInfo;
     this.GetClientList();
     this.reportForm = new FormGroup({
-      clientName: new FormControl('', Validators.required),
-      projectType: new FormControl('', Validators.required),
-      projectDuration: new FormControl('', Validators.required),
+      clientName: new FormControl('0', Validators.required),
+      projectType: new FormControl('0', Validators.required),
+      projectDuration: new FormControl('0', Validators.required),
       projectDate: new FormControl('', Validators.required)
     });
     this.data.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
@@ -69,7 +69,11 @@ export class ReportCreateComponent implements OnInit {
 
   SubmitReport() {
     debugger;
-    if (this.reportForm.valid == true) {     
+    var a = this.reportForm.controls["clientName"].value;
+    var b = this.reportForm.controls["projectType"].value;
+    var c = this.reportForm.controls["projectDuration"].value;
+    //this.reportForm.controls["projectType"].value
+    if (this.reportForm.valid == true && a!="0" && b!="0" && c!="0") {
         this.AssignValues(this.reportDetail);      
     } else {
       this.toastr.error('Please fill in all required(*) details', 'Error!');
