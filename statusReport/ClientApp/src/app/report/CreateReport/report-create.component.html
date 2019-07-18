@@ -55,7 +55,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="projectDate">Date<span style="color:red">*</span></label>
             <div class="col-sm-8">
-              <input type="text" name="name" bsDatepicker class="form-control" placeholder="Select Date"
+              <input type="text" name="name" bsDatepicker [maxDate]="maxDate" class="form-control" placeholder="Select Date"
                      formControlName="projectDate" id="projectDate"
                      [(ngModel)]="reportDetail.ReportStartDate"
                      [ngClass]="{'has-error':reportForm.get('projectDate').errors && ( reportForm.get('projectDate').touched || reportForm.get('projectDate').dirty)}" />

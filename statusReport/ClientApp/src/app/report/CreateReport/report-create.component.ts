@@ -11,6 +11,7 @@ import { getLocaleDateTimeFormat } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { SharedObject } from '../../DTO/SharedObject';
 import { DataService } from '../../services/SharedDataService';
+import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 //import { IReportDetail } from '../../app/DTO/ReportSummery';
 
 @Component({
@@ -23,6 +24,7 @@ export class ReportCreateComponent implements OnInit {
   sharedData: SharedObject = new SharedObject('','','','','','','','','','');
   clientList: IClientList[];
   user: any;
+  maxDate: Date;
 
   showLoader: boolean=true;
   projectID: string;
@@ -44,18 +46,20 @@ export class ReportCreateComponent implements OnInit {
   EndDate: Date;
 
   constructor(private adalService: AdalService, private reportservice: ReportService, private _router: Router, private toastr: ToastrService, private data: DataService) {
-    
+    debugger;
+    this.maxDate = new Date();
   }
 
 
-  ngOnInit() {
+  ngOnInit() {    
     debugger;
+    this.maxDate = new Date();
     this.user = this.adalService.userInfo;
     this.GetClientList();
     this.reportForm = new FormGroup({
-      clientName: new FormControl('0', Validators.required),
-      projectType: new FormControl('0', Validators.required),
-      projectDuration: new FormControl('0', Validators.required),
+      clientName: new FormControl('', Validators.required),
+      projectType: new FormControl('', Validators.required),
+      projectDuration: new FormControl('', Validators.required),
       projectDate: new FormControl('', Validators.required)
     });
     this.data.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
@@ -64,9 +68,9 @@ export class ReportCreateComponent implements OnInit {
 
 
   SubmitReport() {
-
-    if (this.reportForm.valid == true) {
-      this.AssignValues(this.reportDetail);
+    debugger;
+    if (this.reportForm.valid == true) {     
+        this.AssignValues(this.reportDetail);      
     } else {
       this.toastr.error('Please fill in all required(*) details', 'Error!');
     }
@@ -134,7 +138,6 @@ export class ReportCreateComponent implements OnInit {
       this.sharedData.createdByEmail = this.user.userName;
       this.sharedData.createdBy = this.user.profile.name;
       this.data.changeMessage(this.sharedData);
-
       this._router.navigate(['reportSummery/', 0]).then(x => {
         //this.toastr.success('Report Created successfully !', 'Success');
       });
@@ -148,6 +151,7 @@ export class ReportCreateComponent implements OnInit {
 
 
   GetClientList() {
+    debugger;
     this.reportservice.getClientList().subscribe((response: any) => {
       this.clientList = response;
       this.showLoader = false;

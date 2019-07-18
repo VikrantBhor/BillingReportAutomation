@@ -169,7 +169,7 @@ namespace statusReport.Controllers
                     if (reportStatus == 0) // Saved
                     {
                         result = (from reportSummary in context.TblReportSummery
-                                  where (reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created))
+                                  where (reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved))
                                   && reportSummary.CreatedByEmail == userEmail
                                   orderby reportSummary.CreatedDate
                                   select new ReportList
