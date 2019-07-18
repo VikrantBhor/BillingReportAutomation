@@ -9,10 +9,10 @@
 </div>
 
 
-<h3 align="center"> Report Summery </h3>
+<h3 align="center"> Report Summary </h3>
 <div class="card">
   <div class="card-header">
-    <h6> {{reportType}}ly Hours Summery Report </h6>
+    <h6> {{reportType}}ly Hours Summary Report </h6>
   </div>
 
   <div class="card-body">
@@ -139,7 +139,7 @@
                              name="status"
                              formControlName="status"
                              style="margin-right:5px;" required>&nbsp;
-                      <button style="margin-left:20px;" type="button" class="btn btn-success" (click)="saveCRDetails()" [disabled]="!this.ReportSummery.controls.crDetails.controls[0].valid">
+                      <button type="button" class="btn btn-success" (click)="saveCRDetails()" [disabled]="!this.ReportSummery.controls.crDetails.controls[0].valid">
                         <span class="fa fa-check-square" aria-hidden="true"></span> save
                       </button>
                       <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelCR()">
@@ -207,7 +207,7 @@
                              name="eta"
                              formControlName="eta"
                              style="margin-right:5px;" required>
-                      <button style="margin-left:35px;" type="button" class="btn btn-success" (click)="saveActivityDetails()" [disabled]="!this.ReportSummery.controls.activityDetails.controls[0].valid">
+                      <button style="margin-left:10px;" type="button" class="btn btn-success" (click)="saveActivityDetails()" [disabled]="!this.ReportSummery.controls.activityDetails.controls[0].valid">
                         <span class="fa fa-check-square" aria-hidden="true"></span> save
                       </button>
                       <button style="margin-left:10px;" type="button" class="btn btn-info" (click)="cancelActivity()">

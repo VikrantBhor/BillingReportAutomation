@@ -68,7 +68,7 @@ export class ReportCreateComponent implements OnInit {
     if (this.reportForm.valid == true) {
       this.AssignValues(this.reportDetail);
     } else {
-      this.toastr.error('Please fill all the required(*) field', 'Error');
+      this.toastr.error('Please fill in all required(*) details', 'Error!');
     }
     
   }
@@ -140,7 +140,7 @@ export class ReportCreateComponent implements OnInit {
       });
 
     } catch (e) {
-      this.toastr.error('Error! Fill all mandatory Field', 'Error');
+      this.toastr.error('Please fill in all required(*) details', 'Error!');
     }
 
   }

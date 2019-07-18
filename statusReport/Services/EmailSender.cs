@@ -44,19 +44,19 @@ namespace statusReport.Services
                 {
                     mail.To.Add(new MailAddress(email));
                 }
-                            
 
-                // Smtp client
+
+                //// Smtp client
                 var client = new SmtpClient()
                 {
                     Port = _emailSettings.Value.MailPort,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
-                   
+
                     Host = _emailSettings.Value.MailServer,
-                    EnableSsl = false,
+                    EnableSsl = true,
                     Credentials = credentials
                 };
-
+               
                 // Send it...         
                 client.Send(mail);
             }

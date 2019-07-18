@@ -479,7 +479,6 @@ export class ReportSummeryComponent implements OnInit {
     }, error => {
       console.log(error);
       this.toastr.warning('failed while Submitting report !', 'Warning');
-      alert("failed while adding product details");
     })
 
     // console.log(this.saveReportSummery);
