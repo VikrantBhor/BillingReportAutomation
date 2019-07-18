@@ -26,6 +26,7 @@ import { ReportCreateComponent } from './report/CreateReport/report-create.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { DataService } from './services/SharedDataService';
+import { UnauthorizedUserComponent } from './unauthorized-user/unauthorized-user.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { DataService } from './services/SharedDataService';
     ReportComponent,
     ReportSummeryComponent,
     ReportCRComponent,
-    ReportCreateComponent
+    ReportCreateComponent,
+    UnauthorizedUserComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -59,6 +61,7 @@ import { DataService } from './services/SharedDataService';
       { path: 'report', component: ReportComponent },
       { path: 'reportCr', component: ReportCRComponent },
       { path: 'reportCreate', component: ReportCreateComponent },
+      { path: 'unauthorized', component: UnauthorizedUserComponent },
     ]),
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot() // DatePicker Module added   
