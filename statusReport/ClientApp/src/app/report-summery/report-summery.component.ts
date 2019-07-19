@@ -470,20 +470,22 @@ export class ReportSummeryComponent implements OnInit {
 
     // if newreport is created.
     this.reportservice.saveReportDetails(this.saveReportSummery).subscribe(data => {
-      //
-      this._router.navigate(['report/']).then(x => {
-        this.toastr.success('Report Submitted successfully !', 'Success');
-      });
-      
-      //alert("Succesfully Added Product details");
+      debugger;
+      //If weekly, Then Upload to sharepoint
+      if (this.ReportSummery.controls.projectType.value == "Week") {
+        this.downloadDocs();
+      }
+      else {
+        this._router.navigate(['report/']).then(x => {
+          this.toastr.success('Report Submitted successfully !', 'Success');
+        });
+      }
     }, error => {
       console.log(error);
-      this.toastr.warning('failed while Submitting report !', 'Warning');
+      this.toastr.warning('Failed while Submitting report !', 'Warning');
     })
-
-    // console.log(this.saveReportSummery);
-
-  }
+   
+ }
 
   saveForm() {
     //alert("Report have been saved successfully");
@@ -641,7 +643,6 @@ export class ReportSummeryComponent implements OnInit {
   rejectReport(id, remark) {
     
     this.reportservice.rejectReport(id, remark).subscribe(data => {
-      
       this._router.navigate(['/report/']).then(x => {
         this.toastr.success('Report rejected successfully !', 'Success');
       });
@@ -650,67 +651,76 @@ export class ReportSummeryComponent implements OnInit {
 
   public downloadDocs(): void {
     this.showLoader = true;
-    const clientName = "Atidan";
-    const projectName = "StatusReport";
-    var date = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
     const statusReport = new GenerateReport();
-    
-    const doc = statusReport.generateReport(this.reportSummery,this.reportCRDetails,this.reportActivityDetails);
     const packer = new Packer();
+    debugger;
+    if(this.saveReportSummery.projectType == "Week"){
+      const doc = statusReport.generateReport(this.saveReportSummery, this.reportCRDetails, this.reportActivityDetails);
+      debugger;
+      packer.toBase64String(doc).then((string) => {
+        var reqHeader = new Headers({
+          'Content-Type': 'application/zip'
+        });
+        this.formData.data = string;
+        this.formData.reportType = this.reportType;
+        this.formData.reportStartDate = this.saveReportSummery.reportStartDate;
+        this.formData.reportEndDate = this.saveReportSummery.reportEndDate;
+        this.formData.projectName = this.saveReportSummery.projectName;
 
-    //packer.toBlob(doc).then(blob => {
-    //  
-    //  console.log(blob);
-    //  saveAs(blob, "weekly_" + clientName + "_" + projectName + "_" + date + "_" + year + ".docx");
-    //  console.log("Document created successfully");
-    //});
-
-    //packer.toBuffer(doc).then((buffer) => {
-    //  fs.writeFileSync("My Document.docx", buffer);
-    //});
-
-    packer.toBase64String(doc).then((string) => {
-      var reqHeader = new Headers({
-        'Content-Type': 'application/zip'
-      });
-      //const formData: FormData = new FormData();
-      //formData.append('logo', string);
-      this.formData.data = string;
-      this.formData.reportType = this.reportType;
-      this.formData.reportStartDate = this.reportSummery.reportStartDate;
-      this.formData.reportEndDate = this.reportSummery.reportEndDate;
-      this.formData.projectName = this.reportSummery.projectName;
-
-      
-      this.reportservice.postData(this.formData).subscribe(data => {
-        
-        this.showLoader = false;
-
-
-        this.reportservice.uploadReport(this.reportId).subscribe(data => {
-          
+        this.reportservice.postData(this.formData).subscribe(data => {
           this.showLoader = false;
-          this.toastr.success('Report uploaded successfully !', 'Success');
-          //this.generateForm();
-        }, error => console.log(error))
+          this.reportservice.uploadReport(this.reportId).subscribe(data => {
+            this.showLoader = false;
+            this._router.navigate(['report/']).then(x => {
+              this.toastr.success('Report submitted and uploaded successfully !', 'Success');
+            });
+          },
+            error => console.log(error))
+        }, error => {
+          console.log(error);
+          this.showLoader = false;
+          this.toastr.warning('Failed while uploading report !', 'Warning');
+        })
+      });
+    }
+    else {
+      const doc = statusReport.generateReport(this.reportSummery, this.reportCRDetails, this.reportActivityDetails);
+      debugger;
+      packer.toBase64String(doc).then((string) => {
+        var reqHeader = new Headers({
+          'Content-Type': 'application/zip'
+        });
+        this.formData.data = string;
+        this.formData.reportType = this.reportType;
+        this.formData.reportStartDate = this.reportSummery.reportStartDate;
+        this.formData.reportEndDate = this.reportSummery.reportEndDate;
+        this.formData.projectName = this.reportSummery.projectName;
 
-
-        //this.toastr.success('Report uploaded successfully !', 'Success');
-        //alert("Succesfully Added Product details");
-      }, error => {
-        console.log(error);
-        this.showLoader = false;
-        this.toastr.warning('Failed while uploading report !', 'Warning');
-        //alert("failed while adding product details");
-      })
-    });
-
-    //const docx = require("docx");
-    ////const doc = new docx.Document();
-    //const exporter = new docx.StreamPacker(doc);
-    //const stream = exporter.pack();
+        this.reportservice.postData(this.formData).subscribe(data => {
+          this.showLoader = false;
+          this.reportservice.uploadReport(this.reportId).subscribe(data => {
+            this.showLoader = false;
+            this.changeStatusToUploaded(this.reportId);
+            //this.toastr.success('Report uploaded successfully !', 'Success');
+          },
+            error => console.log(error))
+        }, error => {
+          console.log(error);
+          this.showLoader = false;
+          this.toastr.warning('Failed while uploading report !', 'Warning');
+        })
+      });
+    }
   }
+
+  changeStatusToUploaded(id) {
+    this.reportservice.changeStatus(id).subscribe(data => {
+        this._router.navigate(['/report/']).then(x => {
+          this.toastr.success('Report uploaded successfully ! !', 'Success');
+      });
+    })
+  }
+
 }
 
 

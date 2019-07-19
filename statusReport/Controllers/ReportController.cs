@@ -208,7 +208,7 @@ namespace statusReport.Controllers
                     if (reportStatus == 1) // Submitted and Rejected
                     {
                         result = (from reportSummary in context.TblReportSummery
-                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected) || reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
+                                  where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
                                   orderby reportSummary.LastUpdatedDate
                                   select new ReportList
                                   {

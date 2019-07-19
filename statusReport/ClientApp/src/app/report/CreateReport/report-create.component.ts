@@ -166,6 +166,7 @@ export class ReportCreateComponent implements OnInit {
     this.showLoader = true;
     this.reportservice.getProgramType(event.target.value).subscribe((response: any) => {
       this.programTypeList = response;
+      this.reportDetail.ProjectName = "0";
       this.showLoader = false;
     });
   }

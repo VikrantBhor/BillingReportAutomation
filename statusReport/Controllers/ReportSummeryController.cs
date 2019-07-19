@@ -149,7 +149,7 @@ namespace statusReport.Controllers
                         tblReportSummery.ApprovedDate = DateTime.Now;
                         tblReportSummery.Remark = reportSummery.notes;
                         tblReportSummery.IsApproved = true;
-                        tblReportSummery.ReportStatus = 4;
+                        tblReportSummery.ReportStatus = reportSummery.projectType =="Week" ? Convert.ToInt32(ReportStatus.Uploaded) : Convert.ToInt32(ReportStatus.Created);
                         tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
                         tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
 
@@ -228,7 +228,7 @@ namespace statusReport.Controllers
                             tblReportSummery.ApprovedDate = DateTime.Now;
                             tblReportSummery.Remark = reportSummery.notes;
                             tblReportSummery.IsApproved = true;
-                            tblReportSummery.ReportStatus = 4;
+                            tblReportSummery.ReportStatus = reportSummery.projectType == "Week" ? Convert.ToInt32(ReportStatus.Uploaded) : Convert.ToInt32(ReportStatus.Created); ;
 
                             context.SaveChanges();
                         }
@@ -317,7 +317,6 @@ namespace statusReport.Controllers
                         {
 
                             TblReportSummery tblReportSummery = new TblReportSummery();
-
                             tblReportSummery.ClientName = reportSummery.clientName;
                             tblReportSummery.ProjectName = reportSummery.projectName;
                             tblReportSummery.ProjectType = reportSummery.projectType;
@@ -408,7 +407,7 @@ namespace statusReport.Controllers
                                 tblReportSummery.ApprovedDate = DateTime.Now;
                                 tblReportSummery.Remark = reportSummery.notes;
                                 tblReportSummery.IsApproved = true;
-                                tblReportSummery.ReportStatus = 4;
+                                tblReportSummery.ReportStatus = 0;
 
                                 context.SaveChanges();
                             }
@@ -501,6 +500,21 @@ namespace statusReport.Controllers
                 context.TblReportSummery.Update(report);
                 //var mail =report.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
                 //EmailHelper.ReportRejected(mail, emailSender, "",remark, report);
+                await context.SaveChangesAsync();
+
+            }
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("changeStatus/{id}")]
+        public async Task<IActionResult> ChangeStatusReport([FromRoute]int id)
+        {
+            using (BillingReportContext context = new BillingReportContext())
+            {
+                var report = context.TblReportSummery.Where(i => i.ReportId == id).FirstOrDefault();
+                report.ReportStatus = Convert.ToInt32(ReportStatus.Uploaded);
+                context.TblReportSummery.Update(report);
                 await context.SaveChangesAsync();
 
             }

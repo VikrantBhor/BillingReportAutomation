@@ -138,6 +138,17 @@ export class ReportService {
     return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
   }
 
+  changeStatus(id): Observable<void> {
+    debugger;
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    let options = {
+      headers: headers
+    };
+    return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/changeStatus/${id}`, options);
+  }
+
   uploadReport(id): Observable<void> {
     debugger;
     let headers = new HttpHeaders({
