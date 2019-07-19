@@ -66,7 +66,7 @@ export class ReportSummeryComponent implements OnInit {
   currentHrs: any;
   lastHrs : any
   remainingHoursOffShore: number;
-  remainingHoursOnShore: number;
+  remainingHoursOnShore: number = 0;
   formData: any = {
     data: '',
     reportType: '',
@@ -181,7 +181,8 @@ export class ReportSummeryComponent implements OnInit {
       OffShoreHrsRemaining: [null],
       notes: ['']
     })
-
+    debugger;
+    
     this.setCrDetails();
     this.setActivityDetails();
    
@@ -245,6 +246,7 @@ export class ReportSummeryComponent implements OnInit {
               console.log(respn);
               console.log(this.e);
               console.log(this.e.offShoreHrsTillLastWeek);
+              this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
 
             }, error => console.log(error))
 
@@ -273,6 +275,7 @@ export class ReportSummeryComponent implements OnInit {
               this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
               this.showLoader = false;
               console.log(respn);
+              this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
             }, error => console.log(error))
 
           }, error => console.log(error))
@@ -299,17 +302,19 @@ export class ReportSummeryComponent implements OnInit {
       }, error => console.log(error))
 
       this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
-        
+        debugger;
         this.reportSummery = res;
         this.reportType = res.projectType;
         console.log(res);
         this.e = res
         this.showLoader = false;
+        this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
         //this.generateForm();
       }, error => console.log(error))
 
     }
-  
+    debugger;
+    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
 
     //this.reportservice.getCRdetails(this.reportId).subscribe(res => {
     //  this.reportCRDetails = res;
@@ -435,11 +440,11 @@ export class ReportSummeryComponent implements OnInit {
 
 
   SetRemainingOffShoreHours() {
-    this.remainingHoursOffShore = (this.e.onShoreTotalHrs) - (this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek);  
+    this.remainingHoursOffShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
   }
 
-  SetRemainingOnShoreHours() {
-    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek);
+  SetRemainingOnShoreHours() {    
+    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
   }
 
 
@@ -495,7 +500,7 @@ export class ReportSummeryComponent implements OnInit {
 
 
     console.log(this.ReportSummery.value);
-    
+    debugger;
     this.saveReportSummery.id = this.reportId != null ? this.reportId : 0;
     this.saveReportSummery.clientName = this.ReportSummery.controls.clientName.value;
     this.saveReportSummery.projectName = this.ReportSummery.controls.projectName.value;
@@ -591,7 +596,7 @@ export class ReportSummeryComponent implements OnInit {
     console.log(this.reportCRDetails);
     console.log(this.ReportSummery.controls.crDetails.value[0].Name.valid)
     console.log(this.ReportSummery.controls.crDetails.value[0]);
-
+    debugger;
     
 
     //this.newCRDetails.crName = this.ReportSummery.controls.crDetails.value[0].Name;
@@ -600,7 +605,12 @@ export class ReportSummeryComponent implements OnInit {
     //this.newCRDetails.status = this.ReportSummery.controls.crDetails.value[0].status;
 
     //this.reportCRDetails.push(this.newCRDetails);
-
+    for (let record of this.reportCRDetails) {
+      if (record.crName == this.ReportSummery.controls.crDetails.value[0].Name) {
+        this.toastr.error('CR Name already exists !', 'Error');
+        return;
+      }
+    }
     this.reportCRDetails.push({
       'crName': this.ReportSummery.controls.crDetails.value[0].Name,
       'estimateHrs': this.ReportSummery.controls.crDetails.value[0].estimateHrs,
@@ -626,6 +636,13 @@ export class ReportSummeryComponent implements OnInit {
     //this.newActivityDetails.eta = this.ReportSummery.controls.activityDetails.value[0].eta;
 
     //this.reportActivityDetails.push(this.newActivityDetails);
+
+    for (let record of this.reportActivityDetails) {
+      if (record.milestones == this.ReportSummery.controls.activityDetails.value[0].milestones) {
+        this.toastr.error('Milestone already exists !', 'Error');
+        return;
+      }
+    }
 
     this.reportActivityDetails.push({ 'milestones': this.ReportSummery.controls.activityDetails.value[0].milestones, 'eta': this.ReportSummery.controls.activityDetails.value[0].eta});
 
