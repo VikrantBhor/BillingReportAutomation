@@ -27,7 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { DataService } from './services/SharedDataService';
 import { UnauthorizedUserComponent } from './unauthorized-user/unauthorized-user.component';
-
+import { DatePipe } from '@angular/common'
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,6 +70,7 @@ import { UnauthorizedUserComponent } from './unauthorized-user/unauthorized-user
     AdalService,
     AdalGuard,
     DataService,
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

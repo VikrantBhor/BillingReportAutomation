@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
     this.adalService.clearCache();
     console.log(this.adalService.userInfo);
     //debugger;
+    this.adalService.logOut();
     const user = this.adalService.getUser();
     //const roles = user.roles; // Returns [ "User" ]
     this.adalService.login();
