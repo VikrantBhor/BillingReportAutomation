@@ -47,13 +47,13 @@ export class ReportCreateComponent implements OnInit {
   EndDate: Date;
 
   constructor(private adalService: AdalService, private reportservice: ReportService, private _router: Router, private toastr: ToastrService, private data: DataService, private datepipe: DatePipe) {
-    debugger;
+    
     this.maxDate = new Date();
   }
 
 
   ngOnInit() {
-    debugger;
+    
     this.maxDate = new Date();
     this.user = this.adalService.userInfo;
     this.GetClientList();
@@ -69,7 +69,7 @@ export class ReportCreateComponent implements OnInit {
 
 
   SubmitReport() {
-    debugger;
+    
     var a = this.reportForm.controls["clientName"].value;
     var b = this.reportForm.controls["projectType"].value;
     var c = this.reportForm.controls["projectDuration"].value;
@@ -85,7 +85,7 @@ export class ReportCreateComponent implements OnInit {
 
   AssignValues(detail: IReportDetail) {
     try {
-      debugger;
+      
       detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
       this.projectID = this.reportDetail.ProjectName;
       detail.ProjectName = this.programTypeList.find(x => x.id == parseInt(this.reportDetail.ProjectName)).name;
@@ -94,20 +94,32 @@ export class ReportCreateComponent implements OnInit {
       detail.CreatedBy = this.user.profile.name;
       detail.CreatedByEmail = this.user.userName;
 
-      let today = new Date(this.reportDetail.ReportStartDate)
-
+      let today = new Date(this.reportDetail.ReportStartDate);
+      let selectedDate = new Date(this.reportDetail.ReportStartDate);
+      
       if (this.ReportProjectType == "Monthly") {  //Get Monthly Start Date and EndDate
         var y = today.getFullYear(), m = today.getMonth();
         this.StartDate = new Date(y, m, 1);
         this.EndDate = new Date(y, m + 1, 0);
       }
       else if (this.ReportProjectType == "Weekly") {  //Get Weekly Start Date and EndDate
+        debugger;
         var start = 0;
         var day = today.getDay() - start;
-        var datetm = today.getDate() - day + 1;
-        // Grabbing Start/End Dates
-        this.StartDate = new Date(today.setDate(datetm));
-        this.EndDate = new Date(today.setDate(datetm + 6));
+        //if (day == 0) {
+        //  var datetm = today.getDate() - day;
+        //  // Grabbing Start/End Dates
+        //  this.StartDate = new Date(today.setDate(datetm - 6));
+        //  this.EndDate = new Date(today.setDate(datetm));
+        //}
+        //else {
+          var datetm = today.getDate() - day;
+          // Grabbing Start/End Dates
+          this.StartDate = new Date(today.setDate(datetm));
+          this.EndDate = new Date(today.setDate(datetm + 6));
+
+        //}
+       
 
       }
       else {
@@ -117,12 +129,12 @@ export class ReportCreateComponent implements OnInit {
 
       detail.ReportStartDate = this.StartDate.toDateString();
       detail.ReportEndDate = this.EndDate.toDateString();
-      debugger;
+      
       detail.ReportStatus = 4;
 
       //To save in DB 
       //this.reportservice.saveReport(detail).subscribe((data: number) => {
-      //  debugger;
+      //  
       //  this._router.navigate(['reportSummery/', data]).then(x => {
       //    this.toastr.success('Report Created successfully !', 'Success');
       //  });
@@ -130,14 +142,14 @@ export class ReportCreateComponent implements OnInit {
       //  this.toastr.error('Error! Please Try Again', 'Error');
       //  });
 
-      debugger;
+      
       //To save data in Shared Service
       this.sharedData.clientName = detail.ClientName;
       this.sharedData.projectId = this.projectID;
       this.sharedData.reportId = '0';
       this.sharedData.reportType = this.reportDetail.ProjectType == "Weekly" ? "Week" : "Month";
       //this.sharedData.reportDate = today.toJSON().split('T')[0];
-      this.sharedData.reportDate = this.datepipe.transform(today, 'yyyy-MM-dd');
+      this.sharedData.reportDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
       this.sharedData.reportStartDate = detail.ReportStartDate;//  this.StartDate.toJSON().split('T')[0];
       this.sharedData.reportEndDate = detail.ReportEndDate; //this.EndDate.toJSON().split('T')[0];
       this.sharedData.projectName = detail.ProjectName;
@@ -159,7 +171,7 @@ export class ReportCreateComponent implements OnInit {
 
 
   GetClientList() {
-    debugger;
+    
     this.reportservice.getClientList().subscribe((response: any) => {
       this.clientList = response;
       this.showLoader = false;

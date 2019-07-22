@@ -119,9 +119,9 @@ export class GenerateReport {
     ];
 
     this.onShoreHoursUtilized = reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek;
-    this.offShoreHoursUtilized = reportSummery.onShoreHrsTillLastWeek + reportSummery.onShoreHrsCurrentWeek;
+    this.offShoreHoursUtilized = reportSummery.offShoreHrsTillLastWeek + reportSummery.offShoreHrsCurrentWeek;
     this.onShoreHoursRemaining = reportSummery.onShoreTotalHrs - this.onShoreHoursUtilized;
-    this.offShoreHoursRemaining = reportSummery.onShoreTotalHrs - this.offShoreHoursUtilized;
+    this.offShoreHoursRemaining = this.onShoreHoursRemaining; //reportSummery.offShoreTotalHrs - this.offShoreHoursUtilized;
 
     table2.getCell(0, 0).addContent(new Paragraph("Activities").heading3());
     table2.getCell(0, 1).addContent(new Paragraph("Duration (in hrs.)").heading5());
