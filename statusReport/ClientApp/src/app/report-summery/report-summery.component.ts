@@ -61,6 +61,7 @@ export class ReportSummeryComponent implements OnInit {
   prType: string=''
   isManager: boolean = false;
   isTL: boolean = true;
+  manager: any;
 
   accomplishment: any;
   currentHrs: any;
@@ -189,163 +190,135 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   ngOnInit() {
-    
-    if (this.adalService.userInfo.userName.indexOf('Dhruv') == 0) { // This block is for Rumana
+
+    this.getFormData();
+
+    //if (this.adalService.userInfo.userName.indexOf('Dhruv') == 0) { // This block is for Rumana
       
-      this.isManager = true;
-      this.isTL = false;
-    }
-    else {
-      this.isManager = false;
-      this.isTL = true;
-    }
-    var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
-    //Mapping parameters
-    // map report id here
+    //  this.isManager = true;
+    //  this.isTL = false;
+    //}
+    //else {
+    //  this.isManager = false;
+    //  this.isTL = true;
+    //}
+    //var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
+    ////Mapping parameters
+    //// map report id here
     
-    this.projectId = parseInt(this.sharedData.projectId);
-    this.e.projectName = this.sharedData.projectName;
-    this.e.projectType = this.sharedData.reportType;
-    this.reportType = this.sharedData.reportType;
-    this.e.clientName = this.sharedData.clientName;
-    this.e.projectName = this.sharedData.projectName;
-    this.reportDate = parseInt(this.sharedData.reportDate.replace("-","").replace("-",""));
-    //this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
-    //this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
-    this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
-    this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
-    this.createdByEmail = this.sharedData.createdByEmail;
-    this.createdBy = this.sharedData.createdBy;
+    //this.projectId = parseInt(this.sharedData.projectId);
+    //this.e.projectName = this.sharedData.projectName;
+    //this.e.projectType = this.sharedData.reportType;
+    //this.reportType = this.sharedData.reportType;
+    //this.e.clientName = this.sharedData.clientName;
+    //this.e.projectName = this.sharedData.projectName;
+    //this.reportDate = parseInt(this.sharedData.reportDate.replace("-","").replace("-",""));
+    ////this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    ////this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    //this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+    //this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    //this.createdByEmail = this.sharedData.createdByEmail;
+    //this.createdBy = this.sharedData.createdBy;
 
-    //
-    console.log(this.route.snapshot.data['reportId']);
-    this.reportId = +this.route.snapshot.paramMap.get('reportId');
+    ////
+    //console.log(this.route.snapshot.data['reportId']);
+    //this.reportId = +this.route.snapshot.paramMap.get('reportId');
 
-    if (this.reportId == 0)
-    {
-      if (this.reportType == 'Week') {
-        //
-        this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
-          //
-          this.e.accomp = res.weekComments;
-          console.log(res);
-          console.log(this.e);
-          console.log(this.e.accomp);
-
-          this.reportservice.getcurrentWkHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
-            //
-            this.e.offShoreHrsCurrentWeek = resp.currentWKHrs;
-            console.log(resp);
-            console.log(this.e);
-            console.log(this.e.offShoreHrsCurrentWeek);
-
-            this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              
-              this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
-              this.showLoader = false;
-              console.log(respn);
-              console.log(this.e);
-              console.log(this.e.offShoreHrsTillLastWeek);
-              this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
-
-            }, error => console.log(error))
-
-          }, error => console.log(error))
-
-        }, error => console.log(error))
-
-        //
-        console.log(this.reportCRDetails);
-
-      }
-      else if (this.reportType == 'Month') {
-
-        this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
-          //
-          this.e.accomp = res.monthComments;
-          console.log(res);
-
-          this.reportservice.getcurrentMonthHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
-            //
-            this.e.offShoreHrsCurrentWeek = resp.currentMnthHrs;
-            console.log(resp);
-
-            this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
-              
-              this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
-              this.showLoader = false;
-              console.log(respn);
-              this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
-            }, error => console.log(error))
-
-          }, error => console.log(error))
-
-        }, error => console.log(error))
-
-      } else {
-        
-        this.showLoader = false;
-      }
-
-    }
-    else
-    {
-
-      this.reportservice.getCRdetails(this.reportId).subscribe(res => {
-        this.reportCRDetails = res;
-        console.log(res);
-      }, error => console.log(error))
-
-      this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
-        this.reportActivityDetails = res;
-        console.log(res);
-      }, error => console.log(error))
-
-      this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
-        debugger;
-        this.reportSummery = res;
-        this.reportType = res.projectType;
-        console.log(res);
-        this.e = res
-        this.showLoader = false;
-        this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
-        //this.generateForm();
-      }, error => console.log(error))
-
-    }
-    debugger;
-    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
-
-    //this.reportservice.getCRdetails(this.reportId).subscribe(res => {
-    //  this.reportCRDetails = res;
-    //  console.log(res);
-    //}, error => console.log(error))
-
-    //this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
-    //  this.reportActivityDetails = res;
-    //  console.log(res);
-    //}, error => console.log(error))
-
-    //
-    //this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
-    //  
-    //  this.e.accomp = res.comments;
-    // // this.accomplishment = res.comments;
-    //  console.log(res.comments);
-    //}, error => console.log(error))
-
-    //
-    //if (this.reportId != 0)
+    //if (this.reportId == 0)
     //{
+    //  if (this.reportType == 'Week') {
+    //    //
+    //    this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
+    //      //
+    //      this.e.accomp = res.weekComments;
+    //      console.log(res);
+    //      console.log(this.e);
+    //      console.log(this.e.accomp);
+
+    //      this.reportservice.getcurrentWkHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+    //        //
+    //        this.e.offShoreHrsCurrentWeek = resp.currentWKHrs;
+    //        console.log(resp);
+    //        console.log(this.e);
+    //        console.log(this.e.offShoreHrsCurrentWeek);
+
+    //        this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+              
+    //          this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
+    //          this.showLoader = false;
+    //          console.log(respn);
+    //          console.log(this.e);
+    //          console.log(this.e.offShoreHrsTillLastWeek);
+    //          this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
+
+    //        }, error => console.log(error))
+
+    //      }, error => console.log(error))
+
+    //    }, error => console.log(error))
+
+    //    //
+    //    console.log(this.reportCRDetails);
+
+    //  }
+    //  else if (this.reportType == 'Month') {
+
+    //    this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
+    //      //
+    //      this.e.accomp = res.monthComments;
+    //      console.log(res);
+
+    //      this.reportservice.getcurrentMonthHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+    //        //
+    //        this.e.offShoreHrsCurrentWeek = resp.currentMnthHrs;
+    //        console.log(resp);
+
+    //        this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+              
+    //          this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
+    //          this.showLoader = false;
+    //          console.log(respn);
+    //          this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
+    //        }, error => console.log(error))
+
+    //      }, error => console.log(error))
+
+    //    }, error => console.log(error))
+
+    //  } else {
+        
+    //    this.showLoader = false;
+    //  }
+
+    //}
+    //else
+    //{
+
+    //  this.reportservice.getCRdetails(this.reportId).subscribe(res => {
+    //    this.reportCRDetails = res;
+    //    console.log(res);
+    //  }, error => console.log(error))
+
+    //  this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
+    //    this.reportActivityDetails = res;
+    //    console.log(res);
+    //  }, error => console.log(error))
+
     //  this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
+    //    debugger;
     //    this.reportSummery = res;
+    //    this.reportType = res.projectType;
     //    console.log(res);
     //    this.e = res
-
+    //    this.showLoader = false;
+    //    this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
     //    //this.generateForm();
     //  }, error => console.log(error))
+
     //}
-  }
+    //debugger;
+    //this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
+}
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -738,6 +711,140 @@ export class ReportSummeryComponent implements OnInit {
     })
   }
 
+  getFormData() {
+    this.reportservice.getManager().subscribe(res => {
+      debugger;
+      this.manager = res;
+
+      if (this.adalService.userInfo.userName == this.manager.managerEmail) { // This block is for Rumana
+        this.isManager = true;
+        this.isTL = false;
+      }
+      else {
+        this.isManager = false;
+        this.isTL = true;
+      }
+
+      var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
+      //Mapping parameters
+      // map report id here
+
+      this.projectId = parseInt(this.sharedData.projectId);
+      this.e.projectName = this.sharedData.projectName;
+      this.e.projectType = this.sharedData.reportType;
+      this.reportType = this.sharedData.reportType;
+      this.e.clientName = this.sharedData.clientName;
+      this.e.projectName = this.sharedData.projectName;
+      this.reportDate = parseInt(this.sharedData.reportDate.replace("-", "").replace("-", ""));
+      //this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+      //this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+      this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
+      this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+      this.createdByEmail = this.sharedData.createdByEmail;
+      this.createdBy = this.sharedData.createdBy;
+
+      //
+      console.log(this.route.snapshot.data['reportId']);
+      this.reportId = +this.route.snapshot.paramMap.get('reportId');
+
+      if (this.reportId == 0) {
+        if (this.reportType == 'Week') {
+          //
+          this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
+            //
+            this.e.accomp = res.weekComments;
+            console.log(res);
+            console.log(this.e);
+            console.log(this.e.accomp);
+
+            this.reportservice.getcurrentWkHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+              //
+              this.e.offShoreHrsCurrentWeek = resp.currentWKHrs;
+              console.log(resp);
+              console.log(this.e);
+              console.log(this.e.offShoreHrsCurrentWeek);
+
+              this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+
+                this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
+                this.showLoader = false;
+                console.log(respn);
+                console.log(this.e);
+                console.log(this.e.offShoreHrsTillLastWeek);
+                this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));
+
+              }, error => console.log(error))
+
+            }, error => console.log(error))
+
+          }, error => console.log(error))
+
+          //
+          console.log(this.reportCRDetails);
+
+        }
+        else if (this.reportType == 'Month') {
+
+          this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
+            //
+            this.e.accomp = res.monthComments;
+            console.log(res);
+
+            this.reportservice.getcurrentMonthHrs(this.projectId, this.reportDate).subscribe((resp: any) => {
+              //
+              this.e.offShoreHrsCurrentWeek = resp.currentMnthHrs;
+              console.log(resp);
+
+              this.reportservice.getLastMonthHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+
+                this.e.offShoreHrsTillLastWeek = respn.lastMnthHrs;
+                this.showLoader = false;
+                console.log(respn);
+                this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));
+              }, error => console.log(error))
+
+            }, error => console.log(error))
+
+          }, error => console.log(error))
+
+        } else {
+
+          this.showLoader = false;
+        }
+
+      }
+      else {
+
+        this.reportservice.getCRdetails(this.reportId).subscribe(res => {
+          this.reportCRDetails = res;
+          console.log(res);
+        }, error => console.log(error))
+
+        this.reportservice.getActivitydetails(this.reportId).subscribe(res => {
+          this.reportActivityDetails = res;
+          console.log(res);
+        }, error => console.log(error))
+
+        this.reportservice.getReportSummeryDetails(this.reportId).subscribe(res => {
+          debugger;
+          this.reportSummery = res;
+          this.reportType = res.projectType;
+          console.log(res);
+          this.e = res
+          this.showLoader = false;
+          this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));
+          //this.generateForm();
+        }, error => console.log(error))
+
+      }
+      debugger;
+      this.remainingHoursOnShore = (this.e.onShoreTotalHrs) - ((this.e.offShoreHrsTillLastWeek + this.e.offShoreHrsCurrentWeek) + (this.e.onShoreHrsTillLastWeek + this.e.onShoreHrsCurrentWeek));  
+
+
+      console.log(res);
+    }, error => console.log(error))
+  }
 }
+
 
 

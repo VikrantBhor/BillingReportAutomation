@@ -96,6 +96,7 @@ export class ReportService {
   getClientList(): Observable<IClientList[]> {
     return this.http.get<IClientList[]>(this.Baseurl + 'api/Report/GetClientList');
   }
+
   getReports(role, reportStatus, userEmail): Observable<reportList[]> {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus + '/' + userEmail);
   }
@@ -162,10 +163,16 @@ export class ReportService {
 
   }
 
-
-
   getProgramType(id): Observable<IProgramList[]> {
     return this.http.get<IProgramList[]>(this.Baseurl + 'api/Report/GetProgramType/' + id);
+  }
+
+  getAllowedUsers(): Observable<string>{
+    return this.http.get<string>(this.Baseurl + 'api/Users/allowedUsers');
+  }
+
+  getManager(): Observable<any> {
+    return this.http.get<any>(this.Baseurl + 'api/Users/manager');
   }
 
   saveReport(reportDetail: IReportDetail): Observable<any> {

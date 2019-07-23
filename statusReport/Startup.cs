@@ -30,6 +30,7 @@ namespace statusReport
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.Configure<ManagerSettings>(Configuration.GetSection("ManagerSettings"));
+            services.Configure<AllowedUsers>(Configuration.GetSection("AllowedUsers"));
             services.AddScoped<IEmailSender, EmailSender>();
 
             // In production, the Angular files will be served from this directory

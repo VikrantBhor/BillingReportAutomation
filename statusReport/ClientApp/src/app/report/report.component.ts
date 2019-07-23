@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
   showLoader = true;
   userEmail: string;
   col: number = 3;
+  manager: any;
 
   constructor(private adalService: AdalService, protected http: HttpClient, private reportservice: ReportService, private router: Router) {
     //debugger;
@@ -36,15 +37,17 @@ export class ReportComponent implements OnInit {
     this.showLoader = true;
     this.user.token = this.user.token.substring(0, 10) + '...';
     console.log(this.user.token);
-    //var r = Configuration["IdentityServerAddress"];
-    if (this.user.userName.indexOf('Dhruv') == 0) { // This block is for Rumana
-      this.role = "Manager";
-      this.getSubmittedReports();
-    }
-    else {
-      this.role = "TL";
-      this.getSavedReports();
-    }
+    this.getManager();
+    debugger;
+    
+    //if (this.user.userName.indexOf('Dhruv') == 0) { // This block is for Rumana
+    //  this.role = "Manager";
+    //  this.getSubmittedReports();
+    //}
+    //else {
+    //  this.role = "TL";
+    //  this.getSavedReports();
+    //}
     
     
 }
@@ -112,4 +115,20 @@ export class ReportComponent implements OnInit {
 
   }
 
+  getManager() {
+    this.reportservice.getManager().subscribe(res => {
+      debugger;
+      this.manager = res;
+      
+      if (this.user.userName == this.manager.managerEmail) { // This block is for Rumana
+        this.role = "Manager";
+        this.getSubmittedReports();
+      }
+      else {
+        this.role = "TL";
+        this.getSavedReports();
+      }
+      console.log(res);
+    }, error => console.log(error))
+  }
 }
