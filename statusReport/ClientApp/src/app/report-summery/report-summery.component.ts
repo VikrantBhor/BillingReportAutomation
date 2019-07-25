@@ -30,6 +30,7 @@ import { Num } from 'docx/build/file/numbering/num';
 export class ReportSummeryComponent implements OnInit {
   sharedData: SharedObject;
   reportType: string = 'Week';
+  type: string;
   ReportSummery: FormGroup;
   reportCRDetails: reportCR[] = [];
   reportActivityDetails: reportActivity[]=[];
@@ -44,7 +45,7 @@ export class ReportSummeryComponent implements OnInit {
   closeResult: string;
   comment: string;
   remark: string;
-
+  close: boolean;
   //Mapping parameters
   // map report id here
   reportId: number = 22;
@@ -96,6 +97,7 @@ export class ReportSummeryComponent implements OnInit {
     id: 0,
     clientName: this.cName,
     projectName: this.prName,
+    type: this.type,
     projectType: this.prType,
     accomp: this.accomplishment,
     crDetails: this.saveReportCRDetails,
@@ -112,6 +114,7 @@ export class ReportSummeryComponent implements OnInit {
     reportEndDate: '',
     createdByEmail: '',
     createdBy: '',
+    type:''
     //offhoreTotalHrs: 0,
     //OffShoreHrsUtilized: 0,
     //OnShoreHrsUtilized: 0
@@ -137,6 +140,7 @@ export class ReportSummeryComponent implements OnInit {
     reportEndDate: '',
     createdByEmail: '',
     createdBy: '',
+    type: ''
     //offhoreTotalHrs: 0,
     //OffShoreHrsUtilized: 0,
     //OnShoreHrsUtilized: 0
@@ -165,6 +169,7 @@ export class ReportSummeryComponent implements OnInit {
     this.ReportSummery = this.fb.group({
       clientName: [this.cName],
       projectName: [this.prName],
+      type:[null],
       projectType: [this.prType],
       accomp: [this.accomplishment, Validators.required],
       crDetails: this.fb.array([]),
@@ -175,7 +180,7 @@ export class ReportSummeryComponent implements OnInit {
       onShoreHrsCurrentWeek: [null, Validators.required],
       onShoreHrsUtilized: [null],
       onShoreHrsRemaining:[null],
-      offShoreTotalHrs: [null, Validators.required],
+      offShoreTotalHrs: [null],
       offShoreHrsTillLastWeek: [this.lastHrs, Validators.required],
       offShoreHrsCurrentWeek: [this.currentHrs, Validators.required],
       OffShoreHrsUtilized: [null],
@@ -322,7 +327,7 @@ export class ReportSummeryComponent implements OnInit {
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      
+
       if (result == "Save click") {
         this.remark = this.comment;
         this.rejectReport(this.reportId, this.remark);
@@ -330,8 +335,11 @@ export class ReportSummeryComponent implements OnInit {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });    
+    });
   }
+
+
+
 
   private getDismissReason(reason: any): string {
     
@@ -379,6 +387,7 @@ export class ReportSummeryComponent implements OnInit {
     this.projectId = parseInt(this.sharedData.projectId);
     this.prType = this.sharedData.reportType;
     this.reportType = this.sharedData.reportType;
+    this.type = this.sharedData.type;
     this.cName = this.sharedData.clientName;
     this.prName = this.sharedData.projectName;
     this.reportDate = parseInt(this.sharedData.reportDate.replace("-", "").replace("-", ""));
@@ -433,7 +442,7 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.onShoreTotalHrs = this.ReportSummery.controls.onShoreTotalHrs.value;
     this.saveReportSummery.onShoreHrsTillLastWeek = this.ReportSummery.controls.onShoreHrsTillLastWeek.value;
     this.saveReportSummery.onShoreHrsCurrentWeek = this.ReportSummery.controls.onShoreHrsCurrentWeek.value;
-    this.saveReportSummery.offShoreTotalHrs = this.ReportSummery.controls.offShoreTotalHrs.value;
+    this.saveReportSummery.offShoreTotalHrs = this.ReportSummery.controls.onShoreTotalHrs.value;
     this.saveReportSummery.offShoreHrsTillLastWeek = this.ReportSummery.controls.offShoreHrsTillLastWeek.value;
     this.saveReportSummery.offShoreHrsCurrentWeek = this.ReportSummery.controls.offShoreHrsCurrentWeek.value;
     this.saveReportSummery.crDetails = this.reportCRDetails;
@@ -443,6 +452,7 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.reportEndDate = this.reportSummery == undefined ? this.repoEndDate : this.reportSummery.reportEndDate;
     this.saveReportSummery.createdByEmail = this.reportSummery == undefined ? this.createdByEmail : this.reportSummery.createdByEmail;
     this.saveReportSummery.createdBy = this.reportSummery == undefined ? this.createdBy : this.reportSummery.createdBy;
+    this.saveReportSummery.type = this.type;
 
     console.log(this.saveReportSummery);
 
@@ -483,7 +493,7 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.onShoreTotalHrs = this.ReportSummery.controls.onShoreTotalHrs.value;
     this.saveReportSummery.onShoreHrsTillLastWeek = this.ReportSummery.controls.onShoreHrsTillLastWeek.value;
     this.saveReportSummery.onShoreHrsCurrentWeek = this.ReportSummery.controls.onShoreHrsCurrentWeek.value;
-    this.saveReportSummery.offShoreTotalHrs = this.ReportSummery.controls.offShoreTotalHrs.value;
+    this.saveReportSummery.offShoreTotalHrs = this.ReportSummery.controls.onShoreTotalHrs.value;
     this.saveReportSummery.offShoreHrsTillLastWeek = this.ReportSummery.controls.offShoreHrsTillLastWeek.value;
     this.saveReportSummery.offShoreHrsCurrentWeek = this.ReportSummery.controls.offShoreHrsCurrentWeek.value;
     this.saveReportSummery.crDetails = this.reportCRDetails;
@@ -493,6 +503,7 @@ export class ReportSummeryComponent implements OnInit {
     this.saveReportSummery.reportEndDate = this.reportSummery == undefined ? this.repoEndDate : this.reportSummery.reportEndDate;
     this.saveReportSummery.createdByEmail = this.reportSummery == undefined ? this.createdByEmail : this.reportSummery.createdByEmail;
     this.saveReportSummery.createdBy = this.reportSummery == undefined ? this.createdBy : this.reportSummery.createdBy;
+    this.saveReportSummery.type = this.type;
     //this.reportId = 
     console.log(this.saveReportSummery);
 
@@ -631,12 +642,18 @@ export class ReportSummeryComponent implements OnInit {
   }
 
   rejectReport(id, remark) {
-    
-    this.reportservice.rejectReport(id, remark).subscribe(data => {
-      this._router.navigate(['/report/']).then(x => {
-        this.toastr.success('Report rejected successfully !', 'Success');
-      });
-    })
+    debugger;
+    if (remark != undefined && remark != "" && remark != null) {
+      this.reportservice.rejectReport(id, remark).subscribe(data => {
+        this._router.navigate(['/report/']).then(x => {
+          this.toastr.success('Report rejected successfully !', 'Success');
+        });
+      })
+    }
+    else {      
+      this.toastr.error('Remark is mandatory !', 'Success');
+      return;
+    }   
   }
 
   public downloadDocs(): void {
@@ -731,6 +748,7 @@ export class ReportSummeryComponent implements OnInit {
 
       this.projectId = parseInt(this.sharedData.projectId);
       this.e.projectName = this.sharedData.projectName;
+      this.e.type = this.sharedData.type;
       this.e.projectType = this.sharedData.reportType;
       this.reportType = this.sharedData.reportType;
       this.e.clientName = this.sharedData.clientName;
@@ -741,6 +759,7 @@ export class ReportSummeryComponent implements OnInit {
       this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
       this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
       this.createdByEmail = this.sharedData.createdByEmail;
+      this.type = this.sharedData.type;
       this.createdBy = this.sharedData.createdBy;
 
       //
@@ -829,6 +848,7 @@ export class ReportSummeryComponent implements OnInit {
           debugger;
           this.reportSummery = res;
           this.reportType = res.projectType;
+          this.type = res.type;
           console.log(res);
           this.e = res
           this.showLoader = false;

@@ -136,6 +136,7 @@ namespace statusReport.Controllers
                 reportSummery.ReportEndDate = reportDetail.ReportEndDate;
                 reportSummery.Remark = null;
                 reportSummery.ReportStatus = reportDetail.ReportStatus;
+                reportSummery.Type = reportDetail.Type;
 
                 context.Add(reportSummery);
                 context.SaveChanges();
@@ -171,7 +172,7 @@ namespace statusReport.Controllers
                         result = (from reportSummary in context.TblReportSummery
                                   where (reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Saved))
                                   && reportSummary.CreatedByEmail == userEmail
-                                  orderby reportSummary.CreatedDate
+                                  orderby reportSummary.CreatedDate descending
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,
@@ -188,7 +189,7 @@ namespace statusReport.Controllers
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Rejected)
                                   && reportSummary.CreatedByEmail == userEmail
-                                  orderby reportSummary.LastUpdatedDate
+                                  orderby reportSummary.LastUpdatedDate descending
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,
@@ -209,7 +210,7 @@ namespace statusReport.Controllers
                     {
                         result = (from reportSummary in context.TblReportSummery
                                   where reportSummary.ReportStatus == Convert.ToInt32(ReportStatus.Created)
-                                  orderby reportSummary.LastUpdatedDate
+                                  orderby reportSummary.LastUpdatedDate descending
                                   select new ReportList
                                   {
                                       ReportId = reportSummary.ReportId,

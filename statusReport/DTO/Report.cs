@@ -16,7 +16,7 @@ namespace statusReport.DTO
         public int? ReportStatus { get; set; }
         public DateTime ReportEndDate { get; set; }
         
-
+        public string Type { get; set; }
 
     }
 }

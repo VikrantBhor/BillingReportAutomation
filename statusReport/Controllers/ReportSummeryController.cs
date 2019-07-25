@@ -108,7 +108,8 @@ namespace statusReport.Controllers
                                          CreatedBy = RS.CreatedBy,
                                          CreatedByEmail = RS.CreatedByEmail,
                                          ReportStartDate = RS.ReportStartDate,
-                                         ReportEndDate = RS.ReportEndDate
+                                         ReportEndDate = RS.ReportEndDate,
+                                         Type = RS.Type
                                      }).SingleOrDefault();
 
                     return reportSummery;
@@ -152,6 +153,7 @@ namespace statusReport.Controllers
                         tblReportSummery.ReportStatus = reportSummery.projectType =="Week" ? Convert.ToInt32(ReportStatus.Uploaded) : Convert.ToInt32(ReportStatus.Created);
                         tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
                         tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
+                        tblReportSummery.Type = reportSummery.Type;
 
                         context.TblReportSummery.Add(tblReportSummery);
                         context.SaveChanges();
@@ -333,6 +335,7 @@ namespace statusReport.Controllers
                             tblReportSummery.ReportStatus = 0;
                             tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
                             tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
+                            tblReportSummery.Type = reportSummery.Type;
 
                             context.TblReportSummery.Add(tblReportSummery);
                             context.SaveChanges();
@@ -568,7 +571,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(comment_date) = week('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(comment_date,1) = week('" + date + "',1)", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();

@@ -22,7 +22,7 @@ import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 })
 
 export class ReportCreateComponent implements OnInit {
-  sharedData: SharedObject = new SharedObject('', '', '', '', '', '', '', '', '', '');
+  sharedData: SharedObject = new SharedObject('', '', '', '', '', '', '', '', '', '','');
   clientList: IClientList[];
   user: any;
   maxDate: Date;
@@ -35,6 +35,7 @@ export class ReportCreateComponent implements OnInit {
     ClientName: '0',
     ProjectName: '0',
     ProjectType: '0',
+    type: '0',
     CreatedBy: '',
     CreatedByEmail: '',
     ReportStartDate: '',
@@ -60,6 +61,7 @@ export class ReportCreateComponent implements OnInit {
     this.reportForm = new FormGroup({
       clientName: new FormControl('0', Validators.required),
       projectType: new FormControl('0', Validators.required),
+      type: new FormControl('0',Validators.required),
       projectDuration: new FormControl('0', Validators.required),
       projectDate: new FormControl('', Validators.required)
     });
@@ -73,8 +75,9 @@ export class ReportCreateComponent implements OnInit {
     var a = this.reportForm.controls["clientName"].value;
     var b = this.reportForm.controls["projectType"].value;
     var c = this.reportForm.controls["projectDuration"].value;
+    var d = this.reportForm.controls["type"].value;
     //this.reportForm.controls["projectType"].value
-    if (this.reportForm.valid == true && a != "0" && b != "0" && c != "0") {
+    if (this.reportForm.valid == true && a != "0" && b != "0" && c != "0" && d != "0") {
       this.AssignValues(this.reportDetail);
     } else {
       this.toastr.error('Please fill in all required(*) details', 'Error!');
@@ -106,19 +109,19 @@ export class ReportCreateComponent implements OnInit {
         debugger;
         var start = 0;
         var day = today.getDay() - start;
-        //if (day == 0) {
-        //  var datetm = today.getDate() - day;
-        //  // Grabbing Start/End Dates
-        //  this.StartDate = new Date(today.setDate(datetm - 6));
-        //  this.EndDate = new Date(today.setDate(datetm));
-        //}
-        //else {
+        if (day == 0) {
           var datetm = today.getDate() - day;
           // Grabbing Start/End Dates
-          this.StartDate = new Date(today.setDate(datetm));
-          this.EndDate = new Date(today.setDate(datetm + 6));
+          this.StartDate = new Date(today.setDate(datetm - 6));
+          this.EndDate = new Date(today.setDate(datetm));
+        }
+        else {
+          var datetm = today.getDate() - day;
+          // Grabbing Start/End Dates
+          this.StartDate = new Date(today.setDate(datetm + 1));
+          this.EndDate = new Date(today.setDate(datetm + 7));
 
-        //}
+        }
        
 
       }
@@ -148,6 +151,7 @@ export class ReportCreateComponent implements OnInit {
       this.sharedData.projectId = this.projectID;
       this.sharedData.reportId = '0';
       this.sharedData.reportType = this.reportDetail.ProjectType == "Weekly" ? "Week" : "Month";
+      this.sharedData.type = this.reportDetail.type;
       //this.sharedData.reportDate = today.toJSON().split('T')[0];
       this.sharedData.reportDate = this.datepipe.transform(selectedDate, 'yyyy-MM-dd');
       this.sharedData.reportStartDate = detail.ReportStartDate;//  this.StartDate.toJSON().split('T')[0];

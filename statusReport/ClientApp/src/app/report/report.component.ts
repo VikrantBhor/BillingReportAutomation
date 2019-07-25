@@ -21,6 +21,7 @@ export class ReportComponent implements OnInit {
   p: number = 1;
   searchTerm: any = { clientName: '' };;
   btnPendingClicked = false;
+  text = "Saved";
   showLoader = true;
   userEmail: string;
   col: number = 3;
@@ -70,6 +71,7 @@ export class ReportComponent implements OnInit {
     this.statusReport = 0;
     this.col = 3;
     this.btnPendingClicked = false;
+    this.text = "Saved";
     this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {
       //debugger;
       this.showLoader = false;
@@ -81,6 +83,7 @@ export class ReportComponent implements OnInit {
   getSubmittedReports() {
     this.statusReport = 1;
     this.btnPendingClicked = false;
+    this.text = "Submitted";
     this.col = 4;
     this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {
       //debugger;
@@ -92,6 +95,7 @@ export class ReportComponent implements OnInit {
 
   getPendingReports() {
     this.btnPendingClicked = true;
+    this.text = "Pending";
     this.statusReport = 2;
     this.col = 4;
     this.reportservice.getReports(this.role, this.statusReport, this.userEmail).subscribe(res => {

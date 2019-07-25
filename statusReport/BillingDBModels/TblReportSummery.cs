@@ -29,7 +29,7 @@ namespace statusReport.BillingDBModels
         public bool? IsApproved { get; set; }
         public int? ReportStatus { get; set; }
         public DateTime ReportEndDate { get; set; }
-
+        public string Type { get; set; }
         public virtual ICollection<TblReportActivity> TblReportActivity { get; set; }
         public virtual ICollection<TblReportCr> TblReportCr { get; set; }
         public virtual ICollection<TblReportSummeryDetails> TblReportSummeryDetails { get; set; }

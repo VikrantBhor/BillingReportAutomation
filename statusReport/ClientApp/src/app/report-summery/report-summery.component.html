@@ -45,6 +45,19 @@
       </div>
 
       <div class="form-group  row mb-2">
+        <label class="col-md-3 Zeropadding col-form-label" for="type">Project Type</label>
+        <div class="col-md-4">
+          <input type="text"
+                 id="type"
+                 class="form-control"
+                 placeholder="Project Type"
+                 name="type"
+                 formControlName="type"
+                 [(ngModel)]="e.type" readonly>
+        </div>
+      </div>
+
+      <div class="form-group  row mb-2">
         <label class="col-md-3 Zeropadding col-form-label" for="projectType">Report Type</label>
         <div class="col-md-4">
           <input type="text"
@@ -249,26 +262,27 @@
         </div>
       </div>
 
+      <div class="form-group row mb-2">
+        <label class="col-md-3 Zeropadding col-form-label" for="onShoreTotalHrs"> Total Budget Hrs<span style="color:red">*</span></label>
+        <div class="col-md-4">
+          <input type="number"
+                 id="onShoreTotalHrs"
+                 class="form-control"
+                 (change)="SetRemainingOnShoreHours()"
+                 min="0"
+                 placeholder="00.00"
+                 name="onShoreTotalHrs"
+                 formControlName="onShoreTotalHrs"
+                 [(ngModel)]="e.onShoreTotalHrs" required>
+        </div>
+      </div>
 
       <fieldset>
         <legend class="col-md-3 col-sm-5">On Shore:</legend>
         <div class="row">
-          <div class="form-group col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="onShoreTotalHrs"> Total Budget Hrs<span style="color:red">*</span></label>
-            <div class="col-md-12">
-              <input type="number"
-                     id="onShoreTotalHrs"
-                     class="form-control"
-                     (change)="SetRemainingOnShoreHours()"
-                     min="0"
-                     placeholder="00.00"
-                     name="onShoreTotalHrs"
-                     formControlName="onShoreTotalHrs"
-                     [(ngModel)]="e.onShoreTotalHrs" required>
-            </div>
-          </div>
 
-          <div class="form-group col-md-3 mb-2">
+
+          <div class="form-group col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsTillLastWeek"> Hrs Till Last {{reportType}}<span style="color:red">*</span> </label>
             <div class="col-md-12">
               <input type="number"
@@ -283,7 +297,7 @@
             </div>
           </div>
 
-          <div class="form-group col-md-3 mb-2">
+          <div class="form-group col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsCurrentWeek"> Hrs Current {{reportType}}<span style="color:red">*</span> </label>
             <div class="col-md-12">
               <input type="number"
@@ -300,13 +314,13 @@
 
 
 
-          <div class="form-group col-md-3 mb-2">
+          <div class="form-group col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsUtilized">Total Hours Utilized </label>
             <div class="col-md-12">
               <input type="number"
                      id="onShoreHrsUtilized"
                      class="form-control"
-                     (change)="SetRemainingOnShoreHours()"                    
+                     (change)="SetRemainingOnShoreHours()"
                      placeholder="00.00"
                      name="onShoreHrsUtilized"
                      value="{{e.onShoreHrsTillLastWeek + e.onShoreHrsCurrentWeek }}"
@@ -315,41 +329,29 @@
             </div>
           </div>
 
-          <div class="form-group col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="onShoreHrsRemaining">Total Hours Remaining</label>
-            <div class="col-md-12">
-              <input type="number"
-                     id="onShoreHrsRemaining"
-                     class="form-control"                     
-                     value="{{remainingHoursOnShore}}"
-                     placeholder="00.00"
-                     name="onShoreHrsRemaining"
-                     formControlName="onShoreHrsRemaining"
-                     readonly>
-            </div>
-          </div>
+
         </div>
       </fieldset>
       <fieldset>
         <legend class="col-md-3 col-sm-5">Off Shore:</legend>
         <div class="row">
-          <div class="form-group col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="offShoreTotalHrs">Total Budget Hrs</label>
-            <div class="col-md-12">
-              <input type="number"
-                     id="offShoreTotalHrs"
-                     class="form-control"
-                     min="0"
-                     (change)="SetRemainingOnShoreHours()"
-                     placeholder="00.00"
-                     name="offShoreTotalHrs"
-                     value="e.onShoreTotalHrs"
-                     formControlName="offShoreTotalHrs"
-                     [(ngModel)]="e.onShoreTotalHrs" disabled required>
-            </div>
-          </div>
+          <!--<div class="form-group col-md-3 mb-2">
+        <label class="col-md-12 Zeropadding col-form-label" for="offShoreTotalHrs">Total Budget Hrs</label>
+        <div class="col-md-12">
+          <input type="number"
+                 id="offShoreTotalHrs"
+                 class="form-control"
+                 min="0"
+                 (change)="SetRemainingOnShoreHours()"
+                 placeholder="00.00"
+                 name="offShoreTotalHrs"
+                 value="e.onShoreTotalHrs"
+                 formControlName="offShoreTotalHrs"
+                 [(ngModel)]="e.onShoreTotalHrs" disabled required>
+        </div>
+      </div>-->
 
-          <div class="form-group  col-md-3 mb-2">
+          <div class="form-group  col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="offShoreHrsTillLastWeek">Hrs Till Last {{reportType}}<span style="color:red">*</span> </label>
             <div class="col-md-12">
               <input type="number"
@@ -364,7 +366,7 @@
             </div>
           </div>
 
-          <div class="form-group  col-md-3 mb-2">
+          <div class="form-group  col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="offShoreHrsCurrentWeek">Hrs Current {{reportType}}<span style="color:red">*</span> </label>
             <div class="col-md-12">
               <input type="number"
@@ -379,38 +381,51 @@
             </div>
           </div>
 
-          <div class="form-group  col-md-3 mb-2">
+          <div class="form-group  col-md-4 mb-2">
             <label class="col-md-12 Zeropadding col-form-label" for="OffShoreHrsUtilized">Total Hours Utilized </label>
             <div class="col-md-12">
               <input type="number"
                      id="OffShoreHrsUtilized"
                      class="form-control"
-                     placeholder="00.00"                     
+                     placeholder="00.00"
                      (change)="SetRemainingOnShoreHours()"
                      name="OffShoreHrsUtilized"
-                     value="{{e.offShoreHrsTillLastWeek + e.offShoreHrsCurrentWeek }}"                     
+                     value="{{e.offShoreHrsTillLastWeek + e.offShoreHrsCurrentWeek }}"
                      step="0.001"
                      formControlName="OffShoreHrsUtilized"
                      readonly>
             </div>
           </div>
 
-          <div class="form-group  col-md-3 mb-2">
-            <label class="col-md-12 Zeropadding col-form-label" for="OffShoreHrsRemaining">Total Hours Remaining</label>
-            <div class="col-md-12">
-              <input type="number"
-                     id="OffShoreHrsRemaining"
-                     class="form-control"                     
-                     value="{{remainingHoursOnShore}}"
-                     placeholder="00.00"
-                     name="OffShoreHrsRemaining"                     
-                     formControlName="OffShoreHrsRemaining"
-                     readonly>
-            </div>
-          </div>
+          <!--<div class="form-group  col-md-3 mb-2">
+        <label class="col-md-12 Zeropadding col-form-label" for="OffShoreHrsRemaining">Total Hours Remaining</label>
+        <div class="col-md-12">
+          <input type="number"
+                 id="OffShoreHrsRemaining"
+                 class="form-control"
+                 value="{{remainingHoursOnShore}}"
+                 placeholder="00.00"
+                 name="OffShoreHrsRemaining"
+                 formControlName="OffShoreHrsRemaining"
+                 readonly>
+        </div>
+      </div>-->
         </div>
       </fieldset>
 
+      <div class="form-group row mb-2" style="margin-top:.5rem">
+        <label class="col-md-3 Zeropadding col-form-label" for="onShoreHrsRemaining">Total Hours Remaining</label>
+        <div class="col-md-4">
+          <input type="number"
+                 id="onShoreHrsRemaining"
+                 class="form-control"
+                 value="{{remainingHoursOnShore}}"
+                 placeholder="00.00"
+                 name="onShoreHrsRemaining"
+                 formControlName="onShoreHrsRemaining"
+                 readonly>
+        </div>
+      </div>
 
     </form>
   </div>

@@ -26,6 +26,7 @@ namespace statusReport.ViewModel
         public DateTime ReportEndDate { get; set; }
         public string CreatedByEmail { get; set; }
         public string CreatedBy { get; set; }
+        public string Type { get; set; }
     }
 
     public class CRDetails
