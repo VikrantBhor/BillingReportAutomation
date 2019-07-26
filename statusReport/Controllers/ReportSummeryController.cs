@@ -789,11 +789,14 @@ namespace statusReport.Controllers
             try
             {
                 double lastMonthHrs = 0.0;
+                double currentMonthHrs = 0.0;
+                double totalHrs = 0.0;
+
 
                 //&date=20091202   (yyyymmdd)
                 int year = reportDate / 10000;
                 int month = ((reportDate - (10000 * year)) / 100);
-                int day = (reportDate - (10000 * year) - (100 * month));
+                int day = DateTime.DaysInMonth(year, month); //(reportDate - (10000 * year) - (100 * month));
 
                 string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
 
@@ -803,7 +806,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) < month('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and record_date <= ('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -811,13 +814,28 @@ namespace statusReport.Controllers
                         {
                             if (reader["Hrs"] != DBNull.Value)
                             {
-                                lastMonthHrs = Convert.ToDouble(reader["Hrs"]);
+                                totalHrs = Convert.ToDouble(reader["Hrs"]);
+                            }
+                        }
+                    }
+                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    {
+                        conn.Open();
+                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "')", conn);
+
+                        MySqlDataReader readerPreviousYear = cmdPreviousYear.ExecuteReader();
+
+                        while (readerPreviousYear.Read())
+                        {
+                            if (readerPreviousYear["Hrs"] != DBNull.Value)
+                            {
+                                currentMonthHrs = lastMonthHrs + Convert.ToDouble(readerPreviousYear["Hrs"]);
                             }
                         }
                     }
                 }
 
-                return Ok(new { lastMnthHrs = lastMonthHrs });
+                return Ok(new { lastMnthHrs = totalHrs - currentMonthHrs });
 
             }
             catch (Exception)
