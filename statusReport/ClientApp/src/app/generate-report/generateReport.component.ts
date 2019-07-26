@@ -23,6 +23,7 @@ export class GenerateReport {
     docs.Styles.createParagraphStyle("heading2", "Heading 2").spacing({ before: 150, after: 120 }).size(30).color('000080').bold().font('Segoe');
     docs.Styles.createParagraphStyle("heading3", "Heading 3").spacing({ before: 150, after: 120 }).bold().center().font('Segoe');
     docs.Styles.createParagraphStyle("heading5", "Heading 5").spacing({ before: 150, after: 120 }).bold().center().font('Segoe');
+    docs.Styles.createParagraphStyle("heading6", "Heading 6").spacing({ before: 150, after: 120 }).left().font('Segoe');
 
     if (reportSummery.projectType == "Month") {
       docs.addParagraph(new Paragraph("Monthly Summary Report").title().center());
@@ -42,8 +43,8 @@ export class GenerateReport {
       docs.addParagraph(this.createSubHeading("Accomplishment :"));
       for (let accomplishment of reportSummery.accomp.split('\n')) {
         for (let acc of accomplishment.split(',')) {
-          if (acc != " ")
-            docs.addParagraph(this.createBullet(acc));
+          if (acc.length != 0)
+            docs.addParagraph(this.createBullet(acc).heading6());
         }
       }
     }
@@ -62,8 +63,8 @@ export class GenerateReport {
       docs.addParagraph(this.createSubHeading("Awaiting information from client :"));
       for (let clientAwtInfo of reportSummery.clientAwtInfo.split('\n')) {
         for (let cAI of clientAwtInfo.split(',')) {
-          if (cAI != " ")
-            docs.addParagraph(this.createBullet(cAI));
+          if (cAI.length != 0)
+            docs.addParagraph(this.createBullet(cAI).heading6());
         }
       }
     }
@@ -75,8 +76,8 @@ export class GenerateReport {
       docs.addParagraph(this.createSubHeading("Notes :"));
       for (let notes of reportSummery.notes.split('\n')) {
         for (let note of notes.split(',')) {
-          if (note != " ")
-            docs.addParagraph(this.createBullet(note));
+          if (note.length != 0)
+            docs.addParagraph(this.createBullet(note).heading6());
         }
       }
     }
@@ -94,10 +95,10 @@ export class GenerateReport {
 
       var i = 1;
       for (let cR of reportCRDetails) {
-        table.getCell(i, 0).addContent(new Paragraph(cR.crName).heading5().left());
-        table.getCell(i, 1).addContent(new Paragraph(cR.estimateHrs).heading5().center());
-        table.getCell(i, 2).addContent(new Paragraph(cR.actualHrs).heading5().center());
-        table.getCell(i, 3).addContent(new Paragraph(cR.status).heading5().center());
+        table.getCell(i, 0).addContent(new Paragraph(cR.crName).heading6().left());
+        table.getCell(i, 1).addContent(new Paragraph(cR.estimateHrs).heading6().center());
+        table.getCell(i, 2).addContent(new Paragraph(cR.actualHrs).heading6().center());
+        table.getCell(i, 3).addContent(new Paragraph(cR.status).heading6().center());
         i++;
       }
       return table;
@@ -113,9 +114,9 @@ export class GenerateReport {
 
       var i = 1;
       for (let rAD of reportActivityDetails) {
-        table1.getCell(i, 0).addContent(new Paragraph(i.toString()).heading5().center());
-        table1.getCell(i, 1).addContent(new Paragraph(rAD.milestones).heading5().left());
-        table1.getCell(i, 2).addContent(new Paragraph(rAD.eta).heading5().center());
+        table1.getCell(i, 0).addContent(new Paragraph(i.toString()).heading6().center());
+        table1.getCell(i, 1).addContent(new Paragraph(rAD.milestones).heading6().left());
+        table1.getCell(i, 2).addContent(new Paragraph(rAD.eta).heading6().center());
         i++;
       }
       return table1;
@@ -153,9 +154,9 @@ export class GenerateReport {
     table2.getCell(0, 1).addContent(new Paragraph("Duration (in hrs.)").heading5());
     table2.getCell(1, 0).addContent(new Paragraph("Total Budget Hours").heading3().left());
     table2.getCell(1, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till " + this.date  + " " + this.month));
+    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till " + this.date + " " + this.month).heading6());
     table2.getCell(2, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek.toString()).heading5());
-    table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
+    table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]).heading6());
     table2.getCell(3, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek.toString()).heading5());
     table2.getCell(4, 0).addContent(new Paragraph("Total On-Shore Hours Utilized").heading3().left());
     table2.getCell(4, 1).addContent(new Paragraph(this.onShoreHoursUtilized.toString()).heading5());
@@ -163,9 +164,9 @@ export class GenerateReport {
     //table2.getCell(5, 1).addContent(new Paragraph(this.onShoreHoursRemaining.toString()).heading5());
     //table2.getCell(5, 0).addContent(new Paragraph("Total Off-Shore Hours").heading3().left());
     //table2.getCell(5, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(5, 0).addContent(this.createBullet("Off-Shore Hours Till " + + this.date + " " + this.month));
+    table2.getCell(5, 0).addContent(this.createBullet("Off-Shore Hours Till " + + this.date + " " + this.month).heading6());
     table2.getCell(5, 1).addContent(new Paragraph(reportSummery.offShoreHrsTillLastWeek.toString()).heading5());
-    table2.getCell(6, 0).addContent(this.createBullet("Off-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
+    table2.getCell(6, 0).addContent(this.createBullet("Off-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]).heading6());
     table2.getCell(6, 1).addContent(new Paragraph(reportSummery.offShoreHrsCurrentWeek.toString()).heading5());
     table2.getCell(7, 0).addContent(new Paragraph("Total Off-Shore Hours Utilized").heading3().left());
     table2.getCell(7, 1).addContent(new Paragraph(this.offShoreHoursUtilized.toString()).heading5());
