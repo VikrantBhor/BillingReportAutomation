@@ -142,7 +142,7 @@ export class GenerateReport {
     reportSummery.offShoreHrsTillLastWeek = reportSummery.offShoreHrsTillLastWeek == "" ? 0 : reportSummery.offShoreHrsTillLastWeek;
 
     if (new Date(reportSummery.reportStartDate).getDate() - 1 == 0) {
-      this.month = monthNames[new Date(reportSummery.reportStartDate).getMonth() - 1]
+      this.month = monthNames[new Date(reportSummery.reportStartDate).getMonth() - 1] == undefined ? monthNames[11] : monthNames[new Date(reportSummery.reportStartDate).getMonth() - 1];
       this.date = new Date(new Date(reportSummery.reportStartDate).getFullYear(), new Date(reportSummery.reportStartDate).getMonth(), 0).getDate();
     }
     else {
