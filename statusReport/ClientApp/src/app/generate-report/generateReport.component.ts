@@ -12,60 +12,72 @@ export class GenerateReport {
   offShoreHoursUtilized: number;
   onShoreHoursRemaining: number;
   offShoreHoursRemaining: number;
+  date: number;
+  month: string;
 
   generateReport(reportSummery: ReportSummery, reportCRDetails: reportCR[], reportActivityDetails: reportActivity[]) {
     const docs = new Document();
     debugger;
-    docs.Styles.createParagraphStyle("heading1", "Heading 1").spacing({ before: 150, after: 120 }).size(40).bold().color('999989');
-    docs.Styles.createParagraphStyle("title", "Title").spacing({ before: 150 }).size(50).color('FF0000').bold().underline();
-    docs.Styles.createParagraphStyle("heading2", "Heading 2").spacing({ before: 150, after: 120 }).size(30).color('000080').bold();
-    docs.Styles.createParagraphStyle("heading3", "Heading 3").spacing({ before: 150, after: 120 }).bold().center();
-    docs.Styles.createParagraphStyle("heading5", "Heading 5").spacing({ before: 150, after: 120 }).bold().center();
+    docs.Styles.createParagraphStyle("heading1", "Heading 1").spacing({ before: 150, after: 120 }).size(40).bold().color('999989').font('Segoe');
+    docs.Styles.createParagraphStyle("title", "Title").spacing({ before: 150 }).size(50).color('FF0000').bold().underline().font('Segoe');
+    docs.Styles.createParagraphStyle("heading2", "Heading 2").spacing({ before: 150, after: 120 }).size(30).color('000080').bold().font('Segoe');
+    docs.Styles.createParagraphStyle("heading3", "Heading 3").spacing({ before: 150, after: 120 }).bold().center().font('Segoe');
+    docs.Styles.createParagraphStyle("heading5", "Heading 5").spacing({ before: 150, after: 120 }).bold().center().font('Segoe');
 
     if (reportSummery.projectType == "Month") {
-      docs.addParagraph(new Paragraph("Monthly Hours Summary Report").title().center());
+      docs.addParagraph(new Paragraph("Monthly Summary Report").title().center());
       this.reportType = "Month";
     }
     else {
-      docs.addParagraph(new Paragraph("Weekly Hours Summary Report").title().center());
+      docs.addParagraph(new Paragraph("Weekly Summary Report").title().center());
       this.reportType = "Week";
     }
 
-    docs.addParagraph(this.createHeading(reportSummery.projectName)); //Name of Project
+    docs.addParagraph(this.createHeading(reportSummery.clientName +" - "+ reportSummery.projectName).style("123")); //Name of Project
     docs.addParagraph(this.createHeading(new Date(reportSummery.reportStartDate).toDateString().substring(4) + " - " + new Date(reportSummery.reportEndDate).toDateString().substring(4))); //Start and end date of report
 
     docs.addParagraph(this.createSubHeading("Project Type : " + reportSummery.type));
 
-    docs.addParagraph(this.createSubHeading("Accomplishment :"));
-    for (let accomplishment of reportSummery.accomp.split('\n')) {
-      for (let acc of accomplishment.split(',')) {
-        if (acc != " ")
-          docs.addParagraph(this.createBullet(acc));
+    if (reportSummery.accomp != null) {
+      docs.addParagraph(this.createSubHeading("Accomplishment :"));
+      for (let accomplishment of reportSummery.accomp.split('\n')) {
+        for (let acc of accomplishment.split(',')) {
+          if (acc != " ")
+            docs.addParagraph(this.createBullet(acc));
+        }
       }
     }
 
-    docs.addParagraph(this.createSubHeading("CR :"));
-    docs.addTableOfContents(this.createTableCR(reportCRDetails));
+    if (reportCRDetails.length != 0) {
+      docs.addParagraph(this.createSubHeading("CR :"));
+      docs.addTableOfContents(this.createTableCR(reportCRDetails));
+    }
 
-    docs.addParagraph(this.createSubHeading("Activities due this/next week :"));
-    docs.addTableOfContents(this.createTableActivities(reportActivityDetails));
+    if (reportActivityDetails.length != 0) {
+      docs.addParagraph(this.createSubHeading("Activities due this/next week :"));
+      docs.addTableOfContents(this.createTableActivities(reportActivityDetails));
+    }
 
-    docs.addParagraph(this.createSubHeading("Awaiting information from client :"));
-    for (let clientAwtInfo of reportSummery.clientAwtInfo.split('\n')) {
-      for (let cAI of clientAwtInfo.split(',')) {
-        if (cAI != " ")
-          docs.addParagraph(this.createBullet(cAI));
+    if (reportSummery.clientAwtInfo != "") {
+      docs.addParagraph(this.createSubHeading("Awaiting information from client :"));
+      for (let clientAwtInfo of reportSummery.clientAwtInfo.split('\n')) {
+        for (let cAI of clientAwtInfo.split(',')) {
+          if (cAI != " ")
+            docs.addParagraph(this.createBullet(cAI));
+        }
       }
     }
 
     docs.addParagraph(this.createSubHeading("Billing :"));
     docs.addTableOfContents(this.createBillDetails(reportSummery));
 
-    docs.addParagraph(this.createSubHeading("Notes :"));
-    for (let notes of reportSummery.notes.split('\n')) {
-      for (let note of notes.split(',')) {
-        if (note != " ")
-          docs.addParagraph(this.createBullet(note));
+    if (reportSummery.notes != "") {
+      docs.addParagraph(this.createSubHeading("Notes :"));
+      for (let notes of reportSummery.notes.split('\n')) {
+        for (let note of notes.split(',')) {
+          if (note != " ")
+            docs.addParagraph(this.createBullet(note));
+        }
       }
     }
 
@@ -123,24 +135,38 @@ export class GenerateReport {
     this.onShoreHoursRemaining = reportSummery.onShoreTotalHrs - (this.onShoreHoursUtilized + this.offShoreHoursUtilized);
     this.offShoreHoursRemaining = this.onShoreHoursRemaining; //reportSummery.offShoreTotalHrs - this.offShoreHoursUtilized;
 
+    reportSummery.onShoreHrsTillLastWeek = reportSummery.onShoreHrsTillLastWeek == "" ? 0 : reportSummery.onShoreHrsTillLastWeek;
+    reportSummery.onShoreHrsCurrentWeek = reportSummery.onShoreHrsCurrentWeek == "" ? 0 : reportSummery.onShoreHrsCurrentWeek;
+    reportSummery.offShoreHrsTillLastWeek = reportSummery.offShoreHrsTillLastWeek == "" ? 0 : reportSummery.offShoreHrsTillLastWeek;
+    reportSummery.offShoreHrsTillLastWeek = reportSummery.offShoreHrsTillLastWeek == "" ? 0 : reportSummery.offShoreHrsTillLastWeek;
+
+    if (new Date(reportSummery.reportStartDate).getDate() - 1 == 0) {
+      this.month = monthNames[new Date(reportSummery.reportStartDate).getMonth() - 1]
+      this.date = new Date(new Date(reportSummery.reportStartDate).getFullYear(), new Date(reportSummery.reportStartDate).getMonth(), 0).getDate();
+    }
+    else {
+      this.month = monthNames[new Date(reportSummery.reportStartDate).getMonth()] ;
+      this.date = (new Date(reportSummery.reportStartDate).getDate() - 1);
+    }
+
     table2.getCell(0, 0).addContent(new Paragraph("Activities").heading3());
     table2.getCell(0, 1).addContent(new Paragraph("Duration (in hrs.)").heading5());
     table2.getCell(1, 0).addContent(new Paragraph("Total Budget Hours").heading3().left());
     table2.getCell(1, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till " + (new Date(reportSummery.reportStartDate).getDate() - 1) + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()]));
-    table2.getCell(2, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek).heading5());
+    table2.getCell(2, 0).addContent(this.createBullet("On-Shore Hours Till " + this.date  + " " + this.month));
+    table2.getCell(2, 1).addContent(new Paragraph(reportSummery.onShoreHrsTillLastWeek.toString()).heading5());
     table2.getCell(3, 0).addContent(this.createBullet("On-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
-    table2.getCell(3, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek).heading5());
+    table2.getCell(3, 1).addContent(new Paragraph(reportSummery.onShoreHrsCurrentWeek.toString()).heading5());
     table2.getCell(4, 0).addContent(new Paragraph("Total On-Shore Hours Utilized").heading3().left());
     table2.getCell(4, 1).addContent(new Paragraph(this.onShoreHoursUtilized.toString()).heading5());
     //table2.getCell(5, 0).addContent(new Paragraph("Total On-Shore Hours Remaining").heading3().left());
     //table2.getCell(5, 1).addContent(new Paragraph(this.onShoreHoursRemaining.toString()).heading5());
     //table2.getCell(5, 0).addContent(new Paragraph("Total Off-Shore Hours").heading3().left());
     //table2.getCell(5, 1).addContent(new Paragraph(reportSummery.onShoreTotalHrs).heading3());
-    table2.getCell(5, 0).addContent(this.createBullet("Off-Shore Hours Till " + (new Date(reportSummery.reportStartDate).getDate() - 1) + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()]));
-    table2.getCell(5, 1).addContent(new Paragraph(reportSummery.offShoreHrsTillLastWeek).heading5());
+    table2.getCell(5, 0).addContent(this.createBullet("Off-Shore Hours Till " + + this.date + " " + this.month));
+    table2.getCell(5, 1).addContent(new Paragraph(reportSummery.offShoreHrsTillLastWeek.toString()).heading5());
     table2.getCell(6, 0).addContent(this.createBullet("Off-Shore Hours from " + new Date(reportSummery.reportStartDate).getDate() + " " + monthNames[new Date(reportSummery.reportStartDate).getMonth()] + " to " + new Date(reportSummery.reportEndDate).getDate() + " " + monthNames[new Date(reportSummery.reportEndDate).getMonth()]));
-    table2.getCell(6, 1).addContent(new Paragraph(reportSummery.offShoreHrsCurrentWeek).heading5());
+    table2.getCell(6, 1).addContent(new Paragraph(reportSummery.offShoreHrsCurrentWeek.toString()).heading5());
     table2.getCell(7, 0).addContent(new Paragraph("Total Off-Shore Hours Utilized").heading3().left());
     table2.getCell(7, 1).addContent(new Paragraph(this.offShoreHoursUtilized.toString()).heading5());
     table2.getCell(8, 0).addContent(new Paragraph("Total Off-Shore Hours Remaining").heading3().left());

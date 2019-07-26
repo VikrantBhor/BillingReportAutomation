@@ -803,7 +803,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "') -1", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) < month('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 

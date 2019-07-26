@@ -104,8 +104,8 @@ export class ReportSummeryComponent implements OnInit {
     activityDetails: this.saveReportActivityDetails,
     clientAwtInfo: '',
     onShoreTotalHrs: null,
-    onShoreHrsTillLastWeek: null,
-    onShoreHrsCurrentWeek: null,
+    onShoreHrsTillLastWeek: 0,
+    onShoreHrsCurrentWeek: 0,
     offShoreTotalHrs: null,
     offShoreHrsTillLastWeek: this.lastHrs,
     offShoreHrsCurrentWeek: this.currentHrs,
@@ -113,8 +113,8 @@ export class ReportSummeryComponent implements OnInit {
     reportStartDate: '',
     reportEndDate: '',
     createdByEmail: '',
-    createdBy: '',
-    type:''
+    createdBy: ''
+    
     //offhoreTotalHrs: 0,
     //OffShoreHrsUtilized: 0,
     //OnShoreHrsUtilized: 0
@@ -131,7 +131,7 @@ export class ReportSummeryComponent implements OnInit {
     clientAwtInfo: '',
     onShoreTotalHrs: 0,
     onShoreHrsTillLastWeek:0,
-    onShoreHrsCurrentWeek: 0,
+    onShoreHrsCurrentWeek:0,
     offShoreTotalHrs: 0,
     offShoreHrsTillLastWeek: this.lastHrs,
     offShoreHrsCurrentWeek: this.currentHrs,
