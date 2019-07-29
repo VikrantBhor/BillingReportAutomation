@@ -74,7 +74,8 @@ export class ReportSummeryComponent implements OnInit {
     reportType: '',
     reportStartDate: '',
     reportEndDate: '',
-    projectName:''
+    projectName: '',
+    clientName:''
   };
 
   newCRDetails: reportCR = {
@@ -673,6 +674,7 @@ export class ReportSummeryComponent implements OnInit {
         this.formData.reportStartDate = this.saveReportSummery.reportStartDate;
         this.formData.reportEndDate = this.saveReportSummery.reportEndDate;
         this.formData.projectName = this.saveReportSummery.projectName;
+        this.formData.clientName = this.saveReportSummery.clientName;
 
         this.reportservice.postData(this.formData).subscribe(data => {
           this.showLoader = false;
@@ -702,6 +704,7 @@ export class ReportSummeryComponent implements OnInit {
         this.formData.reportStartDate = this.reportSummery.reportStartDate;
         this.formData.reportEndDate = this.reportSummery.reportEndDate;
         this.formData.projectName = this.reportSummery.projectName;
+        this.formData.clientName = this.reportSummery.clientName;
 
         this.reportservice.postData(this.formData).subscribe(data => {
           this.showLoader = false;
