@@ -205,8 +205,11 @@ namespace statusReport.Controllers
 
                         }
                         context.SaveChanges();
-                        //var mail =reportSummery.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
-                        //EmailHelper.ReportSaved(mail, emailSender, null, reportSummery);
+                        if (reportSummery.projectType == "Week")
+                        {
+                            //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                        }
                         return Ok();
                     }
                     else
@@ -289,8 +292,12 @@ namespace statusReport.Controllers
                             context.TblReportActivity.Add(tblReportActivity);
 
                         }
-                        context.SaveChanges();                        
-                        //EmailHelper.ReportSaved("ankur.gautam@atidan.com", emailSender, null,reportSummery);
+                        context.SaveChanges();
+                        if (reportSummery.projectType == "Week")
+                        {
+                            //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                        }
                         return Ok();
                     }
 
