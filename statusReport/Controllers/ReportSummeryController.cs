@@ -207,8 +207,13 @@ namespace statusReport.Controllers
                         context.SaveChanges();
                         if (reportSummery.projectType == "Week")
                         {
-                            //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                            //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
+                        }
+                        else
+                        {
+                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            EmailHelper.ReportSubmitted(mail, emailSender, "", reportSummery);
                         }
                         return Ok();
                     }
@@ -295,8 +300,13 @@ namespace statusReport.Controllers
                         context.SaveChanges();
                         if (reportSummery.projectType == "Week")
                         {
-                            //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                            //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
+                        }
+                        else
+                        {
+                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            EmailHelper.ReportSubmitted(mail, emailSender, "", reportSummery);
                         }
                         return Ok();
                     }
@@ -540,8 +550,14 @@ namespace statusReport.Controllers
                 using (BillingReportContext context = new BillingReportContext())
                 {
                     var report = context.TblReportSummery.Where(i => i.ReportId == id).FirstOrDefault();
-                    //var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                    //EmailHelper.ReportUploaded(mail, emailSender, "",report);
+                    var reportSummmary = new ReportSummery
+                    {
+                        clientName = report.ClientName,
+                        projectName = report.ProjectName,
+                        projectType = report.ProjectType
+                    };
+                    var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                    EmailHelper.ReportUploaded(mail, emailSender, "", reportSummmary);
                     await context.SaveChangesAsync();
 
                 }

@@ -65,7 +65,7 @@ namespace statusReport.Utils
             });
         }
 
-        public static void ReportUploaded(string email, IEmailSender svc, string attachment, TblReportSummery reportSummery)
+        public static void ReportUploaded(string email, IEmailSender svc, string attachment, ReportSummery reportSummery)
         {
             Task.Run(async () =>
             {
