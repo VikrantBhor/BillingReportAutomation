@@ -215,7 +215,7 @@ namespace statusReport.Controllers
                             var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
                             EmailHelper.ReportSubmitted(mail, emailSender, "", reportSummery);
                         }
-                        return Ok();
+                        return Ok(report_id);
                     }
                     else
                     {
@@ -308,7 +308,7 @@ namespace statusReport.Controllers
                             var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
                             EmailHelper.ReportSubmitted(mail, emailSender, "", reportSummery);
                         }
-                        return Ok();
+                        return Ok(reportSummery.id);
                     }
 
                 }

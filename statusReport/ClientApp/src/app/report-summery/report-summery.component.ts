@@ -462,6 +462,8 @@ export class ReportSummeryComponent implements OnInit {
       debugger;
       //If weekly, Then Upload to sharepoint
       if (this.ReportSummery.controls.projectType.value == "Week") {
+        debugger;
+        this.reportId = data;
         this.downloadDocs();
       }
       else {
