@@ -518,8 +518,8 @@ namespace statusReport.Controllers
                 report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
                 report.Remark = remark;
                 context.TblReportSummery.Update(report);
-                //var mail =report.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
-                //EmailHelper.ReportRejected(mail, emailSender, "",remark, report);
+                var mail =report.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
+                EmailHelper.ReportRejected(mail, emailSender, "",remark, report);
                 await context.SaveChangesAsync();
 
             }

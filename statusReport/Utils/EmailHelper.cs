@@ -44,7 +44,7 @@ namespace statusReport.Utils
                 sb.Append($"<h4>Client Name:  {reportSummery.clientName}</h4>");
                 sb.Append($"<h4>Project Name:  {reportSummery.projectName}</h4>");
                 sb.Append($"<h4>Report Type:  {reportSummery.projectType}</h4>");
-                //email = email + ";" + _managerSettings.Value.ManagerEmail;                
+                email = email + ";" + _managerSettings.Value.ManagerEmail;                
                 var body = sb.ToString();
                 await SendEmail("Report submitted!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
             });
@@ -59,7 +59,7 @@ namespace statusReport.Utils
                 sb.Append($"<h4>Client Name:  {reportSummery.ClientName}</h4>");
                 sb.Append($"<h4>Project Name:  {reportSummery.ProjectName}</h4>");
                 sb.Append($"<h4>Report Type:  {reportSummery.ProjectType}</h4>");
-                //email = email + ";" + _managerSettings.Value.ManagerEmail;
+                email = email + ";" + _managerSettings.Value.ManagerEmail;
                 var body = sb.ToString();
                 await SendEmail("Report Rejected!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
             });
@@ -71,10 +71,10 @@ namespace statusReport.Utils
             {
                 var sb = new StringBuilder();
                 sb.Append($"<h2>Report has been Uploaded</h2>");
-                sb.Append($"<h4>Client Name:  {reportSummery.ClientName}</h4>");
-                sb.Append($"<h4>Project Name:  {reportSummery.ProjectName}</h4>");
-                sb.Append($"<h4>Report Type:  {reportSummery.ProjectType}</h4>");
-                //email = email + ";" + _managerSettings.Value.ManagerEmail;
+                sb.Append($"<h4>Client Name:  {reportSummery.clientName}</h4>");
+                sb.Append($"<h4>Project Name:  {reportSummery.projectName}</h4>");
+                sb.Append($"<h4>Report Type:  {reportSummery.projectType}</h4>");
+                email = email + ";" + _managerSettings.Value.ManagerEmail;
                 var body = sb.ToString();
                 await SendEmail("Report Uploaded!", "", email, "", "", body, new List<string>() { attachment }, true, svc);
             });
