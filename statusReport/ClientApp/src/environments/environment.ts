@@ -22,7 +22,7 @@ export const environment = {
   //  // tenant: 'careportfol.io',
   //  tenant: 'ATIDAN2.onmicrosoft.com',
   //  clientId: 'ceb11536-21be-4b02-812a-e2e13435e54b',
-  //  postLogoutRedirectUri: 'http://localhost:49205/',
+  //  postLogoutRedirectUri: 'http://testbillingreport:49205/',
   //  cacheLocation: 'localStorage',
   //  endpoints: {
   //    'https://graph.microsoft.com': '74c3a4b1-a2a5-4e48-9d7b-434f36d335ed'

@@ -788,7 +788,7 @@ export class ReportSummeryComponent implements OnInit {
               console.log(this.e);
               console.log(this.e.offShoreHrsCurrentWeek);
 
-              this.reportservice.getLastWkHrs(this.projectId, this.reportDate).subscribe((respn: any) => {
+              this.reportservice.getLastWkHrs(this.projectId, this.reportDate, this.type).subscribe((respn: any) => {
 
                 this.e.offShoreHrsTillLastWeek = respn.lastWKHrs;
                 this.showLoader = false;

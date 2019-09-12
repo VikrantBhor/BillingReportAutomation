@@ -11,6 +11,7 @@ import { IReportDetail } from '../../app/DTO/ReportSummery';
 import { formatDate } from '@angular/common';
 import { Options } from 'selenium-webdriver';
 import { Http } from '@angular/http';
+import { type } from 'os';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,8 @@ export class ReportService {
     this.form = formData.data;
     //let body = JSON.stringify({ formData }); 
     debugger;
-    return this.http.post('http://localhost:2142/api/UploadReport/Post/', formData, { headers: hdrs });
+    return this.http.post('http://billingauto.atidanmumbai.com:2142/api/UploadReport/Post/', formData, { headers: hdrs });
+    //return this.http.post('http://localhost:2142/api/UploadReport/Post/', formData, { headers: hdrs });
     
   } 
 
@@ -113,8 +115,8 @@ export class ReportService {
     return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getCurrentWeekHrs/' + projectId + '/' + reportDate);
   }
 
-  getLastWkHrs(projectId, reportDate): Observable<number> {
-    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastWeekHrs/' + projectId + '/' + reportDate);
+  getLastWkHrs(projectId, reportDate, type): Observable<number> {
+    return this.http.get<number>(this.Baseurl + 'api/ReportSummery/getLastWeekHrs/' + projectId + '/' + reportDate + '/' + type);
   }
 
   getcurrentMonthHrs(projectId, reportDate): Observable<number> {

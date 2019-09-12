@@ -19,7 +19,7 @@ namespace statusReport.Controllers
     [Route("api/[controller]")]
     public class ReportSummeryController : Controller
     {
-        private readonly IEmailSender emailSender;       
+        private readonly IEmailSender emailSender;
 
         private readonly IOptions<ManagerSettings> _managerSettings;
 
@@ -150,7 +150,7 @@ namespace statusReport.Controllers
                         tblReportSummery.ApprovedDate = DateTime.Now;
                         tblReportSummery.Remark = reportSummery.notes;
                         tblReportSummery.IsApproved = true;
-                        tblReportSummery.ReportStatus = reportSummery.projectType =="Week" ? Convert.ToInt32(ReportStatus.Uploaded) : Convert.ToInt32(ReportStatus.Created);
+                        tblReportSummery.ReportStatus = reportSummery.projectType == "Week" ? Convert.ToInt32(ReportStatus.Uploaded) : Convert.ToInt32(ReportStatus.Created);
                         tblReportSummery.CreatedByEmail = reportSummery.CreatedByEmail;
                         tblReportSummery.ReportEndDate = reportSummery.ReportEndDate;
                         tblReportSummery.Type = reportSummery.Type;
@@ -207,8 +207,8 @@ namespace statusReport.Controllers
                         context.SaveChanges();
                         if (reportSummery.projectType == "Week")
                         {
-                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                            EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
+                            //var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            //EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
                         }
                         else
                         {
@@ -300,8 +300,8 @@ namespace statusReport.Controllers
                         context.SaveChanges();
                         if (reportSummery.projectType == "Week")
                         {
-                            var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                            EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
+                            //var mail = reportSummery.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                            //EmailHelper.ReportUploaded(mail, emailSender, "", reportSummery);
                         }
                         else
                         {
@@ -330,7 +330,7 @@ namespace statusReport.Controllers
                 {
 
                     using (BillingReportContext context = new BillingReportContext())
-                   {
+                    {
 
                         if (reportSummery.id == 0)
                         {
@@ -518,8 +518,8 @@ namespace statusReport.Controllers
                 report.ReportStatus = Convert.ToInt32(ReportStatus.Rejected);
                 report.Remark = remark;
                 context.TblReportSummery.Update(report);
-                var mail =report.CreatedByEmail+ ";" + _managerSettings.Value.ManagerEmail;
-                EmailHelper.ReportRejected(mail, emailSender, "",remark, report);
+                var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
+                EmailHelper.ReportRejected(mail, emailSender, "", remark, report);
                 await context.SaveChangesAsync();
 
             }
@@ -557,7 +557,14 @@ namespace statusReport.Controllers
                         projectType = report.ProjectType
                     };
                     var mail = report.CreatedByEmail + ";" + _managerSettings.Value.ManagerEmail;
-                    EmailHelper.ReportUploaded(mail, emailSender, "", reportSummmary);
+                    if (report.ProjectType == "Week")
+                    {
+                        EmailHelper.ReportUploaded(mail, emailSender, "", reportSummmary);
+                    }
+                    else
+                    {
+                        EmailHelper.ReportSubmitted(mail, emailSender, "", reportSummmary);
+                    }
                     await context.SaveChangesAsync();
 
                 }
@@ -594,7 +601,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(comment_date,1) = week('" + date + "',1)", conn);
+                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(comment_date,1) = week('" + date + "',1)", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -639,7 +646,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(comment_date) = month('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(comment_date) = month('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -684,7 +691,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(record_date) = week('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -710,13 +717,15 @@ namespace statusReport.Controllers
         }
 
         [HttpGet]
-        [Route("getLastWeekHrs/{id}/{reportDate}")]
-        public ActionResult getLastWeekHrs(int id, int reportDate)
+        [Route("getLastWeekHrs/{id}/{reportDate}/{type}")]
+        public ActionResult getLastWeekHrs(int id, int reportDate, string type)
         {
 
             try
             {
                 double lastweekHrs = 0.0;
+                double currentMonthHours = 0.0;
+                double currentweekHrs = 0.0;
 
                 //&date=20091202   (yyyymmdd)
                 int year = reportDate / 10000;
@@ -727,28 +736,66 @@ namespace statusReport.Controllers
 
                 using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
                 {
-                    using (MySqlConnection conn = actitimeContext.GetConnection())
+                    if (type?.Trim() == "Staff Augmented")
                     {
-                        conn.Open();
-
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and week(record_date) = week('" + date + "') -1", conn);
-
-                        MySqlDataReader reader = cmd.ExecuteReader();
-
-                        while (reader.Read())
+                        using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
-                            if (reader["Hrs"] != DBNull.Value)
+                            conn.Open();
+
+                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
+
+                            MySqlDataReader reader = cmd.ExecuteReader();
+
+                            while (reader.Read())
                             {
-                                lastweekHrs = Convert.ToDouble(reader["Hrs"]);
+                                if (reader["Hrs"] != DBNull.Value)
+                                {
+                                    currentMonthHours = Convert.ToDouble(reader["Hrs"]);
+                                }
+                            }
+
+                        }
+                        using (MySqlConnection conn = actitimeContext.GetConnection())
+                        {
+                            conn.Open();
+                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "')", conn);
+
+                            MySqlDataReader readerCurrentWeek = cmdCurrentWeek.ExecuteReader();
+
+                            while (readerCurrentWeek.Read())
+                            {
+                                if (readerCurrentWeek["Hrs"] != DBNull.Value)
+                                {
+                                    currentweekHrs = Convert.ToDouble(readerCurrentWeek["Hrs"]);
+                                }
+                            }
+
+                            lastweekHrs = currentMonthHours - currentweekHrs;
+                        }
+                    }
+                    else
+                    {
+                        using (MySqlConnection conn = actitimeContext.GetConnection())
+                        {
+                            conn.Open();
+                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "') -1", conn);
+
+                            MySqlDataReader reader = cmd.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                if (reader["Hrs"] != DBNull.Value)
+                                {
+                                    lastweekHrs = Convert.ToDouble(reader["Hrs"]);
+                                }
                             }
                         }
                     }
                 }
-
                 return Ok(new { lastWKHrs = lastweekHrs });
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -779,7 +826,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -796,7 +843,7 @@ namespace statusReport.Controllers
                 return Ok(new { currentMnthHrs = currentMonthHrs });
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -829,7 +876,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and record_date <= ('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and record_date <= ('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -844,7 +891,7 @@ namespace statusReport.Controllers
                     using (MySqlConnection conn = actitimeContext.GetConnection())
                     {
                         conn.Open();
-                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + ") and month(record_date) = month('" + date + "')", conn);
+                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
 
                         MySqlDataReader readerPreviousYear = cmdPreviousYear.ExecuteReader();
 
