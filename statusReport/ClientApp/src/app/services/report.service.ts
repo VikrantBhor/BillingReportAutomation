@@ -138,7 +138,7 @@ export class ReportService {
     };
     //const formData: FormData = new FormData();
     //formData.append('remark', remark);
-    return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/rejectReport/${ id }/${remark}`,options);
+    return this.http.get<void>(this.Baseurl + '/api/ReportSummery/rejectReport/' + id +'/'+ remark);
   }
 
   changeStatus(id): Observable<void> {
@@ -149,7 +149,7 @@ export class ReportService {
     let options = {
       headers: headers
     };
-    return this.http.put<void>(`${this.Baseurl}/api/ReportSummery/changeStatus/${id}`, options);
+    return this.http.get<void>(this.Baseurl+ 'api/ReportSummery/changeStatus/' +id);
   }
 
   uploadReport(id): Observable<void> {

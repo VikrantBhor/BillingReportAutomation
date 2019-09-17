@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security;
 using System.Threading.Tasks;
 
 namespace statusReport.Services
@@ -28,7 +29,12 @@ namespace statusReport.Services
             try
             {
                 // Credentials
-                var credentials = new NetworkCredential(_emailSettings.Value.Sender, _emailSettings.Value.Password);
+                var sercured_password = new SecureString();
+                foreach (var c in _emailSettings.Value.Password)
+                {
+                    sercured_password.AppendChar(c);
+                }
+                var credentials = new NetworkCredential(_emailSettings.Value.Sender, sercured_password);
 
                 // Mail message
                 var mail = new MailMessage()

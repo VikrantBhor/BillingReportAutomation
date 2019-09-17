@@ -508,7 +508,7 @@ namespace statusReport.Controllers
         }
 
 
-        [HttpPut]
+        [HttpGet]
         [Route("rejectReport/{id}/{remark}")]
         public async Task<IActionResult> RejectReport([FromRoute]int id, [FromRoute] string remark)
         {
@@ -526,7 +526,7 @@ namespace statusReport.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("changeStatus/{id}")]
         public async Task<IActionResult> ChangeStatusReport([FromRoute]int id)
         {
@@ -601,7 +601,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(comment_date,1) = week('" + date + "',1)", conn);
+                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(comment_date,1) = week('" + date + "',1) and Year(comment_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -646,7 +646,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(comment_date) = month('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(comment_date) = month('" + date + "') and year(comment_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -691,7 +691,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -734,6 +734,8 @@ namespace statusReport.Controllers
 
                 string date = year.ToString() + '-' + month.ToString() + '-' + day.ToString();
 
+                int week = GetWeekNumberOfMonth(Convert.ToDateTime(date));
+
                 using (actitimeContext actitimeContext = HttpContext.RequestServices.GetService(typeof(statusReport.Models.actitimeContext)) as actitimeContext)
                 {
                     if (type?.Trim() == "Staff Augmented")
@@ -742,7 +744,7 @@ namespace statusReport.Controllers
                         {
                             conn.Open();
 
-                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
+                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                             MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -758,7 +760,7 @@ namespace statusReport.Controllers
                         using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
                             conn.Open();
-                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "')", conn);
+                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                             MySqlDataReader readerCurrentWeek = cmdCurrentWeek.ExecuteReader();
 
@@ -769,7 +771,9 @@ namespace statusReport.Controllers
                                     currentweekHrs = Convert.ToDouble(readerCurrentWeek["Hrs"]);
                                 }
                             }
-
+                            if (week == 1)
+                                lastweekHrs = 0;
+                            else
                             lastweekHrs = currentMonthHours - currentweekHrs;
                         }
                     }
@@ -802,7 +806,18 @@ namespace statusReport.Controllers
             }
         }
 
-
+        static int GetWeekNumberOfMonth(DateTime date)
+        {
+            date = date.Date;
+            DateTime firstMonthDay = new DateTime(date.Year, date.Month, 1);
+            DateTime firstMonthMonday = firstMonthDay.AddDays((DayOfWeek.Monday + 7 - firstMonthDay.DayOfWeek) % 7);
+            if (firstMonthMonday > date)
+            {
+                firstMonthDay = firstMonthDay.AddMonths(-1);
+                firstMonthMonday = firstMonthDay.AddDays((DayOfWeek.Monday + 7 - firstMonthDay.DayOfWeek) % 7);
+            }
+            return (date - firstMonthMonday).Days / 7 + 1;
+        }
 
         [HttpGet]
         [Route("getCurrentMonthHrs/{id}/{reportDate}")]
