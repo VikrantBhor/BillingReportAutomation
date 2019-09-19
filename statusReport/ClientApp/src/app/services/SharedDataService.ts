@@ -6,7 +6,7 @@ import { SharedObject } from "../DTO/SharedObject";
 @Injectable()
 export class DataService {
 
-  private _sharedData = new BehaviorSubject<SharedObject>(new SharedObject('', '', '', '', '', '','','','','',''));
+  private _sharedData = new BehaviorSubject<SharedObject>(new SharedObject('', '', '', '', '', '','','','','','',''));
   currentSharedData = this._sharedData.asObservable();
 
   constructor() {

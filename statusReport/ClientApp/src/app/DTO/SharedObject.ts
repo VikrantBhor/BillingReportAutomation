@@ -10,7 +10,8 @@ export class SharedObject {
     public reportStartDate: string,
     public reportEndDate: string,
     public createdByEmail: string,
-    public createdBy: string
+    public createdBy: string,
+    public clientId: string
   ) {
   }
 

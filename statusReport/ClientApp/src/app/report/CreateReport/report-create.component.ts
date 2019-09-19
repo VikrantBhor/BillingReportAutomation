@@ -22,10 +22,11 @@ import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 })
 
 export class ReportCreateComponent implements OnInit {
-  sharedData: SharedObject = new SharedObject('', '', '', '', '', '', '', '', '', '','');
+  sharedData: SharedObject = new SharedObject('', '', '', '', '', '', '', '', '', '','','');
   clientList: IClientList[];
   user: any;
   maxDate: Date;
+  clientId: string;
 
   showLoader: boolean = true;
   projectID: string;
@@ -41,6 +42,7 @@ export class ReportCreateComponent implements OnInit {
     ReportStartDate: '',
     ReportStatus: null,
     ReportEndDate: ''
+    ///ClientId: ''
   };
 
   ReportProjectType: string = '';
@@ -71,7 +73,7 @@ export class ReportCreateComponent implements OnInit {
 
 
   SubmitReport() {
-    
+    debugger;
     var a = this.reportForm.controls["clientName"].value;
     var b = this.reportForm.controls["projectType"].value;
     var c = this.reportForm.controls["projectDuration"].value;
@@ -88,14 +90,16 @@ export class ReportCreateComponent implements OnInit {
 
   AssignValues(detail: IReportDetail) {
     try {
-      
-      detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;
+      debugger;
+      this.clientId = detail.ClientName;
+      detail.ClientName = this.clientList.find(x => x.id == parseInt(this.reportDetail.ClientName)).name;      
       this.projectID = this.reportDetail.ProjectName;
       detail.ProjectName = this.programTypeList.find(x => x.id == parseInt(this.reportDetail.ProjectName)).name;
       this.ReportProjectType = this.reportDetail.ProjectType;
       detail.ProjectType = this.ReportProjectType;
       detail.CreatedBy = this.user.profile.name;
       detail.CreatedByEmail = this.user.userName;
+      
 
       let today = new Date(this.reportDetail.ReportStartDate);
       let selectedDate = new Date(this.reportDetail.ReportStartDate);
@@ -159,6 +163,7 @@ export class ReportCreateComponent implements OnInit {
       this.sharedData.projectName = detail.ProjectName;
       this.sharedData.createdByEmail = this.user.userName;
       this.sharedData.createdBy = this.user.profile.name;
+      this.sharedData.clientId = this.clientId;
       this.data.changeMessage(this.sharedData);
       this._router.navigate(['reportSummery/', 0]).then(x => {
         //this.toastr.success('Report Created successfully !', 'Success');

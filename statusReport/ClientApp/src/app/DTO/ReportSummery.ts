@@ -36,4 +36,5 @@ export interface IReportDetail {
   CreatedBy: string;
   CreatedByEmail: string;
   ReportStatus: number;
+  //ClientId: string;
 }

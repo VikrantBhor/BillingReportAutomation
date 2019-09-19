@@ -103,12 +103,12 @@ export class ReportService {
     return this.http.get<reportList[]>(this.Baseurl + 'api/Report/reportStatus/' + role + '/' + reportStatus + '/' + userEmail);
   }
 
-  getweekComments(projectId, reportDate): Observable<string> {
-    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetWeekComments/' + projectId + '/' + reportDate);
+  getweekComments(projectId, reportDate, clientId): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetWeekComments/' + projectId + '/' + reportDate + '/' + clientId);
   }
 
-  getMonthComments(projectId, reportDate): Observable<string> {
-    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetMonthComments/' + projectId + '/' + reportDate);
+  getMonthComments(projectId, reportDate,clientId): Observable<string> {
+    return this.http.get<string>(this.Baseurl + 'api/ReportSummery/GetMonthComments/' + projectId + '/' + reportDate + '/' + clientId);
   }
 
   getcurrentWkHrs(projectId, reportDate): Observable<number> {

@@ -63,6 +63,7 @@ export class ReportSummeryComponent implements OnInit {
   isManager: boolean = false;
   isTL: boolean = true;
   manager: any;
+  clientId: string;
 
   accomplishment: any;
   currentHrs: any;
@@ -395,7 +396,8 @@ export class ReportSummeryComponent implements OnInit {
     //this.repoStartDate = parseInt(this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
     //this.repoEndDate = parseInt(this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
     this.repoStartDate = (this.sharedData.reportStartDate.replace("-", "").replace("-", ""));
-    this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));    
+    this.repoEndDate = (this.sharedData.reportEndDate.replace("-", "").replace("-", ""));
+    this.clientId = this.sharedData.clientId;
   }
 
 
@@ -750,7 +752,7 @@ export class ReportSummeryComponent implements OnInit {
       var repoData = this.dataservice.currentSharedData.subscribe(sharedData => this.sharedData = sharedData);
       //Mapping parameters
       // map report id here
-
+      debugger;
       this.projectId = parseInt(this.sharedData.projectId);
       this.e.projectName = this.sharedData.projectName;
       this.e.type = this.sharedData.type;
@@ -774,7 +776,7 @@ export class ReportSummeryComponent implements OnInit {
       if (this.reportId == 0) {
         if (this.reportType == 'Week') {
           //
-          this.reportservice.getweekComments(this.projectId, this.reportDate).subscribe((res: any) => {
+          this.reportservice.getweekComments(this.projectId, this.reportDate,this.clientId).subscribe((res: any) => {
             //
             this.e.accomp = res.weekComments;
             console.log(res);
@@ -809,7 +811,7 @@ export class ReportSummeryComponent implements OnInit {
         }
         else if (this.reportType == 'Month') {
 
-          this.reportservice.getMonthComments(this.projectId, this.reportDate).subscribe((res: any) => {
+          this.reportservice.getMonthComments(this.projectId, this.reportDate,this.clientId).subscribe((res: any) => {
             //
             this.e.accomp = res.monthComments;
             console.log(res);

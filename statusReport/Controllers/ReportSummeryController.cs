@@ -580,8 +580,8 @@ namespace statusReport.Controllers
 
 
         [HttpGet]
-        [Route("GetWeekComments/{id}/{reportDate}")]
-        public ActionResult GetWeekComments(string id, int reportDate)
+        [Route("GetWeekComments/{id}/{reportDate}/{clientId}")]
+        public ActionResult GetWeekComments(string id, int reportDate,string clientID)
         {
             try
             {
@@ -601,7 +601,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(comment_date,1) = week('" + date + "',1) and Year(comment_date) = year('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand("select distinct comments from actitime.user_task_comment where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%' and customer_id = "+ Convert.ToInt32(clientID) + ") and week(comment_date,1) = week('" + date + "',1) and Year(comment_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -626,8 +626,8 @@ namespace statusReport.Controllers
 
 
         [HttpGet]
-        [Route("GetMonthComments/{id}/{reportDate}")]
-        public ActionResult GetMonthComments(string id, int reportDate)
+        [Route("GetMonthComments/{id}/{reportDate}/{clientId}")]
+        public ActionResult GetMonthComments(string id, int reportDate,string clientID)
         {
             try
             {
@@ -646,7 +646,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where user_id in (select user_id from actitime.user_project where project_id =" + Convert.ToInt32(id) + ") and task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(comment_date) = month('" + date + "') and year(comment_date) = year('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select distinct comments from actitime.user_task_comment where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%' and customer_id = " + Convert.ToInt32(clientID) + ") and month(comment_date) = month('" + date + "') and year(comment_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
                         DataTable data = reader.GetSchemaTable();
@@ -782,7 +782,7 @@ namespace statusReport.Controllers
                         using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
                             conn.Open();
-                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "') -1", conn);
+                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) < week('" + date + "') and Year(record_date) <= year('" + date + "') ", conn);
 
                             MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -841,7 +841,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -906,7 +906,7 @@ namespace statusReport.Controllers
                     using (MySqlConnection conn = actitimeContext.GetConnection())
                     {
                         conn.Open();
-                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "')", conn);
+                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                         MySqlDataReader readerPreviousYear = cmdPreviousYear.ExecuteReader();
 

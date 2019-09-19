@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:49203/",
+      "applicationUrl": "http://billingauto.atidanmumbai.com:49205/",
       "sslPort": 0
     }
   },
