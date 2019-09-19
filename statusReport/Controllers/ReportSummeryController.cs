@@ -726,6 +726,8 @@ namespace statusReport.Controllers
                 double lastweekHrs = 0.0;
                 double currentMonthHours = 0.0;
                 double currentweekHrs = 0.0;
+                double currentYearHrsExcludingCurrMonth = 0.0;
+                double totalHrsPrevYears = 0.0;
 
                 //&date=20091202   (yyyymmdd)
                 int year = reportDate / 10000;
@@ -760,7 +762,7 @@ namespace statusReport.Controllers
                         using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
                             conn.Open();
-                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) = week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
+                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) >= week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                             MySqlDataReader readerCurrentWeek = cmdCurrentWeek.ExecuteReader();
 
@@ -782,7 +784,8 @@ namespace statusReport.Controllers
                         using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
                             conn.Open();
-                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) < week('" + date + "') and Year(record_date) <= year('" + date + "') ", conn);
+
+                            MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and Year(record_date) < Year('" + date + "')", conn);
 
                             MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -790,10 +793,27 @@ namespace statusReport.Controllers
                             {
                                 if (reader["Hrs"] != DBNull.Value)
                                 {
-                                    lastweekHrs = Convert.ToDouble(reader["Hrs"]);
+                                    totalHrsPrevYears = Convert.ToDouble(reader["Hrs"]);
                                 }
                             }
                         }
+                        using (MySqlConnection conn = actitimeContext.GetConnection())
+                        {
+                            conn.Open();
+                            MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and Week(record_date) < Week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
+
+                            MySqlDataReader readerPreviousYear = cmdPreviousYear.ExecuteReader();
+
+                            while (readerPreviousYear.Read())
+                            {
+                                if (readerPreviousYear["Hrs"] != DBNull.Value)
+                                {
+                                    currentYearHrsExcludingCurrMonth = Convert.ToDouble(readerPreviousYear["Hrs"]);
+                                }
+                            }
+                        }
+
+                        lastweekHrs = totalHrsPrevYears + currentYearHrsExcludingCurrMonth;
                     }
                 }
                 return Ok(new { lastWKHrs = lastweekHrs });
@@ -874,8 +894,8 @@ namespace statusReport.Controllers
             try
             {
                 double lastMonthHrs = 0.0;
-                double currentMonthHrs = 0.0;
-                double totalHrs = 0.0;
+                double currentYearHrsExcludingCurrMonth = 0.0;
+                double totalHrsPrevYears = 0.0;
 
 
                 //&date=20091202   (yyyymmdd)
@@ -891,7 +911,7 @@ namespace statusReport.Controllers
                     {
                         conn.Open();
 
-                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and record_date <= ('" + date + "')", conn);
+                        MySqlCommand cmd = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and Year(record_date) < Year('" + date + "')", conn);
 
                         MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -899,14 +919,14 @@ namespace statusReport.Controllers
                         {
                             if (reader["Hrs"] != DBNull.Value)
                             {
-                                totalHrs = Convert.ToDouble(reader["Hrs"]);
+                                totalHrsPrevYears = Convert.ToDouble(reader["Hrs"]);
                             }
                         }
                     }
                     using (MySqlConnection conn = actitimeContext.GetConnection())
                     {
                         conn.Open();
-                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) = month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
+                        MySqlCommand cmdPreviousYear = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and month(record_date) < month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                         MySqlDataReader readerPreviousYear = cmdPreviousYear.ExecuteReader();
 
@@ -914,13 +934,13 @@ namespace statusReport.Controllers
                         {
                             if (readerPreviousYear["Hrs"] != DBNull.Value)
                             {
-                                currentMonthHrs = lastMonthHrs + Convert.ToDouble(readerPreviousYear["Hrs"]);
+                                currentYearHrsExcludingCurrMonth = Convert.ToDouble(readerPreviousYear["Hrs"]);
                             }
                         }
                     }
                 }
 
-                return Ok(new { lastMnthHrs = totalHrs - currentMonthHrs });
+                return Ok(new { lastMnthHrs = totalHrsPrevYears + currentYearHrsExcludingCurrMonth });
 
             }
             catch (Exception)
