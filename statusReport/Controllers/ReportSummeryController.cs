@@ -762,7 +762,7 @@ namespace statusReport.Controllers
                         using (MySqlConnection conn = actitimeContext.GetConnection())
                         {
                             conn.Open();
-                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) >= week('" + date + "') and Year(record_date) = year('" + date + "')", conn);
+                            MySqlCommand cmdCurrentWeek = new MySqlCommand(" select sum(actuals)/60 as Hrs from actitime.tt_record where task_id in (select id from actitime.task where project_id = " + Convert.ToInt32(id) + " and name not like '%Non Productive Project Task%' and name not like '%Training and Learning - Non Billable%' and name not like '%Non-Productive work%') and week(record_date) >= week('" + date + "') and month(record_date) = month('" + date + "') and Year(record_date) = year('" + date + "')", conn);
 
                             MySqlDataReader readerCurrentWeek = cmdCurrentWeek.ExecuteReader();
 
